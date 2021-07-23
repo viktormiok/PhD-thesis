@@ -1,0 +1,447 @@
+\chapter{Introduction}
+\label{chapter:introduction}
+
+\graphicspath{{Chapter1/Figs/}{Chapter1/Figs/PDF/}{Chapter1/Figs/}}%
+
+
+\section{Motivation}
+Various biological processes are taking place on a cellular level. They comprise different molecules that interact with each other and their {\it interaction} exhibits various kind of {\it dynamics}.
+The key words here are interaction and dynamics. These can be modelled with the mathematical notions of {\it graph} and {\it ordinary differential equation}. The topic of  this thesis is the statistical treatment of these mathematical concepts.
+\par
+Graphs or networks are used to model interactions, for example, {\it gene regulatory networks} (GRNs), which are complex systems made up of genes, proteins and other molecules. It is of great interest to biologists to discover the structure of the graph
+that represents a particular GRN. The problem is that there are thousands of genes and the data are {\it sparse}, i.e. we are dealing with huge networks and few data that provides us information about them. Fortunately, as are the data, 
+GRNs are also {\it sparse}, in the sense that only few elements  interact with each other. The sparsity assumption can be incorporated into statistical methods. One statistical approach that incorporates the sparsity into the classical statical methodology are {\it penalized Gaussian graphical models} (GGM). This is the first topic that we treat in
+this thesis. To be more specific, we treat the topic of model selection, i.e. how to select an appropriate GGM.\par
+Once the graph structure of GRN is found it is of interest to understand the dynamics of this network. The dynamics is usually modelled by ordinary differential equations (ODEs). The equations used for modelling, in general,
+contain parameters that are unknown, since they depend on the network. These parameters can only be estimated from the data. This is the second topic that we treat in this thesis. To be more specific, the main problem
+here is computational since using classical statistical methodology requires repeated solving of ODEs. In this thesis we present methods for estimation that do no require using numerical solvers.
+
+\section{Estimating Gaussian graphical models}
+\subsection{Introduction}
+Roughly speaking, a {\it graphical model} is composed of nodes that represent random variables and edges that represent conditional dependencies between variables.  {\it Gaussian graphical model} (GGM) is a graphical model in which the nodes are jointly normally
+distributed. In GGM conditional dependencies are summarized in the inverse covariance matrix, called the {\it precision matrix}. Non-zero elements in the precision matrix correspond to conditional dependent variables. Therefore, the main goal in GGM is to
+estimate the precision matrix.
+\par
+{\bf The maximum likelihood estimator (MLE): The saturated model}\par
+Maximum likelihood estimation is a general method for estimating the parameters of the statistical model by maximizing the log-likelihood of the data. In the case of a GGM with $p$ nodes and a data set $\Dcal=\{\yb_1,\ldots,\yb_n\}$ of 
+$p$-dimensional observations, the scaled log-likelihood up to an additive constant is equal to
+\begin{equation}
+\label{eq1:loglik}
+\frac{2}{n}l(\Thetab)=\log|\Thetab|-\tr(\Thetab \Sb),
+\end{equation}
+where $\Thetab$ is the $p\times p$ precision matrix and  $\Sb=1/n\sum_{k=1}^n \yb_k\yb_k^\top$ is the $p\times p$ empirical covariance matrix. The maximizer of \eqref{eq1:loglik}, which with probability one exists when $n>p$, is called 
+the {\it maximum likelihood estimator} (MLE) and has the form $\Thetahatb=\Sb^{-1}$. The graph that corresponds to MLE is the full graph. This is the consequence of the fact, that the maximum likelihood estimator of any entry of the precision matrix,
+as a continous random variable takes zero value with probability zero. This model does not assume any conditional independence relations between 
+variables and is called the {\it saturated model}.
+\par
+{\bf The maximum likelihood estimator under a given graphical model}\par
+Since MLE does not yield any zeros in the precision matrix, sparsity can be achieved by setting some of the elements of precision matrix to zero while estimating the rest with maximum likelihood method \citep{dempster1972covariance}. This means 
+that we assume certain conditional independence relations, i.e. a certain graph structure. Since there are many possible graphs we deal with the problem of model selection. i.e. from the family of estimated precision matrices how to choose the precision matrix with 
+'the right' pattern of zeros. This approach is problematic since parameter estimation and model selection are done separately, which leads to instability of the estimator \citep{breiman1996heuristics}. Furthermore, when $p>n$ there is a 
+fundamental problem of the existence of MLE \cite[p.148]{lauritzen1996graphical} and when $p$ is large there are computational problems.
+\par
+{\bf Maximum penalized likelihood estimation (MPLE)}\par
+Setting zeros in the precision matrix can be done automatically by penalizing the coefficients of the precision matrix \citep{yuan2007model}. This idea was first used in ordinary regression \citep{tibshirani1996regression}.
+This is equivalent to maximizing the {\it penalized log-likelihood function} c.f. \eqref{eq1:loglik}
+\begin{equation}
+\label{eq1:penloglik}
+l_{\lambdab}(\Thetab)=\log|\Thetab|-\tr(\Thetab \Sb)-\sum_{i=1}^p\sum_{j=1}^pp_{\lambda_{ij} }(|\theta_{ij}|),
+\end{equation}
+where $\lambdab=(\lambda_{11},\ldots,\lambda_{pp})$ are the {\it regularization parameters} ({\it tunning or penalization parameters}) and typically $\lambda_{11}=\ldots=\lambda_{pp}=\lambda$. The penalty function is chosen in a way that enforces  sparsity
+in the estimate of the precision matrix. This approach has the advantage that the  estimation and model selection are done simultaneously and it can be used when $n\leq p$ since the maximizer of \eqref{eq1:penloglik} exists, for the particular
+choices of penalty. Important issue is determining the amount of penalization which is controlled by $\lambdab$. We treat this problem in Chapter 3 after a more in depth review of GGMs in Chapter 2. The list of existing methods is given in the Table \ref{ch1:tab2}. 
+\subsection{References}
+\cite{dempster1972covariance},
+\cite{lauritzen1996graphical},
+\cite{edwards2000introduction},
+\cite{rue2005gaussian}, 
+\cite{meinshausen2006high},
+\cite{yuan2007model},
+\cite{rothman2008sparse},
+\cite{friedman2008sparse},
+\cite{banerjee2008model},
+\cite{whittaker2009graphical},
+\cite{fried2009robust},
+\cite{lam2009sparsistency},
+\cite{fan2009network},
+\cite{liuroederwasserman10},
+\cite{foygel2010ebic},
+\cite{menendez2010gene},
+\cite{Buhlmann11},
+%\cite{zhou2011high}
+\cite{schmidt2010graphical},
+\cite{ravikumar2011high},
+\cite{cai2011constrained},
+\cite{lian2011shrinkage},
+\cite{gao2012tuning},
+\cite{fitch2012computationally},
+\cite{chen2012lasso}.
+
+
+\begin{landscape}
+\thispagestyle{empty}
+%\topskip0pt
+%\vspace*{3cm}
+%\vspace*{\fill}
+\begin{table}
+\begin{tabulary}{\linewidth}{l*{6}{c}r}
+\toprule
+Authors           					& Method & Type    		 & Goal			 		  & Theoretical properties 		  &	R package	\\\midrule
+\multirow{3}{*}{\cite{akaike1973information}} 		&\multirow{3}{*}{ AIC}	         & \multirow{3}{*}{closed-form criterion} &\multirow{3}{*}{ prediction}		  & \multirow{3}{*}{not established}	     &\multirow{3}{*}{N.A.}\\
+							& 	 		         &  			 		  &  					  & 		 	     &\\ 
+							& 	 		         &  			 		  &  					  & 		 	     &\\ 
+\multirow{3}{*}{\cite{stone1974cross}}       		&\multirow{3}{*}{ CV} 	         & \multirow{3}{*}{computational}     & \multirow{3}{*}{prediction}		  & \multirow{3}{*}{not established}            &\multirow{3}{*}{huge}\\
+						        & 	 			 &  			 		  &   					  &				&\\
+							& 	 		         &  			 		  &  					  & 		 	     &\\ 
+\multirow{3}{*}{\cite{yuan2007model}} 			& \multirow{3}{*}{BIC}	         & \multirow{3}{*}{closed-form criterion} & \multirow{3}{*}{graph identification} & model selection consistent with	   			&\multirow{3}{*}{huge}\\
+							& 	 			 &   			 		  &  					  & SCAD and Adaptive LASSO penalties &\\
+							& 	 		         &  			 		  &  					  &$n\rightarrow\infty$; $p$ fixed 		 	     &\\ 
+\multirow{3}{*}{\cite{foygel2010ebic}}        		& \multirow{3}{*}{EBIC} 	 & \multirow{3}{*}{closed-form criterion} & \multirow{3}{*}{graph identification} &model selection consistent with 				&\multirow{3}{*}{huge}\\
+							& 				 &  			 		  &   			                  & SCAD  penalty &\\
+							& 	 		         &  			 		  &  					  & $n\rightarrow\infty$; $p\rightarrow\infty$		 	     &\\ 
+\multirow{3}{*}{\cite{liuroederwasserman10}}            & \multirow{3}{*}{StARS}	 & \multirow{3}{*}{computational}     & \multirow{3}{*}{graph identification} &      &\multirow{3}{*}{huge}\\		
+							& 	 			 &  			 		  &   					  &partially sparsistent; &\\ 
+							& 	 		         &  			 		  &  					  & $n\rightarrow\infty$; $p\rightarrow\infty$		 	     &\\ 
+\multirow{3}{*}{\cite{lian2011shrinkage}}  		& \multirow{3}{*}{GACV} 	 & \multirow{3}{*}{closed-form criterion} & \multirow{3}{*}{prediction}    	  & \multirow{3}{*}{not established}&\multirow{3}{*}{N.A.}\\
+							& 				 &  			 		  &   					  & 							 &\\
+							& 	 		         &  			 		  &  					  & 		 	     &\\ 
+
+\bottomrule
+\end{tabulary}
+\caption{List of methods for choosing the regularization parameter in Gaussian graphical models.}
+\label{ch1:tab2}
+\end{table}
+\end{landscape}
+
+
+
+
+\section{Estimating parameters in ODEs}
+\subsection{Introduction}
+A {\it system of ordinary differential equations} is the set of equations that relate the values of the unknown functions of one variable and their derivatives of various orders. In this thesis we consider the systems of the form 
+\begin{equation}\label{eq1:ode_model}
+\bigg\{
+\begin{array}{l}
+\xb^{\prime}(t)=\fb(\xb(t),\ub(t),t;\thetab),\ t\in [a,b],
+\\
+\xb(0)=\xib,
+\end{array}
+\end{equation}
+where $\xb(t)$ takes values in $\rR^d,\, \xib$ in $\Xi\subset \rR^d,$ and $\thetab$ in ${\it \Theta}\subset\rR^p$ and $\fb$ and $\ub$ are known functions.  Function $\xb(t)$ is called the {\it state} and $\fb$ is called the {\it vector field}. If the 
+function $\fb$ on the right hand side of \eqref{eq1:ode_model} depends only on  $\xb(t)$ and $\thetab$, then the system is called {\it autonomous}. Given the
+values of $\xib$ and $\thetab$, we denote the solution of (\ref{eq1:ode_model}) by $\xb(t; \thetab,\xib)$. Assume that some process is modelled by ODEs \eqref{eq1:ode_model} with the true parameters $\xib_0$ and $\thetab_0$. These parameters are 
+not known and the aim is to estimate them from noisy observations $\yb(t_i)$, $i=1,\ldots,n$ of the true state  $\xb(t;\thetab_0,\xib_0)$ at some time points $t_i\in[a,b]$, $i=1,\ldots,n$:
+$$%\label{eq:observation_model}
+\yb(t_i)=\xb(t_i;\thetab_0,\xib_0)+\varepsilonb(t_i),\quad i=1,\dots,n,
+$$
+This problem is called the {\it inverse problem of ordinary differential equations}. 
+
+Although ordinary differential equations are ubiquitous in science and engineering, the inverse problem of ODEs faces many challenges. The principal notion in 
+statistics is that of the log-likelihood function, and the main problem in estimation of ODEs lies in the fact that evaluating the log-likelihood function requires the knowledge of the solution of the ODEs. Since, in general, ODEs do not have a closed-form 
+solution it follows that the log-likelihood cannot be obtained explicitly. Indeed, for simplicity assume that we only have one equation and that the noise is Gaussian with zero mean and varince $\sigma^2$. Then the log-likelihood function is up to and additive constant
+\begin{equation}
+\label{eq2:ode_lik}
+l(\thetab,\xib)=-\frac{1}{2\sigma^2}\sum_{i=1}^n\{y(t_i)-x(t_i;\thetab,\xi)\}^2,
+\end{equation}
+which involves the solution $x(t;\thetab,\xi)$ of the ODE \eqref{eq1:ode_model}.
+%where $p(x|\mu,\sigma)$ is the density of the normal distribution $\Ncal(\mu,\sigma^2)$.
+\par
+{\bf Classical methods coupled with numerical solvers} \par 
+An obvious approach to circumvent this problem is to use a numerical solver for evaluating the log-likelihood values. In both, the frequentist and Bayesian paradigm, the classical methods coupled with ODE solvers were used to solve the problem.
+These are:
+\begin{enumerate}
+ \item Non linear least squares (NLS). 
+ \item Markov chain monte carlo (MCMC). 
+\end{enumerate}
+NLS is a frequentist method in which the estimate of the prameter is obtained by maximizing \eqref{eq2:ode_lik}, which is done numerically. The optimization algorithm, which begins from some initial value, updates the parameter at each step.
+The log-likelihood $l(\thetab,\xib)$ needs to be evaluated at some particular parameter at every step. MCMC is a Bayesian method that provides an approximation of the posterior distribution of the unknown parameter by  constructing a Markov chain. 
+The chain is initialized in some value of the parameter and then on every step a new value $(\thetab_{\rm new},\xib_{\rm new})$ is proposed according to a {\it proposal distribution}. That value is added to the chain or the old value
+$(\thetab_{\rm old},\xib_{\rm old})$ is replicated, depending on the certain probability $\pi$ that depends on $l(\thetab_{\rm new},\xib_{\rm new})$ and $l(\thetab_{\rm old},\xib_{\rm old})$. Thus, in both approaches at every step the
+of the procedures the log-likelihood needs to be evaluated, which involves solving the ODE and hence the computational burden.
+\par
+{\bf Classical methods coupled with data smoothing}\par
+Another approach is to construct an approximation of the solution based on the data, by using some smoothing method. This, approach has turned out to be fruitful. The idea is old (see e.g. \cite{bellman1971use,varah1982spline}), but some time passed 
+until it was refined. Even though using smoothing avoids numerical integration of the ODE, a lot of issues needed to be resolved. The seminal paper by  \cite{ramsay2007parameter} solved many of this issues and  attracted the interest of researchers
+in the area. The approach proposed has many strong points and it has also been explored from a Baysian viewpoint \citep{campbell2007bayesian}. 
+\par
+{\bf Purely Bayesian approach: Gaussian processes}\par
+In Bayesian statistics parameters are considered as random variables. A novel idea was proposed in \cite{calderhead2008accelerating}, that involved considering state variables as random with a prior distribution. The theory of Gaussian
+processes makes this possible. The inference involves MCMC methodology which yields a posterior distribution over the parameter and the states. The idea has been substantially improved in recent work by \cite{chkrebtii2013bayesian}.
+\par The most important contributions in the field are given in Table \ref{ch1:tab1}. Our treatment is presented in chapters 4 and 5.
+
+\begin{landscape}
+\thispagestyle{empty}
+%\topskip0pt
+%\vspace*{2cm}
+\begin{table}
+\begin{tabulary}{\linewidth}{l*{6}{c}r}
+\toprule
+\multirow{2}{*}{Authors}           		   & \multirow{2}{*}{Type of method} & \multirow{2}{*}{Error}          & Do all the states & \multirow{2}{*}{Theoretical properties} &\multirow{2}{*}{R package}\\
+						   &		    & 				     			& need to be observed? &       &	 \\\midrule
+\multirow{3}{*}{\cite{ramsay2007parameter}} 	   & \multirow{3}{*}{frequentist}    & \multirow{3}{*}{not only Gaussian } & \multirow{3}{*}{No}       & $\sqrt{n}$-consistent  &\multirow{3}{*}{CollocInfer}\\
+						   & 	 	    		     &  	     			& 		      & asymptotically normal  &  \\ 
+						   & 	 	    		     & 	     				& 		      & asymptotically efficient  &  \\ 
+\multirow{3}{*}{\cite{brunel2008parameter}}        & \multirow{3}{*}{frequentist}     &\multirow{3}{*}{not only Gaussian }& \multirow{3}{*}{Yes}   	      &  &\multirow{3}{*}{N.A.}    \\
+						   & 	   	    &  	     & 		      & $\sqrt{n}$-consistent &\\
+						   & 	   	    &       &   	      &  asymptotically normal  & \\
+\multirow{3}{*}{\cite{calderhead2008accelerating}} & \multirow{3}{*}{Bayesian} 	    & \multirow{3}{*}{Gaussian}       & \multirow{3}{*}{No}        & \multirow{3}{*}{N.A.} 	       &\multirow{3}{*}{N.A.}  \\
+						   & 	   	    &                &   	      & 		       & \\
+						   & 	   	    &       &   	      & 		       & \\
+\multirow{3}{*}{\cite{liang2008parameter}}  	   & \multirow{3}{*}{frequentist}     &\multirow{3}{*}{not only Gaussian }& \multirow{3}{*}{Yes}      	      &\multirow{3}{*}{strongly consistent }    &\multirow{3}{*}{N.A.}\\
+						   & 	   	    & 	     &   	      & 		       & \\
+						   & 	   	    &       &   	      & 		       & \\
+\multirow{3}{*}{\cite{chen2008estimation}}         & \multirow{3}{*}{frequentist}     & \multirow{3}{*}{not only Gaussian }&\multirow{3}{*}{ No}       & optimal convergence  &\multirow{3}{*}{N.A.}  \\			
+						   & 	   	    &       &   	      & rate but only for		       & \\
+						   & 	   	    &       &   	      & a linear model		       & \\
+\multirow{3}{*}{\cite{gugushvili2012sqrt}}	   & \multirow{3}{*}{frequentist}     & \multirow{3}{*}{not only Gaussian }& \multirow{3}{*}{Yes}  	      & \multirow{3}{*}{$\sqrt{n}$-consistent}  &\multirow{3}{*}{N.A.}\\
+						   & 	   	    &       &   	      & 		       & \\
+						   & 	   	    &       &   	      & 		       & \\
+\multirow{3}{*}{\cite{chkrebtii2013bayesian}} 	   & \multirow{3}{*}{Bayesian}& \multirow{3}{*}{Gaussian}       & \multirow{3}{*}{No}      & probabilistic solution	       &\multirow{3}{*}{N.A.}\\ 
+						   & 	   	    &                &   	      			       & of the state state  is	       & \\
+						   & 	   	    &                &   	      			       & consistent in $L_1$ norm      & \\
+\multirow{3}{*}{\cite{dattner2013estimation}} 	   & \multirow{3}{*}{frequentist}& \multirow{3}{*}{not only Gaussian}       & \multirow{3}{*}{Yes}      &        &\multirow{3}{*}{N.A.}\\ 
+						   & 	   	    &                &   	      			       & $\sqrt{n}$-consistent       & \\
+						   & 	   	    &                &   	      			       &      & \\
+\bottomrule
+\end{tabulary}
+\caption{List of general methods for solving the inverse problem of ODEs starting from the seminal paper \cite{ramsay2007parameter}. }
+\label{ch1:tab1}
+\end{table}
+\end{landscape}
+
+\subsection{References}
+\cite{bellman1971use},
+\cite{hemker1972numerical},
+\cite{bard1974nonlinear},
+\cite{varah1982spline},
+\cite{voit1982power},
+\cite{bock1983recent},
+\cite{biegler1986nonlinear},
+\cite{vajda1986direct},
+\cite{bates1988nonlinear},
+\cite{wild1989nonlinear},
+\cite{tjoa1991simultaneous},
+\cite{ogunnaike1994process},
+\cite{gelman1996physiological},
+\cite{stortelder1996parameter},
+\cite{ramsay1996principal},
+\cite{jost2000testing},
+\cite{pascual2000linking},
+\cite{ellner2002fitting},
+\cite{putter2002bayesian},
+\cite{li2002estimation},
+\cite{madar2003incorporating},
+\cite{li2005parameter},
+\cite{ramsay2006functional},
+\cite{barenco2006ranked},
+\cite{lawrence2006modelling},
+\cite{lalam2006pseudo},
+\cite{huang2006hierarchical},
+\cite{huang2006bayesian},
+\cite{poyton2006parameter},
+\cite{ramsay2007parameter}
+\cite{cao2007parameter},
+\cite{hooker2007ipopt},
+\cite{campbell2007bayesian},
+\cite{khanin2007statistical},
+\cite{rogers2007bayesian}, 
+\cite{donnet2007estimation},
+\cite{hooker2007theorems},
+\cite{brunel2008parameter},
+\cite{calderhead2008accelerating},
+\cite{liang2008parameter},
+\cite{chen2008estimation},
+\cite{varziri2008selecting},
+\cite{cao2008estimatingpredator},
+\cite{girolami2008bayesian},
+\cite{miao2008modeling},
+\cite{chen2008efficient},
+\cite{cao2008estimating},
+\cite{steinke2008kernels},
+\cite{hooker2009forcing},
+\cite{aijo2009learning},
+\cite{secrier2009abc},
+\cite{qi2010asymptotic},
+\cite{lillacci2010parameter},
+\cite{lu2011high},
+\cite{lawrence2011gaussian},
+\cite{gugushvili2012sqrt},
+\cite{chkrebtii2013bayesian},
+\cite{dattner2013estimation}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Considerable efforts have been directed in the post-genomic era to determine the target genes of the TFs and to model the dynamic patterns of interaction in regulatory systems \citep{khanin2006reconstructing}. It is known that genes regulated by 
+% the same TF are generally co-expressed. However, the primary problem is that the TF expression profile provides only partial information about the TF activity. Given the current lack of reliable high-throughput  techniques to 
+% measure protein activity levels in real time, it is  crucial to know whether this activity can be reconstructed from gene expression data.     
+
+% \section{Introduction0}
+% An ordinary differential equation is the equation for an unknown function of one variable that relates the values of the function itself and its derivatives of various orders. 
+% 
+% In this thesis we consider the system of differential equations of the form
+% \begin{equation}\label{eq:ode_model}
+% \bigg\{
+% \begin{array}{l}
+% x^{\prime}(t)=F(x(t),t;\theta),\ t\in[a,b],
+% \\
+% x(a)=\xi,
+% \end{array}
+% \end{equation}
+% where $x(t)$ takes values in $\rR^d,\, \xi$ in $\Xi\subset \rR^d,$ and $\theta$ in $\Theta\subset\rR^p.$
+% \par
+% 
+% We will only consider the initial value problem, hence we give conditions under which equation  (\ref{eq:ode_model}) has a unique solution (\citet{Agarwal08}).
+% \newline
+% \begin{theorem}
+% \label{Lip}
+% Let $F(t,x;\theta)$ be continuous in $R\times R^{d}$ and satisfy a uniform Lipschitz condition
+% $$||F(x_1,t;\theta)-F(x_2,t;\theta)||\leq L||x_1-x_2 ||, \qquad \forall (x_1,t),(x_2,t)\in T $$
+% where $T=\{(x,t): ||x-x_0||< \infty, |t|\leq T\}$ and $x(a)=\xi$ is initial value. Then initial value problem for equation 
+%  (\ref{eq:ode_model}) has a unique solution in $|t|\leq T$.
+% \end{theorem}
+% 
+% Corollary10. p59 \citep{arnold1973ordinary}
+% \begin{theorem} If $F=F(t,x,\theta)$ is a vector field 	depending $C^r$-differentiably on a parameter $\theta$ (as well as on $t$ and $x$) then the value of the solution of the equation
+%  (\ref{eq:ode_model}) depends differentiably on $a,\xi,\theta$ and $t$. 
+% 
+% \end{theorem}
+% 
+% \section{Identifiability}
+% 
+% There are several notions of identifiability in the literature on parameter estimation of ODE systems, cf.  \cite{bellman1970structural}, \cite{ljung1994global} and \cite{miao2011identifiability}. In this thesis, 
+% identifiability means that knowledge of a solution $x(t),\, t\in[0,1],$ for the system (\ref{eq:ode_model})--(\ref{eq:int_model}) yields the values of the parameters $\xi$ and $\theta$. For $\xi=x(0)$ this is obviously
+%  true, while identifiability for $\theta$ means that for any $\theta^\prime\ne\theta$ we have $x(\cdot;\theta^\prime,\xi)\ne x(\cdot;\theta,\xi)$.
+% 
+% The conditions for identifiability of the parameter $\theta$ and $\xi$ do not guarantee the uniqueness of the solution $x(t;\theta,\xi)$ as a function of $t$. Indeed, for the existence and uniqueness of the
+% solution $x(\cdot;\theta,\xi)$ in some neighborhood of $0$ the map $g:\rR^d\rightarrow\rR^d\times\rR^p$ needs to be twice continuously differentiable (for this and other basic theorems see \cite[pr 2]{arnold1977}). 
+% As an example, consider for any positive $\alpha \ne 1$ the (one dimensional) initial value problem
+% \begin{equation*}
+% \bigg\{
+% \begin{array}{l}
+% x^{\prime}(t)=\alpha\theta x(t)^{(\alpha -1)/\alpha},\quad
+% t\in[0,1], \\
+% x(0)=\xi=0.
+% \end{array}
+% \end{equation*}
+% One may check that
+% \[x(t;\theta,0)=[\theta(t-\tau)]^\alpha \vee 0,\quad
+% t\in[0,1],\] is a solution for any $\tau\in[0,1)$. Hence, there
+% are infinitely many solutions for this initial value problem.
+% Nevertheless, the parameter $\theta$ is identifiable \citep{dattner2013estimation}.
+% 
+% \section{Inverse problem of ODEs}
+% \label{chapter:Likelihood inference for inverse problem of ODEs}
+% Consider the differential equation 
+% \begin{equation}
+% \label{Ramsay1}
+%  x'(t)=F(x(t),t|\theta), \qquad t\in [a,b],
+% \end{equation}
+% which models some process of interest. The differential equation contains the model parameters $\theta$ which are unknown. 
+% In order to find the parameters $\theta$ we make measurements of state variables  $x(t)$ at some time points
+% $$t_1,t_2,\ldots,t_N.$$
+% In practice these measurements always contain some amount of noise. Two common ways that noise may arise are 
+% \begin{enumerate}
+%  \item unmodeled influences on instrument readings and
+%  \item numerical round-off.
+% \end{enumerate}
+% Therefore our data consist of some noisy observations,
+% \begin{equation}
+% \label{eq:measurements}
+% y(t_1)=x(t_1)+\epsilon_1, y(t_2)=x(t_2)+\epsilon_2,\ldots,y(t_n)=x(t_n)+\epsilon_n.
+% \end{equation}
+% 
+% The main problem we consider here is the inverse problem of ordinary differential equations (ODEs).
+% \begin{definition}
+% The {\it inverse problem} of ordinary differential equations (ODEs) \ref{Ramsay1} is defined as the problem of estimating the parameters  $\theta$ in the ODE model
+% using the measurements \ref{eq:measurements} of state variables.
+% \end{definition}
+
+\section{Our Work and Contribution}
+In this section we list our contribution.
+
+\begin{enumerate}
+
+		\item \textbf{Estimating Kullback Leibler information in Gaussian graphical models}
+		
+		
+			\textbf{Motivation}.
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			A special feature of Gaussian graphical models is that the estimation of its parameters, i.e. the precision matrix, can have two goals. One is prediction accuracy which is usually measured in terms of 
+			Kullback Leibler distance. The other one is graph identification. 
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%			
+			
+		\textbf{Results}.
+		The scaled log-likelihood is a biased KL estimate and estimating the bias yields an improved estimate of KL. We propose two criteria that both have the same structure: they are the sum of the log-likelihood term and an estimated bias
+		term. The first criterion, which we call Kullback-Leibler cross-validation (KLCV), is an approximation of leave-one-out cross-validation. The second one is based on the generalized information criterion (GIC), which is
+	  the generalization of the AIC for a wider class of models. This is the content of Chapter 2.
+
+
+
+	\item  \textbf{Estimating graph structure in Gaussian graphical models}
+	
+	
+			\textbf{Motivation}.
+	In gene regulatory networks we are usually interested in relationships between different agents. It is of interest to infer these relationships that are represented by a graph. In a Gaussian graphical model framework this means
+	that  we are more interested in the graph that is induced by the precision matrix than in the precision matrix itself.
+	
+	\textbf{Results}.
+	 The only existing closed-form model selection consistent criteria are BIC and EBIC. They use degrees of freedom that are unstable when the sample size is small. We use the derived criteria KLCV and GIC to  define alternative 
+        degrees of freedom for Gaussian graphical models. These alternative  definitions' can be used with BIC or EBIC when the sample size is small. We do not advocate their usage for larger
+        sample sizes. We discuss this in Chapter 2.
+	
+
+	      	\item  \textbf{Estimating parameters in general ordinary differential equations}
+
+				\textbf{Motivation}.
+	In many sciences dynamic processes are modelled by ordinary differential equations. These equations contain parameters that need to be estimated from the data.
+
+			\textbf{Results}.
+	A widely used approach to estimating parameters in ODEs involves replacing the solution of the ODE by its estimate obtained from the data. In Chapter 5 we use this idea but we formulate it in a framework of reproducing kernel Hilbert spaces.  
+       We consider smoothing the state as a problem of estimating a regression function that is also close to the solution of the ODEs. To make the idea possible we discretize the problem. The proposed estimator avoids the usage of numerical solvers of ODEs. 
+
+
+
+      	\item  \textbf{Estimating parameters in autonomous ordinary differential equations linear in the parameters}
+
+			\textbf{Motivation}.
+	In many applications the ordinary differential eqution which is a model of some dynamic process is autonomous and linear in the parameters. 
+
+			\textbf{Results}.
+	The special structure of the autonomous systems that are linear in the parameters allow one to obtain explicit explicit estimators of the parameters and initial values. This idea has been explored in the case of repeated measurements. 
+        For time course data we introduce a window estimator that yields $\sqrt{n}$-consistent estimators of the parameters. The explicit form of the estimators are also available in this case. Because of this, no optimization is needed
+	and estimation is computationally fast. Due to the computational efficiency the estimator can be combined with more efficient procedures. This is the topic of Chapter 5.
+
+      	\item  \textbf{Inferring latent gene regulatory network kinetics}
+
+			\textbf{Motivation}.
+	Transcription factors (TFs) are proteins that activate or repress genes. Regulatory networks consist of genes and TFs and their dynamics can be modelled by ODEs.
+        It is of interest to infer the activity profile of TFs, that are unobserved, and estimate the kinetic parameters of the ODE using level expression measurements of the genes that the TFs regulate.
+
+			\textbf{Results}.
+       We model the regulatory network in Escherichia coli. By using the theory developed in Chapter 5 we reconstruct the unobserved  LexA transcription factor and estimate the  kinetic parameters of the ODEs.
+       We also use an EM algorihtm to improve the precision of the derivative approximation. This is the topic of the Chapter 6.
+
+\end{enumerate}
+
+\section{Outline of the thesis}
+The rest of this thesis is organized as follows. Chapter 2 includes background material for Chapter 3. More specifically, in Chapter 2 we give an overview of Gaussian graphical models and penalized maximum estimation as well as 
+model selection for these models. In Chapter 3 we describe two new estimates of Kullback-Leibler information for Gaussian graphical model and we show how they can be also used for graph estimation. Chapter 4 deals with the estimation of parameters
+of the autonomous differential equations linear in the parameters. In Chapter 5 we describe a method for estimating parameters of general differential equations
+which uses the theory of the Reproducing kernel Hilbert (RKHS) spaces. In Chapter 6 we apply the methodology developed in Chapter 5 for inferring gene regulatory kinetics in the case of the SOS repair system in Escherichia coli.
