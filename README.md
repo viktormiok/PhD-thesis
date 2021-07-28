@@ -35,7 +35,8 @@ The pdf version of this thesis can be accessed here: [https://research.vu.nl/en/
 The work presented in this thesis has been done by me in collaboration with the persons listed in each section. 
 When using to information of this thesis, please cite the associated papers:
 
-**Chapter 1:** [Introduction]
+**Chapter 1:** [Introduction](https://research.vu.nl/ws/portalfiles/portal/61554199/chapter+1.pdf)
+
 Background, data generation and statistical analysis
 
 **Chapter 2:** [tigaR: integrative significance analysis of temporal differential gene expression induced by genomic abnormalities](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-15-327)
