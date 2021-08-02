@@ -1,0 +1,22 @@
+% ******************************* Notation ********************************
+
+\begin{notation}
+In order to distinguish between one-dimensional and multidimensional objects we use boldface symbols. Scalars are not boldfaced while vectors and matrices 
+are. To differentiate between vectors and matrices we use italic symbols. A vector is denoted by an italic boldface symbol whereas a matrix is denoted by an upright boldface one. Here follows a more detailed list of math fonts used in this thesis.
+\vspace{1cm}
+\begin{itemize}
+\item {\it Scalar variables} are denoted by lower case italics or Greek symbols (e.g. $t$, $\lambda$ ).
+ \item {\it Functionals} and {\it scalar functions}  are denoted by lower- or upper case italics or lower case Greek symbols (e.g. $\delta_x$, $l$, $L$, $\psi$ ).
+\item {\it Vectors} are denoted by bold italics or bold Greek (e.g. $\yb$, $\Yb$, $\mub$ ).
+\item {\it Vector functions} are denoted by bold italics or bold Greek (e.g. $\fb$).
+\item {\it Matrices} are denoted by bold upper case Roman or bold upper case Greek (e.g. $\Ab$, $\Thetab$). 
+\item {\it Matrix functions} are denoted by bold upper- or lower case Roman (e.g. $\Fb$, $\gb$). 
+\item {\it Operators} are denoted by upper case Roman (e.g. $\rP$, $\rG$). 
+\item {\it The derivative} is upright sans serif $\sD$, {\it differential} is lower case Roman $\rd$ and the symbol $\partial$ is used for {\it partial differential}.
+\item Symbol $\varepsilon$ is used for stochastic noise and $\epsilon$ for positive real number.
+\item Sub/superscripts that are variables are in italics or Greek, while those that are labels are Roman (e.g. $\yb_k$, $l_{\lambda}$,  $\BIC_{\KLCV}$ ).
+\item Brackets are arranged in the order $[\{( )\}]$.
+\end{itemize}
+  
+\end{notation}
+

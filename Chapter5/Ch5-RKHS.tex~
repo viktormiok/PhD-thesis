@@ -1,0 +1,655 @@
+\chapter{RKHS approach to estimating parameters in ODEs}
+\chaptermark{RKHS}
+
+\graphicspath{{Chapter5/Figs/}{Chapter5/Figs/PDF/}{Chapter5/Figs/}}%
+
+%Nomenclature
+\nomenclature[A]{$\|f\|_{\Hcal}$}{norm in $\Hcal$}% ???\nomenclature[A]{$\|f\|_{\Hcal}$}{norm in $\Hcal$}% ???
+% \nomenclature[A]{$\langle f,g\rangle_{\Hcal}$}{inner product in space $\Hcal$}%
+% \nomenclature[A]{$x(\tb)$}{vector $(x(t_1),\ldots,x(t_n))$, where $x:T\rightarrow \rR$ and $\tb=(t_1,\ldots,t_n)$, $t_1,\ldots,t_n\in T$ }% 
+% \nomenclature[A]{$\tb$}{vector $(t_1,\ldots,t_n)$, where $t_1,\ldots,t_n\in T$ }%
+% \nomenclature[A]{${\cal H}$}{Hilbert space or Reproducing Kernel Hilbert Space}%
+% \nomenclature[A]{${\cal H}_{{ \rm pre}}$}{inner product space spanned by finite linear combinations of functions $k(\cdot,x_k)$, where $x_k\in X$ and $k$ is kernel on nonempty set $X$ }%
+% \nomenclature[A]{$k$}{kernel function}%
+% \nomenclature[A]{$\Phi$}{ feature map }%
+% \nomenclature[A]{$\delta_x$}{depending on context, either Dirac's functional or Dirac's function}%
+% \nomenclature[A]{$G$}{Green's function}%
+% \nomenclature[A]{$\Kb$}{$\Kb := (k(x_k, x_j))_{i,j}$ is kernel (or Gram) matrix; $x_k,x_j\in X$, where $X$ is nonempty set.  }%
+% \nomenclature[A]{$L_{\lambda}$}{regularized (penalized) loss function}%
+% \nomenclature[A]{$\Gb$}{Green's matrix, discrete analogue of Green's function}% 
+% \nomenclature[A]{$L_2$}{space of square Lebesgue integrable functions}% 
+% 
+% \nomenclature[Z]{ODE}{ordinary differential equation}%
+% \nomenclature[Z]{RKHS}{reproducing kernel Hilbert space}%
+% \nomenclature[Z]{TF}{transcription factor}%
+% \nomenclature[Z]{mRNA}{messenger Ribonucleic acid}%
+% \nomenclature[Z]{FHN}{ FitzHugh-Nagumo}%
+% 
+% \nomenclature[X]{CdaR}{a particular transcription factor in Streptomyces coelicolor bacterium}%
+% \nomenclature[X]{SCO3235}{a particular gene in Streptomyces coelicolor bacterium}%
+
+\footnotetext{Most of this chapter is published in the article \cite{gonzalez2013reproducing} and smaller part is published in \cite{gonzalez2013inferring}.} 
+In this chapter, we discuss the problem of estimating parameters in ODEs which have a general form. In our approach we combine the frequentist set-up, such as in \citep{ramsay2007parameter}, with the kernel approach of \citep{steinke2008kernels}. 
+The main advantage is that we can define the estimation problem explicitly as a maximum likelihood problem, whereby the differential equation is interpreted as a constraint. By introducing a reproducing kernel Hilbert space (RKHS), we transform the 
+constrained maximization problem into an unconstrained maximization problem.  We detail this idea in  Section \ref{sec6:RKHS_lik} after the review of RKHS and Green's function given in
+Section \ref{sec:prelim} and classical MLE approach reviewed in Section \ref{sec6:explicit_ode}. In Section \ref{sec:implementation} we focus on the implementation of our methodology. Sections \ref{sec7:sim_study1} and 
+\ref{sec7:streptomyces} illustrate the behaviour of the technique in simulated and real data scenarios, respectively. 
+\section{Preliminaries}
+\label{sec:prelim}
+\subsection{Reproducing Kernel Hilbert spaces }
+
+In this section we give an introduction to the theory of reproducing kernel Hilbert spaces. Our exposition is based on \cite{steinwart2008support}. We restrict ourselves to real Hilbert spaces although the theory holds for complex
+Hilbert spaces as well. 
+
+\begin{definition}\label{def:kernel}Let $X$ be a non-empty set. A function $k : X\times X \rightarrow \rR$ is called a kernel on $X$ if it is symmetric and positive definite, i.e. for all $n\in N$, $\alpha_1,\ldots,\alpha_n\in \rR$ 
+and all $x_1,\ldots,x_n$ we have 
+\begin{equation}
+\label{eq6:kernel}
+ \sum_{k=1}^n\sum_{j=1}^nk(x_j,x_k)\geq 0.
+\end{equation}
+\end{definition}
+Condition (\ref{eq6:kernel}) is equivalent to positive definiteness of {\it kernel matrix} (or {\it Gram matrix})  
+\begin{equation}
+\label{eq:kernel_matrix}
+\Kb := \{k(x_k, x_j)\}_{i,j}.
+\end{equation}
+Kernels are intimately connected to Hilbert spaces since it can be shown that $k$ is a kernel on $X$ if and only if there exists a Hilbert space $\Hcal$ called a {\it feature space}  and a map $\Phi:X\rightarrow \Hcal$ called a 
+{\it feature map} such that for all $x,x'\in X$ we have 
+$$k(x,x')=\langle\Phi(x),\Phi(x')\rangle_{\cal H},$$
+where $\langle \cdot,\cdot\rangle_{\Hcal}$ is an inner product on $\Hcal$. For a kernel, neither the feature map nor the feature space are uniquely determined. Although not unique, it can be shown that the feature space $\Hcal$
+has to be  a Hilbert function space over $X$, i.e., a Hilbert space that consists of functions mapping from $X$ into $\rR$. Related to this, we can consider an opposite situation: for a given Hilbert function space $\Hcal$ over $X$ 
+does there exist a kernel $k$ that can reproduce the functions of space $\Hcal$? In this regard, we have the following definition.
+
+\begin{definition}\label{def:reproducing_kernel}Let $X$ be a nonempty set and ${\cal H}$ be a Hilbert function space over $X$. A function $k:X\times X\rightarrow \rR$  is called
+ a reproducing kernel of ${\cal H}$ if we have $k(\cdot,x)\in {\cal H}$ for all $x\in X$ and the reproducing property 
+$$f(x)=\langle f,k(\cdot,x)\rangle$$
+holds for all $f\in {\cal H} $ and all $x\in X$.
+\end{definition}
+In the definition (\ref{def:reproducing_kernel}) it is not assumed that $k$ is a kernel since it can be shown that every reproducing kernel is a kernel in the sense of definition (\ref{eq6:kernel}) with the feature map given by 
+$$\Phi(x) = k(\cdot,x), \qquad x\in X.$$
+Furthermore, it can be shown that every Hilbert function space with a reproducing kernel is an reproducing kernel Hilbert space in the sense of the following definition. 
+\begin{definition}\label{def:RKHS }Let $X$ be a nonempty set. A Hilbert function space ${\cal H}$ over $X$ is a reproducing kernel Hilbert space (RKHS) over $X$ if for all $x\in X$ the Dirac functional $\delta_x:{\cal H}\rightarrow \rR$ defined by 
+$$\delta_x(f)=f(x)\qquad f\in {\cal H},$$
+is continuous.
+\end{definition}
+There is a one-to-one relation between kernels and RKHSs which is the content of the following theorem.
+\begin{theorem}
+ 1. (Every RKHS has a unique reproducing kernel) Let ${\cal H}$ be an RKHS over $X$. Then $k:X\times X\rightarrow \rR$ defined by 
+$$k(x,x')=\langle\delta_x,\delta_{x'}\rangle\qquad, x\in X$$
+is the only reproducing kernel of ${\cal H}$. \par
+2. (Every kernel has a unique RKHS) Let $X$ be a nonempty set and $k$ be a kernel on $X$. Then the metric completion ${\cal H}$ of the set
+$${\cal H}_{\rm {pre}}=\bigg\{\sum_{k=1}^n\alpha_i k(\cdot,x_k):n\in N,\alpha_1,\ldots,\alpha_n,x_1,\ldots,x_n\in X\bigg\}$$
+is the only RKHS for which $k$ is a reproducing kernel. Also, for $f :=\sum_{k=1}^n\alpha_i k(\cdot,x_k)\in {\cal H}_{\text{pre}}$ we have 
+$$\|f\|^2_{{\cal H}}=\sum_{k=1}^n\sum_{k=1}^n\alpha_i\alpha_j k(x_k,x_j)=\alphab^{\top}\Kb\alphab,$$
+where $\Kb$ is the kernel matrix defined in (\ref{eq:kernel_matrix}) and $\alphab=(\alpha_1,\ldots,\alpha_n)$.
+\end{theorem}
+
+Now consider a problem of estimating a function $f:X\rightarrow \rR$ from the data $\mathcal{D}=\{(x_1,y_1),$ $\ldots,(x_n,y_n)\,|x_k\in X\,,y_i\in\rR\}$. We focus here on quadratic loss but the problem could be formulated for an 
+arbitrary {\it loss function} \citep{smola2002learning}. Minimizing the functional 
+$$L(f)=a\sum_{k=1}^n\{y_i-f(x_k)\}^2,$$
+where $a$ is some positive constant is {\it ill-posed problem} \citep{chen2002different} unless we restrict the class of functions $f$. One approach to doing this is to restrict the class of functions $f$ to a compact set of an RKHS over $X$. 
+This can be done  by regularizing the empirical loss $L$ with a strictly monotone function of $\|f\|_{\cal H}^2$. In our work, we consider the regularized (penalized) loss
+\begin{equation}
+\label{eq:pen_loss}
+L_{\lambda}(f)=a\sum_{k=1}^n\{y_i-f(x_k)\}^2  +\frac{\lambda}{2}\|f\|_{\cal H}^2 \nomenclature[A]{$\|f\|_{\Hcal}$}{norm in $\Hcal$}% ???\nomenclature[A]{$\|f\|_{\Hcal}$}{norm in $\Hcal$}% ???. 
+\end{equation}
+The existence of the minimizer of the penalized loss and its representation in terms of kernel is guaranteed by the {\it representer theorem}, in the case of arbitrary loss function and penalty which is strictly  monotonic function 
+of the RKHS norm \citep{smola2002learning}. In the case of the penalized loss (\ref{eq:pen_loss}) the solution is also unique.
+\begin{theorem}[Representer theorem]
+Let $a$ and $\lambda$ be positive constants and let ${\cal H}$ be an RKHS over $X$ associated to a kernel $k$. Then for every $x_1,\ldots,x_n\in X$ and every $y_1,\ldots,y_n\in \rR$ the minimizer $\hat{f}\in {\cal H}$ of the functional
+$$L_{\lambda}(f)=a\sum_{k=1}^n\{y_i-f(x_k)\}^2  +\frac{\lambda}{2}\|f\|_{\cal H}^2$$
+is unique and admits the representation of the form 
+$$\hat{f}(x)=\sum_{k=1}^n\alpha_ik(x_k,x)=\Kb\alphab,$$
+where vector $\alphab=(\alpha_1,\ldots,\alpha_n)$ is given by
+$$\alphab=\left(\frac{\lambda}{2a}\Ib_{n} + \Kb\right)^{-1}\yb,$$
+and $\yb=(y_1,\ldots,y_n)$.
+\end{theorem}
+
+\subsection{Green's function and RKHS}\label{sec:prelim_green}
+In this section we cover the concept of Green's function and its relation to RKHS. In our exposition we define Green's function as a proper function of two variables, though it can be defined as a distribution, i.e. generalized 
+function. The terminology varies \citep{griffel2002applied,nikol1992functional,kelley2010theory,folland1992fourier,duffy2001green,stakgold2011green,barton1989elements,roach1982green,fasshauer2012green}, but roughly speaking the main 
+idea is that Green's function is the kernel of the integral operator which is the inverse of a linear differential operator.
+\begin{definition}
+Let $P=\sum_{k=1}^d \theta_{k}d^{k}/dt$ be a linear differential operator. Any function $G(t,s)$ satisfying 
+\begin{equation}
+\label{eq:greenfunction}
+P_t\{G(t,s)\}=\delta(t-s),
+\end{equation}
+where $\delta$ is the Dirac delta function, is called a fundamental solution or Green's function for the differential operator $P$. 
+\end{definition}
+The subscript $t$ in $P$ is to stress that the differentiation is with respect to the variable $t$. Dirac $\delta$-function is defined as 'function' such that $\int_{-\infty}^{+\infty}\delta(t-s)f(s)ds=f(t)$ and 
+\[ \delta(t) = \left\{
+  \begin{array}{l l}
+    +\infty & \quad \text{if $t=0$}\\
+      0     & \quad \text{if $t\neq 0$}
+  \end{array} \right..\]
+We use $\delta$-function for the notational simplicity, so the equality (\ref{eq:greenfunction}) should not be understood in {\it distributional sense} \citep{folland1992fourier} but as follows:
+\begin{itemize}
+ \item $G(t,s)$ belongs to the class $C^{n-2}[a,b]$ and $(n-1)$th and $n$-th derivative exist and are continuous for $t\neq s$.
+ \item $P_t\{G(t,s)\}=0$, for $t\neq s$
+ \item $(n-1)$th derivative has a unit jump for $t = s$.
+\end{itemize}
+Green's function is important because it is used to solve linear differential equations. If we have the differential equation 
+$$Pg=f$$
+and certain conditions the solution $g$ needs to satisfy, like {\it boundary conditions}, {\it initial value conditions} or more generally {\it distributed conditions} than the solution can be written as
+$$g(t)=(P^{-1}f)(t)=\int_a^b G(t,s)f(s)\rd s.$$
+where besides (\ref{eq:greenfunction}), $G$ also needs to satisfy conditions that arise from the conditions imposed on the solution $g$. In other words inverse operator $P^{-1}$ of the differential operator $P$ is an integral 
+operator with the {\it kernel} $G$. For more details see \cite{nikol1992functional}.
+\par
+In our work we are going to discretize the differential operator. In other words, we are going to use difference operator and consequently we are interested in its Green's function.
+Thus, we consider Hilbert space of functions over finite set $X=\{x_1,\ldots,x_n\}$,  i.e. $\Hcal=\{f:f:X\rightarrow\rR\}$. Here the situation is much more simpler because every function $f\in \Hcal$ is
+fully described by the $\rR^n$ vector $\fb=(f(x_1),\ldots,f(x_n))$,  linear operators $\Pb:\Hcal\rightarrow \Hcal$ are isomorphic to matrices and any function $g:X\times X\rightarrow \rR$ uniquely determines a linear operator
+$\Gb:\Hcal\rightarrow\Hcal$ through $\Gb_{ij}=g(x_k,x_j)$. Also for every invertible operator on finite dimensional space we have the form of the matrix of its inverse. The role of delta function is taken by Kronecker delta. 
+For more details see \cite{steinke2008kernels}. Hence, the definition (\ref{eq:greenfunction}) for a difference operator with matrix $\Pb$ 
+translates into 
+\begin{equation}
+\label{eq:greenfunctiondiscrete}
+(\Pb\Gb)(t,s)=\delta(t,s),
+\end{equation}
+where $\delta(t,s)$ is the Kronecker delta. In other words $\Gb$ is the inverse matrix of the matrix $\Pb$ of difference operator, i.e. $\Gb=\Pb^{-1}$. \par
+
+In the following theorem we connect Green's function and RKHS. 
+\begin{theorem}
+\label{th7:green_rkhs}
+Consider any invertible linear operator with matrix $\Pb$ on $\rR^n$. Define an inner product on ${\cal H}$ with 
+$$\langle \fb,\fb'\rangle_{\cal H}=\langle \Pb\fb,\Pb\fb'\rangle_{\rR^n},$$
+where $\langle \cdot,\cdot\rangle_{\rR^n}$ is the standard euclidean product in $\rR^n$. Then ${\cal H}$ is an RKHS over $X$ that admits as a reproducing kernel Green's function of $\Pb^{\top}\Pb$, i.e. function 
+$k:X\times X\rightarrow \rR$ determined by the matrix 
+\begin{equation}
+\label{greens_kernel}
+ \Kb=(\Pb^{\top}\Pb)^{-1}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Green's function $g:X\times X\rightarrow \rR$ determined by the matrix $\Gb=(\Pb^{\top}\Pb)^{-1}$ is the reproducing kernel of ${\cal H}$ since for any function $f\in\Hcal$ we have
+\begin{eqnarray*}
+\langle f, g(\cdot,x)\rangle_{\cal H} &=&\langle \fb, \Gb(\cdot,x)\rangle_{\rR^n}=\langle \Pb\fb, \Pb\Gb(\cdot,x)\rangle_{\rR^n}=\langle \fb, \Pb^{\top}\Pb\Gb(\cdot,x)\rangle_{\rR^n}\\
+&=&\langle \fb,\delta(\cdot,x)\rangle=f(x),
+\end{eqnarray*}
+where $\Gb(\cdot,x)$ is the column of $\Gb$. Every linear functional on finite dimensional vector space is continuous, so Dirac's is and consequently 
+${\cal H}$ is an RKHS determined by the kernel $\Gb$.
+\end{proof}
+
+\section{Explicit ODE}
+\label{sec6:explicit_ode}
+We consider dynamical systems with $m$ interacting elements evolving in some closed time interval $T=[a,b]$. We denote by $x_k:T \rightarrow \bbbr$ for $k=1,\dots,d$, the functions describing the evolution of the elements of the 
+system and by $u_k:T \rightarrow \bbbr$ for $k=1,\dots,p$, the action of $p$ external forces.  In compact notation, we denote by $\xb(t)=(x_1(t),\dots,x_d(t))^{\top}$, $\ub(t)=(u_1(t),\dots,u_p(t))^{\top}$ the vectors of state 
+variables and external forces respectively. We assume that each state variable $x_k$ satisfies   
+\begin{equation}\label{eq:system.diff}
+P_{\thetab_k} x_k(t)= f_{k}(\xb(t),\ub(t),\betab), \,\,\, k=1,\dots,d, \,\,\, t \in T, 
+\end{equation}
+where $P_{\thetab_k} = d/dt+\theta_k I$ is the linear differential operator associated to the $k$th equation of the system,  which is defined by parameter $\theta_k$ and $f_k$ is a known function depending on $t$ through $\xb(t)$ and
+$\ub(t)$ for $\betab$ a vector of parameters. Here $I$ stands for the identity operator. For differential operators of higher order see \cite{gonzalez2013reproducing}.
+
+In the sequel, we refer to the whole set parameters of the system by $\{\thetab,\betab\}$, where $\thetab= \{\theta_1,\dots,\theta_m\}$. Typically, a noise sample of $\xb$ is observed at a grid of time points 
+$\tb = (t_1,\dots,t_n)^{\top}$. Let $\yb_k=y_k(\tb)$ indicate the available data for state $k$ and let $x_k(\tb)$ indicate the vector of values corresponding to evaluated $k$th state at time points $\tb$, i.e.
+\begin{align}
+\label{eq7:yb_i} 
+\yb_k&=y_k(\tb)=(y_k(t_1),\dots,y_k(t_n))^{\top}, \\
+\label{eq7:xb_i} 
+\xb_k&=x_k(\tb)=(x_k(t_1),\dots,x_k(t_n))^{\top},\\
+\label{eq7:fb_i} 
+\fb_k&=(f_{k}(\xb(t_1),\ub(t_1),\betab),\dots,f_{k}(\xb(t_n),\ub(t_n),\betab))^{\top}.
+\end{align}
+We consider model with additive noise
+$$y_k(\tb)=x_k(\tb)+\epsilon_k(\tb),$$ 
+where $\epsilon_k$ represents a noise process for the $k$th state. We assume that $\epsilon_k(\tb)$ is an independent multivariate zero-mean Gaussian noise with variance $\sigma_k^2$ for each $k$th state.
+Denote the sample by $\yb(\tb)$, which is the matrix that comprises all the rows  $\yb_k$, for $k=1,\dots,d$. Then the \emph{log-likelihood} of the model given $\yb(\tb)$ is given by
+\begin{equation}\label{def:like.univ.ode}
+l(\thetab,\betab, \xb| \yb(\tb))=- \sum\limits_{k=1}^{d}\frac{1}{2\sigma^2_k}\|\yb_k-\xb_k\|^2\,\,\, \text{where} \,\,\, P_{\thetab_k} x_k(t)= f_{k}(\xb(t),\ub(t),\betab),
+\end{equation}
+and $\xb$ depends on $\{\thetab,\betab\}$ although it is not explicitly specified for the sake of simplicity. Since ODEs generally don't have closed form solution, evaluating the log-likelihood at the specific value of the parameters
+$\thetab,\betab$ requires solving numerically the ODE for those parameters. Thus, the numerical maximization of the log-likelihood function involves repeatedly solving ODE for every new iteration in the optimization algorithm. 
+Thus, this approach is computationally costly, specially for large systems.
+\section{RKHS based penalized likelihood}
+\label{sec6:RKHS_lik}
+In thi section, our goal is to reformulate (\ref{def:like.univ.ode}) in terms of a penalized loss  such that we obtain a computationally tractable solution that does not require an explicit solution of the differential equation. 
+To this aim, we resort to standard approach of discretization of ODEs and consider the difference equation given by
+\begin{equation}\label{eq:diif.eq}
+\Pb_{\thetab_k}\xb_k= \fb_k,
+\end{equation}
+where $\xb_k$ and $\fb_k$ are defined in \eqref{eq7:xb_i} and \eqref{eq7:fb_i}  and $\Pb_{\thetab_k}$ is the operator defined by 
+\begin{equation}\label{eq7:diif.op}
+\Pb_{\thetab_k}=\Db+\theta_k\Ib_n,
+\end{equation}
+where $\Ib_n$ is the identity matrix of order $n$ and $\Db \in \bbbr^{n\times n}$ is a first order difference operator 
+\begin{equation}
+\label{eq6:D}
+\Db= \Delta^{-1}
+\left( {\begin{array}{ccccccccc}
+-1 & 1 &  &   &  \\
+  -1 & 0 & 1 & &   \\
+  &  & & \ddots    \\
+ &&  &-1 & 0 & 1 \\
+  &  &&  &-1 & 1 \\
+ \end{array} } \right),
+\end{equation}
+where $\Delta= \text{diag}(t_2-t_1, 2(t_{3}-t_{1}), \dots,2(t_{n-1}-t_{n-2}),t_{n}-t_{n-1})$. The different finite approximations used for $t_1$ and $t_n$ are due to the fact that they are boundary points. In this regard, we 
+aim to define a penalized loss function 
+\begin{equation}\label{def:like.univ.ode.pen}
+l_{\lambda}(\thetab,\betab, \textbf{x}| \yb(\tb))=- \sum\limits_{k=1}^{d}\frac{1}{2\sigma^2_k}\|\yb_k-\xb_k\|^2 - \frac{\lambda}{2} \sum\limits_{k=1}^{d} \Omega(\xb_k)
+\end{equation}
+where $\Omega$ defines a norm of $\xb_k$ in an RKHS.
+\par 
+First consider the case when the system is homogeneous, i.e. $\fb_k=\ob$. In this case, according to the theorem (\ref{th7:green_rkhs}) defining the penalty as  $ \Omega(\xb_k) = \|\Pb_{\thetab_k}\xb_k\|^2$ implies that 
+ $$\Omega(\xb_k) = \|\xb_k\|_{\Hcal_{\theta_k}}^2$$
+where $\Hcal_{\theta_k}$ is an RKHS defined by the kernel 
+\begin{equation}\label{eq7:K}
+\Kb_{\theta_k}=(\Pb_{\theta_k}^{\top}\Pb_{\theta_k})^{-1}.
+\end{equation}
+\par
+Consequently, by the representer theorem the penalized loss has the minimizer $\xhatb_k$ of the form 
+$$\xhatb_k=\Kb_{\theta_k}\alphahatb_k  $$                        
+where $\alphab_k =( \Kb_{\thetab_k}+\lambda\sigma^2_k\Ib_n)^{-1}\yb_k.$
+
+In general, the interest in inferring parameters of ODE is for systems which are not homogeneous. In the same spirit of above, one might like to consider
+\begin{equation}\label{pen2}
+\Omega(\xb_k) = \|\Pb_{\thetab_k}\xb_ k- \fb_k\|^2,
+\end{equation}
+as a penalty. However (\ref{pen2}) cannot be directly used as a penalty for two reasons. Expression (\ref{pen2}) cannot be reformulated as a norm of $\xb_k$ in an RKHS. Note that when $\xb_k=\ob$ then 
+$\|\Pb_{\thetab_k}\xb_k - \fb_k\|^2$ is not necessarily zero. Also, in this case the equations of the ODE are not independent. In a general setting, each $\xb_k$ is affected by $\xb_1,\dots,\xb_n$.  
+
+To circumvent previous problem we consider that each $f_k$ is a function of $\betab$ that depends on $t$ through $\ub(t)$ and some fixed surrogate of $\xb$, denoted by $\xb^{\star}(t)$, independent of $\thetab$ and $\betab$. 
+Effectively, this step represents a linearization of the system and makes the equations independent of each other. In section 4 we elaborate on the definition of an appropriate $\xb^{\star}(t)$.
+
+In order to find a RKHS representation of the system in a general case, as before we assume that $\Pb_{\thetab_k}$ is invertible for each $k$ . Denote by 
+\begin{align}
+\label{eq7:fb_i_star} 
+\fb^{\star}_k&=(f_k(\xb^{\star}(t_1),\ub(t_1),\betab),\dots,f_k(\xb^{\star}(t_n),\ub(t_n),\betab))^{\top},\\
+\label{eq7:x.tilde}
+\tilde{\xb}_k& = \xb_k - \Pb^{-1}_{\thetab_k}\fb^{\star}_k.
+\end{align}
+Since $\Pb_{\theta_k}$ is a linear operator we obtain that for all $k$
+$$\|\Pb_{\theta_k}\xb_k - \fb^{\star}_k\|^2=\|\Pb_{\theta_k}\tilde{\xb}_k\|^2$$
+which according to the theorem (\ref{th7:green_rkhs}) is a norm of $\tilde{\xb}_k$ in an RKHS defined by the kernel \ref{eq7:K}. Hence, we write
+\begin{equation}
+\Omega(\tilde{\xb}_k) =\|\Pb_{\theta_k}\tilde{\xb}_k\|^2=\|\tilde{\xb}_k\|_{\Hcal_{\theta_k}}^2.  
+\end{equation}
+In practice, noise samples are obtained for $\xb_k$ and not for $\tilde{\xb}_k$. Therefore, the inference problem on $\tilde{\xb}_k$ requires transformation the original data. 
+\begin{equation}\label{eq:transform}
+\tilde{\yb}_k= \yb_k - \Pb_{\thetab_k}^{-1}\fb^{\star}_k.
+\end{equation}
+It is straightforward to check that $\tilde{\yb_k} \sim \mathcal{N}(\tilde{\xb}_k(\tb),\sigma_k^2\Ib_n)$ and  therefore the variance of the $y_{kj}$'s is the same as the variance of the $\tilde{y}_{kj}$'s.
+
+\section{Approximate ODE inference}\label{sec:implementation}
+
+The goal of this section is to provide computational details to infer the set of parameters $\{\thetab,\betab\}$ using the approximate ODE representation described in Section \ref{sec6:RKHS_lik}. As detailed there, a definition of each 
+$\xb^{\star}_k$, a surrogate of $\xb_k$ is required. In this work we express each $\xb^{\star}_k$ in terms of a penalized splines basis expansion, 
+\begin{equation}\label{eq7:xb_i_star}
+\xb^{\star}_k = \sum_{k=1}^qc_{ki}\phi_i(\tb) = \cb_k^{\top}\phib(\tb), 
+\end{equation}
+where $q$ is the number of splines functions of the vector $\phib$, which is large enough to capture the variation of the solutions of the ODE. 
+\begin{definition}
+Consider the penalized likelihood model in (\ref{def:like.univ.ode.pen}). Let $\yb_k$, $\xb_k$, $\Pb_{\thetab_k}$, $\fb^{\star}_k$ and $\xb^{\star}_k$ be defined by \eqref{eq7:yb_i},\eqref{eq7:xb_i},\eqref{eq7:diif.op}, \eqref{eq7:fb_i_star} 
+and \eqref{eq7:xb_i_star} for $k=1,\dots,d$. We define the approximated penalized pseudo-log-likelihood of the ODE model associated to (\ref{def:like.univ.ode.pen}) as
+$$l_{\lambda}(\thetab,\betab | \yb(\tb),\xb^{\star} )=- \sum\limits_{k=1}^{m}\frac{1}{2\sigma^2_k}\|\yb_k-\xb_k\|^2 - \frac{\lambda}{2} \sum\limits_{k=1}^{d} \| \Pb_{\thetab_k} \xb_k-\fb^{\star}_k\|^2$$
+where $\lambda>0$ and $\xb^{\star}(\tb) = (x^{\star}_{1}(\tb),\dots,x^{\star}_{m}(\tb))^{\top}$.
+\end{definition}
+Since we have 
+\begin{eqnarray} \nonumber
+\sum\limits_{k=1}^{d}\frac{1}{2\sigma^2_k}\|\yb_k-\xb_k\|^2 & = &\sum\limits_{k=1}^{d}\frac{1}{2\sigma^2_k}\|\yb_k-\Pb_{\thetab_k}^{-1}\fb^{\star}_k-(\xb_k-\Pb_{\thetab_k}^{-1}\fb^{\star}_k)\|^2=
+\sum\limits_{k=1}^{d}\frac{1}{2\sigma^2_k}\|\tilde{\yb}_k-\tilde{\xb}_k\|^2, 
+\end{eqnarray}
+it follows that we can rewrite $l_{\lambda}(\thetab,\betab | \yb(\tb),\xb^{\star} )$ as follows 
+\begin{equation}
+\label{eq6:pen_loss} 
+l_{\lambda}(\thetab,\betab | \yb(\tb),\xb^{\star} )=- \sum\limits_{k=1}^{m}\frac{1}{2\sigma^2_k}\|\tilde{\yb}_k-\tilde{\xb}_k\|^2 -\frac{\lambda}{2} \sum\limits_{k=1}^{m} \| \Pb_{\thetab_k} \tilde{\xb}_k \|^2 
+\end{equation}
+This form allows us to use the representer theorem according to which the minimizer of $\tilde{\xb}_k$ is given by 
+$\hat{\tilde{\xb}}_k=\Kb_{\theta_k}\alphahatb_k $ where $\alphahatb_k= ( \Kb_{\thetab_k} + \lambda \sigma_k^2 \Ib_n )^{-1}\tilde{\yb}_k$ so it follows that 
+\begin{equation}
+\label{eq6:lin_smoother}
+ \hat{\tilde{\xb}}=\Sb_{\lambda,k}\tilde{\yb}_k
+\end{equation}
+where 
+\begin{equation}
+\label{eq6:influence_matrix}
+\Sb_{\lambda,k}=\Kb_{\thetab_k}(\Kb_{\thetab_k}+\lambda \sigma_k^2 \Ib_n )^{-1}\tilde{\yb}_k.
+\end{equation}
+Hence, the minimizer written in the terms of $\xb_k$ is given by
+$$\xhatb_k =  \Kb_{\thetab_k}\alphahatb_k +\Pb_{\thetab_k}^{-1}\fb^{\star}_k.$$
+Next, we show how to compute $l_{\lambda}$ in practice.
+\begin{proposition}\label{prop:Mstep}
+Assume that $\Pb_{\thetab_k}^{-1}$ exists. Then it holds 
+$$\{\hat{\thetab},\hat{\betab}\}=arg  \max_{\thetab,\betab} l_{\lambda}(\thetab,\betab | \yb(\tb),\xb^{\star} ) = arg  \max_{\thetab,\betab} g_{\lambda}(\thetab,\betab| \yb(\tb),\xb^{\star} ).$$
+\end{proposition}
+where 
+\begin{equation}
+\label{eq6:g_function}
+g_{\lambda}(\thetab,\betab | \yb(\tb)) = \sum_{k=1}^m \frac{1}{2\sigma_k^2}  \tilde{\yb}_k^{\top}\left[\Ib_n -  (\Ib_n + \sigma_k^2\lambda  \Kb_{\thetab_k}^{-1} )^{-1} \right]\tilde{\yb}_k.
+\end{equation}
+Optimization of \eqref{eq6:g_function} with a conjugate gradient method produces estimates of $\{\thetab, \betab \}$. If the set of parameters of the systems is separable by equations, independent optimization can be done for those, 
+which helps to avoid local minima and speed up the procedure. Finally, estimates for each $\xhatb_k$ are available by means of
+\begin{equation}\label{eq:alpha}
+\xhatb_k =  \Kb_{\thetab_k}\alphahatb_k +\Pb_{\thetab_k}^{-1}f_k(\ub(\tb),\xb^{\star}(\tb),\hat{\betab})
+\end{equation}
+where $\alphahatb_k= (\Kb_{\thetab_k}+\lambda \sigma_k^2 \Ib_n )^{-1}\tilde{\yb}_k$. 
+
+\subsection{Model selection}\label{sec6:model_selection}
+In our penalized approach, the value of the nuisance parameter $\lambda$ has to be fixed. For this purpose, we derive AIC-type of criterion using results from \citep{trevor2009elements}. 
+The main difference between the obtained criterion and  classical AIC criterion is that the likelihood is not evaluated at the MLE estimator and the number of parameters is substituted by the effective number of parameters $\df$ 
+\citep{trevor2009elements}. For the linear smoother \eqref{eq6:lin_smoother} of the $k$th state the influence matrix is given by \eqref{eq6:influence_matrix}.The effective number of parameters for each state is defined as 
+$\df_k=\tr(\hat{\Sb}_{\lambda,k})= \tr\{\Kb_{\hat{\theta}_k}( \Kb_{\hat{\theta}_k} + \lambda \hat{\sigma}_k^2 \Ib_n )\}^{-1}$ where $\tr$ represents  the trace operator. Then the AIC-type of criterion is defined in our context as
+\begin{equation}\label{eq6:AIC}
+\AIC(\lambda) = -2 l_{\lambda}(\thetab,\betab | \yb(\tb),\xb^{\star} ) + 2 \sum_{k=1}^d\df_k.
+\end{equation}
+In the context of ODE estimation, an alternative is to select $\lambda$ large. As pointed out in \cite{ramsay2007parameter} this adds more weight to the ODE over the data.
+
+\section{Examples using synthetically generated data}
+\label{sec7:sim_study1}
+\subsection{Explicit ODE versus regularization approach}
+
+In this section we use a toy example to illustrate the advantages of using a regularization approach to estimate the parameters of a dynamical system. We consider the differential equation  
+$$x'(t)=\theta x(t).$$
+For fixed $\theta$ and initial condition $x(0)$ the  solution of  the differential equation is given by $x(t) = x(0) \exp(\theta t)$. We fix $\theta=-2$, $x(0)=-1$ and we generate 500 samples of 10 equally spaced points in the 
+interval $[0,2]$ using Gaussian noise with $\sigma=0.25$. For each sample we calculate the maximum likelihood estimator (MLE) of $\theta$ and our RKHS based estimator for $\lambda$ selected by means of the AIC. The averaged absolute 
+deviance to the true parameter of the MLE is 0.73 with a standard deviation of 1.03 whereas the averaged error for the penalized approach is $0.53$ with a standard deviation of 0.38. In Figure \ref{figure:example} we show the results
+for one run of the experiment. Figure \ref{figure:example} a)  shows the negative log likelihood and the penalized log-likelihood of the model for one of the generated data sets. The penalized approach results in an 'improvement' of
+the original likelihood for parameter estimation with a minimum closer to the true value of the parameter. Also note that the original negative log likelihood becomes extremely flat for small values of the parameters, which can 
+produce computational problems in the optimization step. Figure \ref{figure:example} b) shows the MLE and RKHS solutions together with the true function $x(t) = -\exp(2t)$ for $t\in [0,2]$. Penalizing the likelihood improves the 
+estimator in this example. The true function $x$ is better approximated using the penalized approach due to the finite sample bias of the MLE. Also the estimate of the parameter is closer to the true value of $\theta$ in this 
+particular realization
+($\hat{\theta}_{MLE} =-2.55$ vs. $\hat{\theta}_{RKHS} = -2.05$).
+
+\begin{figure}[t!]
+  \begin{center}
+   \mbox{
+      \subfloat[Negative log likelihood and the penalized log-likelihood of the model for one of the generated data sets.] {\includegraphics[height=6.8cm,width=6.8cm]{likelihood.pdf}}\quad 
+      \subfloat[Simulated data, true solution, and the two estimated solutions using the MLE and RKHS approaches.] {\includegraphics[height=6.8cm,width=6.8cm]{functions.pdf}}
+        }
+  \end{center}
+\caption{Results obtained for the differential equation  $x'(t)=\theta x(t)$}\label{figure:example}
+\end{figure}
+
+\subsection{Comparison with MLE}
+
+ \begin{figure}[t!]
+  \begin{center}
+   \mbox{
+       \subfloat[True solutions and the data in the Lotka-Volterra experiment for $n=100$ and $\sigma=0.25$.] {\includegraphics[height=6.7cm,width=6.7cm]{LV.pdf}}\quad 
+       \subfloat[Time comparison between the explicit MLE approach and the proposed penalized RKHS based approach.] {\includegraphics[height=6.7cm,width=6.7cm]{RunningTime.pdf}}
+        }
+ \end{center}
+\vspace{-0.6cm}\caption{Results obtained for the  Lotka-Volterra equations. }\label{figure:LV}
+\end{figure}
+
+In this experiment we work with the Lotka-Volterra system of differential equations originally proposed in the theory of auto-catalytic chemical reaction \citep{lotka1910contribution}. The system is given by
+\begin{equation}\label{eq:LVmodel}
+\begin{array}{l}
+x'_1(t) = x_1(t)\{\theta_1 - \beta_1 x_2(t)\},
+\\
+x'_2(t) = - x_2(t)\{\theta_1 - \beta_2 x_2(t)\}.
+\end{array}
+\end{equation}
+where $\thetab=(\theta_1, \theta_2)^{\top}$, $\betab = (\beta_1, \beta_2)^{\top}$ are the parameters.
+
+Our aim is to evaluate the accuracy and speed of our RKHS penalized approach in comparison with the classical MLE approach. To do so, we run a simulation study for fixed $\theta_1=0.2 $, $\beta_1=0.35$ $\theta_2=0.7$, $\beta_2=0.40$ 
+and initial conditions $x_{1}(0) = 1 $ and $x_{2}(0) = 2$. We generate samples made up of $n$ fixed and equally spaced independent noisy observations of the state variables $x_1$ and $x_2$ in the interval $T=[0,30]$ that we perturb 
+with zero mean Gaussian noise with standard deviation $\sigma$. We generate data for the samples sizes $n=35,70,100$ and two noise scenarios $\sigma=0.1,0.25$. In Figure \ref{figure:LV} a) we show the true solutions of the model for 
+the above mentioned parameters together with the data of one of the simulations.
+
+In order to apply the proposed approach we obtain the functions $x^{\star}_1$ and $x^{\star}_2$ using penalized splines and for $\lambda=100$. To perform the MLE estimation we use 10 different initial 
+values of the parameters (randomly generated in the interval $[0,1]$) and we use the likelihood value to select the best candidate. 
+
+In Figure \ref{figure:LV} b) we show a computational time comparative for the averaged running times. 
+The RKHS-based is 120.08, 24.06  and 14.41 times faster than the explicit ODE approach for $n=35, 70$ and $100$ respectively. In Table 1 we show the mean square errors of the
+estimates with respect to the true parameters for 100 runs of the experiment. For $n=35$ the penalized RKHS approach performs significantly better than the explicit ODE estimates, which is explained by the empirical bias suffered by
+the MLE approach illustrated in Section 6.1. For $n=75,100$ both methods work similarly in terms of precision. Notice that the noise in the data is reflected in the precision of the estimates for both techniques; the errors are larger
+in all cases for $\sigma=0.25$. 
+
+ 
+\begin{table}[t!]
+\footnotesize {
+\begin{center}\caption{Mean square error for the inferred parameters in the Lotka-Volterra model. Standard deviations shown in parenthesis. The true value of the parameters are fixed to $\theta_1=0.2 $, $\beta_1=0.35$ $\theta_2=0.7$, 
+$\beta_2=0.40$. The best result for each comparison is boldfaced. }
+\begin{tabulary}{\linewidth}{ccccccc}
+\toprule
+\multicolumn{7}{ c }{Lotka-Volterra ODE model} \\
+\hline
+$\sigma$ &n & Method& $|\theta_1 - \hat{\theta}_1|$ & $|\beta_1 - \hat{\beta}_1|$ & $|\theta_2 - \hat{\theta}_2|$ & $|\beta_2 - \hat{\beta}_2|$ \\
+   \hline
+\multirow{6}{*}{$0.1$}&\multirow{2}{*}{35} & RKHS     & {\bf 0.0002 (0.0003)} & {\bf0.0007  (0.0007)} & {\bf0.0031  (0.0036)} & {\bf0.0014  (0.0014)} \\ 
+&			& MLE   									& 0.0016  (0.0088) & 0.0063 (0.0425) & 0.0422  (0.1809) & 0.0227  (0.1064) \\[0.15cm]
+&\multirow{2}{*}{70} & RKHS   			        & 0.0001  (0.0001) & 0.0002  (0.0002) &{\bf  0.0009  (0.0011)} & {\bf 0.0003  (0.0004)} \\ 
+&			& MLE   			& {\bf 0.0000  (0.0001)}&{\bf  0.0001  (0.0006)} & 0.0017  (0.0034) & 0.0005  (0.0010) \\ [0.15cm]
+&\multirow{2}{*}{100}  & RKHS   			& 0.0001  (0.0001) & {\bf 0.0001  (0.0002)} & {\bf 0.0005  (0.0006)} & {\bf 0.0002 (0.0002)}	 \\ 
+&			& MLE   
+							& {\bf 0.0000  (0.0001)} & 0.0002  (0.0010) & 0.0013  (0.0023) & 0.0004  (0.0008) \\ 
+   \midrule
+\multirow{6}{*}{$0.25$}&\multirow{2}{*}{35}     	& RKHS   & {\bf 0.0010  (0.0013)} & {\bf 0.0017  (0.0024)} &{\bf  0.0111  (0.0205)} & {\bf 0.0038 (0.0059)} \\ 
+&			& MLE   			& 0.0029  (0.0180) & 0.0081  (0.0392) & 0.0173  (0.0487) & 0.0078  (0.0359) \\ [0.15cm]
+&\multirow{2}{*}{70} & RKHS  				& {\bf 0.0004 (0.0006)} & {\bf 0.0008  (0.0009)} & {\bf 0.0042  (0.0047)} & {\bf 0.0015  (0.0019)} \\ 
+&			& MLE    			& 0.0007  (0.0025) & 0.0030  (0.0115) & 0.0151  (0.0474) & 0.0062  (0.0301) \\ [0.15cm]
+&\multirow{2}{*}{100}    & RKHS 			& {\bf 0.0003  (0.0004)} & {\bf 0.0005  (0.0006)} & {\bf 0.0034  (0.0043)} & {\bf 0.0011  (0.0016)} \\ 
+&			& MLE  				& 0.0008  (0.0032) & 0.0028  (0.0116) & 0.0174  (0.0603) & 0.0083  (0.0387) \\  
+   \bottomrule
+\end{tabulary}\label{table:results}
+\end{center}}
+\end{table}
+
+     
+\subsection{Influence of the sample size on the estimation}\label{sec:large_n}
+Since we were not able to obtain consistency of the proposed estimator, in this section we test the proposed methodology with the aim to see the influence of the sample size in the estimation of the parameters. We consider the 
+FitzHugh-Nagumo model (FHN) \citep{fitzhugh1955mathematical} which is described  by the 
+equations 
+\begin{equation}\label{eq:FHNmodel}
+\begin{array}{l}
+x'_1(t) = c\left\{x_1(t)-\frac{x_1(t)^3}{3} +x_2(t) \right\},
+\\
+ x'_2(t) = \frac{1}{c}\{x_1(t)-a + bx_2(t)\}.
+\end{array}
+\end{equation}
+where $a$, $b$ and $c$ are the parameters of the system and $x_1$ and $x_2$ are the state variables. 
+
+\begin{figure}[t!]
+%\begin{center}
+\includegraphics[scale=0.55]{FHN.pdf}
+\caption{Solution of the FHN model and generated data points in one run of the experiment (n=100).}
+    \label{fig:dataFHN}
+%\end{center}
+\end{figure}
+
+\begin{figure}[t!]
+%\begin{center}
+\includegraphics[scale=0.48]{bars.jpeg}
+\caption{ 95$\%$ confidence intervals for the parameters $a$, $b$, $c$ and $\sigma^2$ of the FHN equations for different sample sizes. Horizontal grey lines represent the true values of the parameters. Estimations and  C.I. are 
+calculated using the 50 runs of the experiment. }
+    \label{fig:CIruns}
+%\end{center}
+\end{figure}
+
+\begin{figure}[t!]
+%\begin{center}
+\includegraphics[scale=0.75]{boxplot.pdf}
+\caption{Box-plots for the absolute errors $|\hat{a}_i-a|$, $|\hat{b}_i-b|$ and $|\hat{c}_i-c|$ in the estimation of the parameters of the FHN equations. Results calculated using the Ramsay et al. method and the penalized maximum 
+likelihood approach (MPLE-rkhs) proposed in this work for $n=50$.}
+    \label{fig:boxplot}
+%\end{center}
+\end{figure}
+
+In our experiment we fix the parameters $a,b=0.2 $ and $c=3$ and initial conditions $x_{1,0} = -1 $ and $x_{2,0} = -1$. We generate samples $\mathcal{D}=\{(y_{kj},t_j) \in \bbbr \times T\}_{j=1}^n$ for $i=1,2$ made up of independent
+noisy observations of the state variables $x_1$ and $x_2$ at $n$ fixed (and equally spaced) time points $t_1,\ldots,t_n$ in the interval $T=[0,20]$. We use a normal scheme $y_{kj} \sim \mathcal{N}(x_k(t_j),\sigma^2),$ where the 
+variance $\sigma^2$ is assumed equal for $x_1$ and $x_2$ with a value of $0.1$.  Within this framework, we estimate the parameters of the FHN model for sample sizes $n$ ranging between 30 and 200. In Figure \ref{fig:dataFHN} we show
+the true functions $x_1$ and $x_2$ and the data  generated for $n=100$. 
+
+In order to apply the proposed methodology we need to transform the system to homogeneous as detailed in Section \ref{sec6:RKHS_lik}. Since $x_1$ is non-linearly included in eq (\ref{eq:FHNeq1}) we fit a spline functions to the data.
+Then, we replace $x_1$ and $x_2$ by their spline estimates $x^{\star}_1$ and $x^{\star}_2$  which yields:
+\begin{equation}\label{eq:FHNeq1}
+\begin{array}{l}
+x'_1(t) - cx_1(t) \approx c\left\{-\frac{{x^{\star}_1}^3}{3} +x^{\star}_2(t)  \right\},
+\\
+x'_2(t) - \frac{b}{c}x_2(t) \approx \frac{1}{c} \{x^{\star}_1(t)-a \}. 
+\end{array}
+\end{equation}
+
+Under the previous transformation, the right part of the system does not depend on $x_1$ and $x_2$ and we can proceed as explained in Section \ref{sec6:RKHS_lik}. Consider $\Db$, the difference operator in eq. \eqref{eq6:D} for a
+particular sample size $n$. Then the difference operator of the system is given by
+\begin{equation}
+\Pb_{b,c}= 
+\left( {\begin{array}{cc}
+\Db- c\Ib_n &   \Ob_n\\
+ \Ob_n  & \Db- \frac{b}{c}\Ib_n   \\
+ \end{array} } \right),
+\end{equation}     
+for $\Ib_n$ and $\Ob_n$ are the $n$-dimensional identity matrix and $n$-dimensional matrix of zeros, respectively. Under the previous formulation, the kernel matrix used to penalize the likelihood can be explicitly written as $\Kb_{b,c} = (\Pb_{b,c}^{\top}\Pb_{b,c})^{-1}$ which connects the 
+system of differential equations with the RKHS framework.
+
+We apply the proposed methodology to estimate the parameters of the FHN system. For each sample size we generate 100 independent samples and we estimate the parameters $a$, $b$, $c$ and $\sigma^2$. Following the 
+discussion in Section \ref{sec6:model_selection} and the ideas in \citep{ramsay2007parameter} the regularization parameter $\lambda$ was fixed to 10000. In this case and the variance $\sigma^2$ is estimated as a parameter of the model.
+In Figure \ref{fig:CIruns} we show the 95\% confidence intervals for the four parameters across different sample sizes. When $n$ increases the estimation of the parameters is more precise: the averaged estimates are closer to the true
+parameters and the uncertainty decreases. With 40 data points the method shows a very accurate estimation of the parameters $a$, $b$ and $c$. Specially precise is the estimation of $a$. A proper estimate $\sigma^2$ requires a larger
+amount of data points.
+
+
+
+\begin{table*}[t!]
+\begin{center}
+\caption{Averaged, maximum and minimum errors for the estimation of the parameters of the FHN system achieved by the Ramsay et al. method and the penalized maximum likelihood approach (MPLE-RKHS) proposed in this work. Two different
+sample sizes (50,300) are used for the comparison. The best result for each comparison is boldfaced. \label{Tab:comparative}}
+{\begin{tabulary}{\linewidth}{cccccccc}
+\toprule
+&   FHN & \multicolumn{2}{c}{ Av. error} &   \multicolumn{2}{c}{ Max. error}   &  \multicolumn{2}{c}{ Min. error}  \\
+       &   params.    & MPLE  & Ramsay &  MPLE      & Ramsay  & MPLE     &  Ramsay \\
+\midrule
+n = 50 &a            & {\bf 0.0780}  &    0.2892&   {\bf 0.1829}  &   0.5130  & {\bf  0.0000}  &   0.0019\\
+& b          &  {\bf 0.0485}  &    0.7023  & {\bf  0.1737}  &    1.2936  &  {\bf 0.0012}  &   0.0619\\
+&c           & {\bf  0.0983}   &   0.2503  & {\bf  0.3028}   &  0.6253  &  {\bf 0.0006}  &   0.0488\\
+\midrule
+n = 300 & a    &   0.0058   &    {\bf 0.0032}   &   0.0150    &   {\bf 0.0126} &   0.0000    &   0.0000\\
+& b                   &   0.0175   &    {\bf  0.0101}  &   0.0609    &   {\bf 0.0318}   &   0.0005  &    {\bf 0.0002}\\
+& c                    &     0.0348   &    {\bf 0.0134}  &   0.1133  &     {\bf 0.0476}   &   0.0008   &     {\bf 0.0010}\\
+\bottomrule
+\end{tabulary}}{}
+\end{center}
+\end{table*}
+
+\subsection{Comparison with generalized profiling procedure}\label{sec:comparison_ramsay}
+To conclude this section we compare the results achieved in the FHN system with those obtained by the {\it generalized profiling} approach proposed in \cite{ramsay2007parameter}. In particular, we compare the estimates for two 
+scenarios with sample sizes $n=50$ and $n=300$. We run 50 replicates of the experiment and we show the results in Table \ref{Tab:comparative}. We compare both methods in terms of the differences between the estimates of the parameters
+and their true values. The averaged, maximum and minimum error across the 50 replicates are used to compare both approaches. For $n=50$ the proposed methodology improves the Ramsay et al. method for the three parameters irrespective 
+of the criteria. Box-plots of the errors distributions are shown in Figure \ref{fig:boxplot}. For $n=300$ only minor differences are found. 
+
+
+
+\section{Real example: Reconstruction of Transcription Factor activities in Streptomyces coelicolor}
+\label{sec7:streptomyces}
+A gene regulatory network consists of a gene encoding a transcription factor (TF) together with the genes it regulates (genes whose activity can be activated or repressed by binding to the DNA). 
+In the absence of reliable technology to measure the activity of the TF (number of TF-protein molecules in the cell), the problem is to reconstruct it from gene expression data of its target genes.
+
+ \begin{figure}[t!]
+  \begin{center}
+   \mbox{
+      \subfloat[Gene SCO3235, reconstructed profile. Circles and crosses represent the observed data and lines the obtained profiles. The estimated variance is $\hat{\sigma}^2=0.014$. The estimated parameters for this gene are 
+      $\beta_{1}$ = 0.65 
+(stdev= 0.57), $\beta_{2} = 1.07 (0.51)$, $\beta_{3}$ = 2.09 (0.26) and $\theta$=1.06 (0.21).] {\includegraphics[height=6.8cm,width=6.8cm]{GeneSCO3235.pdf}}\quad 
+       \subfloat[Reconstructed activity of the master activator cdaR scaled between 0 an 1. Circles and crosses represent the data obtained in two independent experiments not used in the estimation process.] 
+{\includegraphics[height=6.8cm,width=6.8cm]{TF.pdf}}
+        }
+ \end{center}
+\vspace{-0.6cm}
+ \caption{Reconstructed genes profiles and master activator cdaR.}\label{figure:rec.profiles}
+\end{figure}
+
+In this experiment we work with a data set of genes expression levels in the \emph{Streptomyces coelicolor} bacterium. The goal is to reconstruct the activity of the transcription factor (TF) \emph{CdaR} using 
+10-points time-series gene expression data of 17 genes. For each gene, two different series corresponding to a wild type and mutant type bacterium (for which a transcriptional regulator 
+cdaR has been knocked out) are available. Measurements are available at time points (in mins.) $\tb=\{16,18, 20,21,22,23,24,25,39,67\}$. The 
+importance of understanding the behaviour of the cdaR relies on the fact that it is partially responsible for the production of a particular type of antibiotic.
+
+
+Following \citet{khanin2007statistical} we assume that changes in the expression levels of the genes are caused by changes in the cdaR protein and the mRNA degradation. We denote by $\eta(t)$  the activity profile of the regulator 
+cdaR at time $t$ and by $x_k(t)$ the expression level of each gene $k$ in time $t$. This regulatory system is modelled by
+\begin{equation}\label{eq:systemEcoli}
+\frac{d}{dt}x_k(t) + \theta_k x_k(t)  = \beta_{1i} + \beta_{2i} \frac{\eta(t)}{\beta_{3i}+ \eta(t)}, 
+\end{equation}
+where $\theta_k$ is the rate of mRNA degradation, $\beta_{2i}$ and $\beta_{3i}$ are gene-specific kinetic parameters for the gene $k$ and $\beta_{1i}$ is an additive constant that accounts for the basal level of transcription and the
+nuisance effects from micro-arrays. The goal is to use the available sample to reconstruct the levels of the activator $\eta(t)$, which is unobserved, and the gene profiles via the estimation of the parameters in  
+(\ref{eq:systemEcoli}). We assume that the variance is equal for all the genes. For each gene, we work with the average of the two available time series. We model the activator $\eta$ using a basis of cubic splines with equally spaced
+nodes, that is $\eta(t)=\sum_{k=1}^{15}a_i\phi_i$ where the $\phi_i$'s are elements of the basis and $a_1,\dots,a_{15}$ parameters to estimate. We apply the methodology described in  \ref{sec6:RKHS_lik} and \ref{sec:implementation}. 
+We select the optimal regularization parameter $\lambda$ by using the AIC  as model selection criterion. 
+
+Figure \ref{figure:rec.profiles} a)  shows the estimated profile for the gene SCO3235, which fits well the observed data. The reconstructed genes profiles exhibit a similar fit for the remaining genes. The reconstructed cdaR activator
+is shown in Figure \ref{figure:rec.profiles} b) together two independent replicates profiles obtained from a different experiment and that were not used in the estimation process. The values are normalized between 0 and 1 since the 
+activity of the cdaR protein is expressed in arbitrary units and can be interpreted as relative levels. The estimated profile fits the observed data showing two hills around time points 4 and 9 similarly to the genes profiles. This 
+agrees with the fact that cdaR is an activator of the genes activity. These result shows the ability of the proposed approach to identify unknown elements of the ODE systems through the estimation of the parameters of the model.
+
+\section{Appendix}
+\Skip
+\noindent
+\emph{\textbf{Proof of Proposition 1}}
+\Skip
+\noindent
+We prove the proposition by showing that $l_{\lambda}(\thetab,\betab|\yb(\tb),\xb^{\star} )$ and $g_{\lambda}(\thetab,\betab| \yb(\tb),\xb^{\star} )$ are the same function. 
+Using \eqref{eq6:pen_loss} and properties of RKHSs yields
+\begin{eqnarray*}
+l_{\lambda}(\thetab,\betab | \yb(\tb),\xb^{\star} )&=&- \sum\limits_{k=1}^{m}\frac{1}{2\sigma^2_k}\|\yb_k-\xb_k\|^2 - \frac{\lambda}{2} \sum\limits_{k=1}^{d} \| \Pb_{\thetab_k} \xb_k-\fb^{\star}_k\|^2\\
+&=&- \sum\limits_{k=1}^{d}\frac{1}{2\sigma^2_k}\|\tilde{\yb}_k-\tilde{\xb}_k\|^2 - 
+\frac{\lambda}{2} \sum\limits_{k=1}^{d} \| \Pb_{\thetab_k} \tilde{\xb}_k \|^2.\\
+&=&- \sum\limits_{k=1}^{d}\frac{1}{2\sigma^2_k}\|\tilde{\yb}_k-\Kb_{\thetab_k}\alphab_k\|^2 - 
+\frac{\lambda}{2} \sum\limits_{k=1}^{d} \alphab_k^{\top}\Kb_{\thetab_k}\alphab_k.
+\end{eqnarray*}
+By writing the norm in the terms of inner product  we obtain
+$$l_{\lambda}(\thetab,\betab | \yb(\tb),\xb^{\star} )=- \sum_{k=1}^{d}\frac{1}{2\sigma_k^2}\left(\tilde{\yb}_k^{\top}\tilde{\yb}_k-2\tilde{\yb}_k^{\top}\Kb_{\thetab_k}\alphab_k+
+\alphab_k^{\top}\Kb_{\thetab_k}^{\top}\Kb_{\thetab_k}\alphab_k+\sigma_k^2\lambda\alphab_k^{\top}\Kb_{\thetab_k}\alphab_k \right).$$
+For fixed $\{\thetab, \betab\}$ and $\sigma_k^2$ the maximum of $l_{\lambda}(\thetab,\betab | \yb(\tb),\xb^{\star} )$ is given for the vectors $\alphab_k=(\Kb_{\thetab_k}+
+\sigma_k^2\lambda\Ib)^{-1}\tilde{\yb}_k$. We set the derivative to zero to find the point of maximum. Substituting each $\alphab_k$ and simplifying we obtain that
+\begin{eqnarray}\nonumber
+l_{\lambda}(\thetab,\betab | \yb(\tb),\xb^{\star})  & =   & 
+  -\sum\limits_{k=1}^{m}\frac{1}{2\sigma_k^2} \big\{ \tilde{\yb}_k^{\top}\tilde{\yb}_k-2\tilde{\yb}_k^{\top}\Kb_{\thetab_k}(\Kb_{\thetab_k}+\sigma_k^2\lambda\Ib)^{-1}\tilde{\yb}_k \\ \nonumber
+&+& \tilde{\yb}_k^{\top}(\Kb_{\thetab_k}+\sigma_k^2\lambda\Ib)^{-1}(\Kb_{\thetab_k}+\sigma_k^2\lambda\Ib)\Kb_{\thetab_k}(\Kb_{\thetab_k}+\sigma_k^2\lambda\Ib)^{-1}\tilde{\yb}_k \big\}  \\ \nonumber
+    & =   & - \sum\limits_{k=1}^{m}\frac{1}{2\sigma_k^2}\left\{\tilde{\yb}_k^{\top}\tilde{\yb}_k-\tilde{\yb}_k^{\top}\Kb_{\thetab_k}(\Kb_{\thetab_k}+\sigma_k\lambda\Ib)^{-1}\tilde{\yb}_k\right\} \\ \nonumber
+    &= &-\sum\limits_{k=1}^{m}\frac{1}{2\sigma_k^2}\tilde{\yb}_k^{\top}\left\{\Ib- (\Ib+\sigma_k^2\lambda  \Kb_{\thetab_k}^{-1})^{-1} \right\}\tilde{\yb}_k \\
+   &= & g_{\lambda}(\thetab,\betab| \yb(\tb),\xb^{\star} )
+ \nonumber
+\end{eqnarray}
+as we aimed to prove.
+
+\subsection{Derivation of AIC selector for MPLE}
+
+To simplify the derivation we first prove a general result and than we apply it in our case. Assume that we have an observation $\yb=(y_1,\ldots,y_n)^{\top}$ from $\Ncal(\mub,\sigma^2\Ib_n)$, with the density 
+$f_{\mub}(\yb)$, where $\mub=(\mu_1,\ldots,\mu_n)^{\top}$.  Let  $f_{\mu_i}(y_i)$ be the density function of the distribution $\Ncal(\mu_i,\sigma^2)$,  for $i=1,\ldots,n$ . Independence of $y_1,\ldots,y_n$
+implies
+\begin{equation}
+\label{eq:density_equality} 
+\log f_{\mub}(\yb)=\sum_{k=1}^n\log f_{\mu_i}(y_i).
+\end{equation}
+Let the estimate of $\mub$ has the form $\muhatb=\Sb\yb$, i.e. $\muhatb$ is a linear smoother. The aim is to find an estimate of the prediction error, so called {\it in-sample error} denoted by $\hat{{\rm Err}}_{{\rm inn}}$ 
+\citep{trevor2009elements}, for the predictor $\muhatb$. To this end, we use the following formula  
+$$\hat{{\rm Err}}_{{\rm inn}}=\frac{1}{n}\sum_{k=1}^n (y_i-\muhat_i)^2+\frac{2}{n}\sum_{k=1}^n\cov(\muhat_i,y_i)$$
+\citep[chapter 7]{trevor2009elements}.
+Up to an additive constant we have $-2\sigma^2\log f_{\mu_i}(y_i)\cong(y_i-\muhat_i)^2$ and consequently 
+\begin{equation}
+\label{eq:density_equality2} 
+\hat{{\rm Err}}_{{\rm inn}}\cong\frac{2\sigma^2}{n}\sum_{k=1}^n\log f_{\muhat_i}(y_i)+\frac{2}{n}\sum_{k=1}^n\cov(\muhat_i,y_i).
+\end{equation}
+Since $\muhatb$ is a linear smoother it holds $\sum_{k=1}^n\cov(\muhat_i,y_i)=\tr(\Sb)\sigma^2$  \citep{trevor2009elements}. After substituting the previous equality  (\ref{eq:density_equality2}), using equality 
+(\ref{eq:density_equality}) and scaling with $n/\sigma^2$ we obtain  
+$$\hat{{\rm Err}}_{{\rm inn}}\cong-2\log f(\yb)+2\tr(\Sb).$$
+The term $\log f_{\mub}(\yb)$ is equal to the log-likelihood $l(\muhatb)$ so after substitution we obtain the expression that we denote by $\AIC$
+\begin{equation}
+\label{eq:AIC_RKHS} 
+\AIC=-2l(\muhatb)+2\df,
+\end{equation}
+where $\df=\tr(\Sb)$.
+\par 
+Now we apply the derived result in our case. We have that $\tilde{\yb}_k\sim \Ncal(\tilde{\xb}_k,\sigma^2_k\Ib_n)$ and $\hat{\tilde{\xb}}_k=\hat{\Sb}_{\lambda,k}\tilde{\yb}_k$, where 
+$\hat{\Sb}_{\lambda,k}=\Kb_{\thetahat_k}(\Kb_{\thetahat_k}+\lambda \sigmahat_k^2 \Ib_n )^{-1}\tilde{\yb}_k$. According to (\ref{eq:AIC_RKHS}) $\AIC$ score for the estimate of the $k$th state is 
+$$\AIC_k(\lambda)=-2l_k(\thetab,\betab, \xb| \yb(\tb))+2\tr(\hat{\Sb}_{\lambda,k}),$$
+where $l_k(\thetab,\betab, \xb| \yb(\tb))=\frac{1}{2\sigma^2_k}\|\yb_k-\xb_k\|^2$. Summing expressions $\AIC_k$, for $k=1,\dots,d$, we obtain  
+\begin{equation}
+\AIC(\lambda) = -2 l(\thetab,\betab,\tilde{\hat{\xb}} | \tilde{\yb}(\tb),\hat{\xb}' ) + 2 \sum_{k=1}^d \tr(\hat{\Sb}_{\lambda,k}).
+\end{equation}
+Since $l(\thetab,\betab | \tilde{\yb}(\tb),\xb^{\star} )=l(\thetab,\betab| \yb(\tb),\xb^{\star} )$ we finally obtain the expression (\ref{eq6:AIC}).
+\par
+The derivation presented here is simpler than the one suggested in \cite{gonzalez2013inferring}, which assumes the measure of prediction error to be deviance and uses the theory of general covariance penalties
+\citep{efron2004estimation,efron1986biased}. 
+
+
+\section{Summary}
+
+We have proposed a new method to estimate general systems of ordinary differential equations measured with noise. Our proposal is based on the penalization of the likelihood of the problem by means of the ODE. A reproducing
+kernel Hilbert space approach has provided the theoretical framework to make this idea feasible. The concept of Green's function and the connection between linear differential operators and kernels have been used to rewrite the 
+penalized likelihood of the problem in a particular manner easy to handle in practice. 
+
+The main merit of the method is its ability to perform in a single step the estimation problem without solving the differential equation. In practice, our proposal is specially competitive in small sample scenarios as it is shown via
+simulation. A real example in system biology has been used to illustrate the utility of the method in scenarios with hidden components.

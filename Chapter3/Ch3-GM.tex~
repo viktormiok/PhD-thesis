@@ -1,0 +1,759 @@
+\chapter{Estimating KL loss in Gaussian graphical models}
+\label{ch3:KL_loss}
+
+\graphicspath{{Chapter3/Figs/}{Chapter3/Figs/PDF/}{Chapter3/Figs/}}%
+
+\nomenclature[A]{$\Ib_p$}{identity matrix of order $p$ }%
+\nomenclature[A]{$\Ib_{\lambda}$}{indicator matrix, whose entry is $1$ if the corresponding entry in the precision matrix $\Thetahatb_{\lambda}$ is nonzero and zero if the corresponding entry in the precision matrix is zero.}%
+\nomenclature[A]{$\Ob_p$}{zero matrix of order $p$ }%
+\nomenclature[A]{$(\Xb)_{ij}$}{for the matrix $\Xb$ its $(i,j)$th element }%
+\nomenclature[A]{$\Ab\circ\Bb$}{Schur (Hadamard) product of two matrices $(\Ab\circ\Bb)_{ij}=(\Ab)_{ij}(\Bb)_{ij}$}%
+\nomenclature[A]{$\Ab\otimes\Bb$}{Kronecker product of two matrices }%
+
+\chaptermark{Entropy loss in GGMs}
+% KLCV and GIC
+\label{chapter:Estimating entropy loss in Gaussian graphical models}
+
+
+In this chapter, we propose two estimators of the Kullback-Leibler loss in Gaussian graphical models. One approach uses the Generalized Information Criterion (GIC) and the other, that we call Kullback Leibler cross-validation (KLCV), is 
+based on deriving a closed form approximation of leave-one-out cross validation. We first derive the formulae for the maximum likelihood estimator (MLE), for both GIC and KLCV. For the maximum penalized  likelihood estimator (MPLE), 
+we use a unifying framework which allows us to  modify the formulae derived for the MLE in a such a way so the assumption of sparsity is incorporated. As pointed out in the previous chapter, in GGM a distinction should be made 
+between estimating KL and estimating the graph. Consequently, we treat graph estimation problem separately. We explore the use of the proposed criteria in graph estimation
+problem by combining it with consistent model selection criteria  such as BIC and EBIC. 
+
+
+The rest of the chapter is organized as follows. In Section \ref{sec3:KLexample} we clarify the aim of different model selection methods. In Section \ref{sec3:GIC_KLCV} we introduce two new estimators of KL loss for which the 
+derivation is given in Section \ref{sec3:GIC_KLCV_derivation}. Section \ref{sec3:implementation} deals with the computational aspect of the proposed methods, while Section \ref{sec3:simulation_study} shows their performance on 
+simulated data. Finally, the use of the proposed criteria for graph estimation is explored in Section \ref{sec3:graph_estimation}. All the proofs and auxiliary results are given in the Appendix.
+\par
+\section{Prediction power VS graph structure}
+\label{sec3:KLexample}
+Let $\Thetab$ be a precision matrix that corresponds to the true non-complete graph $\Gcal$ and let $\Thetab_{\epsilon}$ be the matrix obtained by adding  
+$\epsilon>0$ to every entry of matrix $\Thetab$. The matrix $\Thetab_{\epsilon}$ is positive definite since it is a sum of one positive definite matrix and one positive semi-definite matrix.
+Indeed, $\Thetab_{\epsilon}=\Thetab+\xb_{\epsilon}\xb_{\epsilon}^{\top}$, where $\xb_{\epsilon}=(\sqrt{\epsilon},\ldots,\sqrt{\epsilon})^{\top}$ is a vector of dimension $p$. Hence, $\Thetab_{\epsilon}$ belongs to the class
+of precision matrices and it corresponds to some graph $\Gcal_{\epsilon}$. The Kullback-Leibler divergence of $\Ncal(\ob,\Thetab_{\epsilon}^{-1})$ from $\Ncal(\ob,\Thetab^{-1})$, denoted by $\KL(\Thetab;\Thetab_{\epsilon})$, is equal 
+to 
+\begin{equation}
+\label{klloss}
+\KL(\Thetab;\Thetab_{\epsilon})=\frac12\{ \tr(\Thetab^{-1}\Thetab_{\epsilon})-\log|\Thetab^{-1}\Thetab_{\epsilon}|-p\}
+\end{equation}
+ (see \ref{eq1:KL}). Since $\epsilon\rightarrow 0$ implies $\Thetab_{\epsilon}\rightarrow \Thetab$, by continuity of the log-determinant and trace it follows that
+$$\lim_{\epsilon\downarrow 0}\KL(\Thetab;\Thetab_{\epsilon})=0.$$
+However, for every $0<\epsilon<\min_{i,j}|\omega_{ij}|$ the matrix $\Thetab_{\epsilon}$ is a matrix without zero entries and consequently the graph $\Gcal_{\epsilon}$ is the full graph.
+Thus, the conclusion is that even though a matrix can be close to the precision matrix of the true distribution with respect to KL loss,
+the corresponding graph can be completely different from the true one.
+\par
+Since $K$-CV, AIC and GACV are estimators of KL, they are appropriate for obtaining the model with good predictive power. On the other hand, the previous example indicates  that they should not be used 
+for graph identification. The following theorem, whose proof we give in the Appendix \ref{sec3:AIC_proof}, confirms this in the case of the AIC when $p$ is fixed as $n\rightarrow\infty$. 
+\begin{theorem}
+\label{eq3:AIC_theorem}
+ The AIC is not model selection consistent when $p$ is fixed as $n\rightarrow\infty$. 
+\end{theorem}
+We conjecture that the theorem also holds in the case when $p\rightarrow\infty$ as $n\rightarrow\infty$. Moreover, we hypothesize  that $K$-CV, where $K$ is fixed as $n\rightarrow\infty$, GACV and the two criteria that we propose as 
+ans estimators of KL, GIC and KLCV, are not model selection consistent. \par
+For graph identification, BIC, EBIC and StARS are appropriate, because of their graph selection consistency
+properties. Consequently, we treat these two problems separately. Next section we devote to  two new estimators of KL and in Section \ref{sec3:graph_estimation} we show how they can be used to improve the performance of E(BIC).
+
+\section{GIC and KLCV as estimators of the KL loss}
+\label{sec3:GIC_KLCV}
+In this section we propose two new estimates of KL in GGMs.  Let $\Thetahatb_{\lambda}$ be maximum penalized likelihood estimator defined by (\ref{eq:penloglik}). The Kullback-Leibler divergence of the model 
+$\Ncal(\ob,\Thetahatb_{\lambda}^{-1})$ from the true distribution $\Ncal(\ob,\Thetab_0^{-1})$ 
+can be written up to an additive constant as (see \ref{eq:KLbias})
+$$\KL(\Thetab_0;\Thetahatb_{\lambda})= -\frac{1}{n}l(\Thetahatb_{\lambda})+\bias,$$
+where $l(\Thetab)=n\{\log|\Thetab|-\tr(\Thetab \Sb)\}/2$ and $\bias=\tr\{\Thetahatb_{\lambda}(\Thetab_0^{-1}-\Sb)\}/2$. By estimating the bias term we obtain an estimate of KL. The first estimator we propose, the so-called Generalized 
+Information Criterion  (GIC),
+has the form
+\begin{equation}
+\label{eq3:GICgeneral}
+\GIC(\lambda) = -2l(\Thetahatb_{\lambda})+2\widehat{\df}_{\GIC},
+\end{equation}
+where
+\begin{equation}
+\label{dfgic}
+ \widehat{\df}_{\GIC} =  \frac{1}{2n}\sum_{k=1}^n \vect (\Sb_k\circ \Ib_{\lambda})^{\top}\vect\{\Thetahatb_{\lambda}(\Sb_k\circ \Ib_{\lambda})\Thetahatb_{\lambda}\}
+- \frac{1}{2}\vect (\Sb\circ \Ib_{\lambda})^{\top}\vect\{\Thetahatb_{\lambda}(\Sb\circ \Ib_{\lambda})\Thetahatb_{\lambda}\},
+\end{equation}
+where $\Ib_{\lambda}$ is the indicator matrix, whose entry is $1$ if the corresponding entry in the precision matrix $\Thetahatb_{\lambda}$ is nonzero and zero if the corresponding entry in the precision matrix is zero. Here, $\circ$ is the 
+Schur or Hadamard product of matrices and $\vect$ is the vectorization operator which transforms a matrix into a column vector, obtained by stacking the columns of the matrix on top of one another.
+In fact, this is an estimator of KL scaled by $2n$, which means that the estimator of the bias provided by GIC is $\widehat{\df}_{\GIC}/n$. We keep the scale in order to be consistent with the original definition of GIC (see \ref{eq2:GICgeneral}). 
+\par
+Another estimator we propose, referred to as Kullback-Leibler cross-validation (KLCV), has the form
+\begin{equation}
+\label{eq3:klcv}
+\KLCV(\lambda)= -\frac{1}{n}l(\Thetahatb_{\lambda})+ \widehat{\bias}_{\KLCV},
+\end{equation}
+where
+\begin{equation}
+\label{eq3:klcv_bias}
+\widehat{\bias}_{\KLCV}=\frac{1}{2n(n-1)}\sum_{k=1}^n \vect\{(\Thetahatb_{\lambda}^{-1}-\Sb_k)\circ \Ib_{\lambda}\}^{\top}\vect[\Thetahatb_{\lambda}\{(\Sb-\Sb_k)\circ \Ib_{\lambda}\}\Thetahatb_{\lambda}].
+%\widehat{\bias}_{\KLCV}=1/n(n-1)\sum_{i=1}^n\vect[(\Thetahatb_{\lambda}^{-1}-\Sb_k)\circ \Ib_{\lambda}]^{\top}(\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda})\vect[(\Sb-\Sb_k)\circ \Ib_{\lambda}],
+\end{equation}
+To obtain the model  $\Ncal(\ob,\Thetahatb_{\lambda^*})$ that is good in terms of prediction, we pick $\lambda^*$ that minimizes $\GIC(\lambda)$ or $\KLCV(\lambda)$ over $\lambda>0$.
+\section{Derivation of GIC and KLCV}
+\label{sec3:GIC_KLCV_derivation}
+In this section we derive the GIC and the KLCV. We do this in two steps. First, we derive the criteria for the maximum likelihood estimator. In the second step we use the derived formula and the assumption of sparsity
+to propose a formula for the maximum penalized likelihood estimator. The obtained formula is an extension of that for MLE, since both formulae are equivalent in the case of the maximum likelihood estimator.
+\subsection{Derivation of GIC for MLE}
+\label{sec3:gic_derivation}
+The log-likelihood of one observation $\yb_k$ for a Gaussian model $\Ncal_p(\ob, \Thetab^{-1})$ is, up to an additive constant, $l_k(\Thetab)=\frac12 \left\{\log|\Thetab|-\tr(\Thetab \Sb_k)\right\}$, where $\Sb_k =\yb_k \yb_k^{\top}$.
+The maximum likelihood estimator $\Thetahatb$ is an M-estimator defined as a solution of  the system of equations
+\begin{equation}
+\label{eq3:M-estimator} 
+\sum_{k=1}^n \psib(\yb_k,\Thetab)=\ob_{p^2},
+\end{equation}
+where $\psib(\yb_k,\Thetab)=\vect \sD l_{k}(\Thetab)$ and $\ob_{p^2}$ is column vector of zeros of dimension $p^2$.
+Consequently, the GIC for $\Thetahatb$ (see \ref{eq2:GICgeneral}). ) is given by:
+\begin{equation}
+\label{eq3:GICgeneral_tr}
+\GIC=-2l(\hat{\Thetab})+2\tr(\Rb^{-1}\Qb),
+\end{equation}
+where  $\Rb$ and $\Qb$ are square matrices of order $p^2$
+\begin{align}
+\label{eq3:R}
+\Rb=-\frac1n\sum_{k=1}^n\{\sD\psib(\yb_k,\Thetahatb)\}^{\top},\\
+%\Rb=-\frac1n\sum_{k=1}^n\{D\psib(\yb_k,\Thetab)\}^{\top}\big|_{\Thetab=\Thetahatb},
+%\Rb&=-\frac1n\sum_{k=1}^n\Big[\frac{d \psib(\yb_k,\Thetahatb)}{\partial\Thetab}\Big]^{\top},\\
+\label{eq3:Q}
+\Qb=\frac1n\sum_{k=1}^n\psib(\yb_k,\Thetahatb)\sD l_k(\Thetahatb),
+%\Qb=\frac1n\sum_{k=1}^n\psib(\yb_k,\Thetab)D l_k(\Thetab)\big|_{\Thetab=\Thetahatb}.
+%\Qb&=\frac1n\sum_{k=1}^n\psib(\yb_k,\Thetab)\frac{d l_k(\Thetahatb)}{\partial\Thetab}.
+\end{align}
+and $\sD\psib(\yb_k,\Thetahatb)$ and $\sD l_k(\Thetahatb)$ are Jacobian matrices of corresponding functions at $\Thetahatb$ (see Appendix \ref{sec3:diff_calc}).  We are interested in deriving the term $\tr(\Rb^{-1}\Qb)$.  Using matrix
+ differential calculus (see Appendix \ref{sec3:diff_calc}) we obtain
+\begin{align}
+\label{eq3:score}
+\psib(\yb_k,\Thetab)&=\vect \sD l_{k}(\Thetab)=\frac12\vect(\Thetab^{-1}-\Sb_{k}),\\
+\label{eq3:term3}
+\{\sD\psib(\yb_k;\Thetab)\}^{\top}&=-\frac12\Thetab^{-1}\otimes \Thetab^{-1}.
+\end{align}
+Equalities \eqref{eq3:M-estimator} and \eqref{eq3:score}  imply that
+\begin{equation}
+\label{eq3:M-estimator2} 
+\sum_{k=1}^n \psib(\yb_k,\Thetahatb)=\frac12\sum_{k=1}^n \vect\big(\Thetahatb^{-1}-\Sb_{k}\big)=\ob_{p^2},
+\end{equation}
+whence it follows that $\vect\big(n\Thetahatb^{-1}-n\Sb)=\ob_{p^2}$ which further reduces to
+\begin{equation}
+\label{eq3:qnew1} 
+\vect\Thetahatb^{-1}=\vect \Sb.
+\end{equation}
+By using \eqref{eq3:Q}, \eqref{eq3:M-estimator2} and \eqref{eq3:qnew1} (see Appendix \ref{app3:calculation_Q} for details) we obtain 
+$$\Qb =-\frac{1}{4n}\sum_{k=1}^n \vect\big(\Thetahatb^{-1}-\Sb_k\big)\vect(\Sb_k)^{\top}.$$
+Finally, applying (\ref{eq3:qnew1}) we have 
+$$\Qb= \frac{1}{4n}\sum_{k=1}^n \vect \Sb_k \vect(\Sb_k)^{\top} - \frac{1}{4} \vect \Sb\vect(\Sb)^{\top}.$$
+Expression for $\Rb^{-1}$ we obtain from (\ref{eq3:R}) and (\ref{eq3:term3})
+\begin{equation}
+\label{eq3:Rinv}
+\Rb^{-1}=2\Thetahatb\otimes \Thetahatb.
+\end{equation}
+Using the formula $\tr(\Ab\Bb)=\tr(\Bb\Ab)$ and the fact that for any $p$-dimensional vector $\xb$ and matrix $\Ab$ of dimension $p$ it holds  $\tr(\xb^{\top}\Ab\xb)=\xb^{\top}\Ab\xb$ it follows that 
+\begin{equation}
+\label{eq:gic:mle1}
+\tr(\Rb^{-1}\Qb)=\frac{1}{2n}\sum_{k=1}^n \vect \Sb_{k}^{\top}(\Thetahatb\otimes \Thetahatb)\vect \Sb_{k}- \frac{1}{2}\vect \Sb^{\top}(\Thetahatb\otimes \Thetahatb)\vect \Sb.
+\end{equation}
+This formula is equivalent to the formula \eqref{eq3:GICgeneral} where the Schur product is removed. This will be shown in the Section \ref{sec3:extension}.
+
+\subsection{Derivation of the KLCV for the MLE}
+\label{sec3:klcv_derivation}
+We follow the idea of \cite{xiang1996generalized}, i.e.  we introduce an approximation for $\LOOCV$ via several first order Taylor expansions. \cite{lian2011shrinkage} uses the idea to derive GACV for MPLE in GGM, where 
+in deriving the formula, the partial derivatives corresponding to the zero elements of the precision matrix are ignored. Here, unlike in \cite{lian2011shrinkage}, we apply the idea only for the MLE estimator and therefore we avoid 
+all technical difficulties that ignoring the derivatives entails. We deal with MPLE separately in the next section.
+\par
+Consider the following function of two variables
+$$f(\Sb,\Thetab)=\frac{2}{n}l(\Thetab)=\log|\Thetab|-\tr(\Sb\Thetab).$$
+With this notation we have the identity
+\begin{equation}
+\label{eq3:f_identity}
+\sum_{k=1}^n f(\Sb_k,\Thetab)=nf(\Sb,\Thetab).
+\end{equation}
+Let $\Thetahatb^{(-k)}$ be the MLE estimator of the precision matrix defined based on the data excluding the $k$th data point. The leave-one-out cross validation score (see \ref{eq1:LOOCV} ) 
+is defined by 
+\begin{eqnarray*}
+ \LOOCV&=&-\frac{1}{n}\sum_{k=1}^n l_k(\Thetahatb^{(-k)})=-\frac{1}{2n}\sum_{k=1}^n f(\Sb_k,\Thetahatb^{(-k)})\\
+&=&-\frac{1}{2n}\sum_{k=1}^n\{ f(\Sb_k,\Thetahatb^{(-k)})- f(\Sb_k,\Thetahatb)+ f(\Sb_k,\Thetahatb)\}\\
+&\stackrel{\eqref{eq3:f_identity}}{=}&-\frac{1}{2}f(\Sb,\Thetahatb)-\frac{1}{2n}\sum_{k=1}^n\left\{f(\Sb_k,\Thetahatb^{(-k)})-f(\Sb_k,\Thetahatb)\right\}\\
+&\approx&-\frac{1}{n}l(\Thetahatb)-\frac{1}{2n}\sum_{k=1}^n\left\{\frac{d f(\Sb_k,\Thetahatb)}{d \Thetab}\right\}^{\top}\vect(\Thetahatb^{(-k)}-\Thetahatb).
+\end{eqnarray*}
+Using matrix differential calculus (see the Appendix \ref{sec3:diff_calc}) we have $d f(\Sb_k,\Thetahatb)/d\Thetab=\vect(\Thetahatb^{-1}-\Sb_k)^{\top}$. The term $\vect(\Thetahatb^{(-k)}-\Thetahatb)$ is obtained via the Taylor 
+expansion of the column vector valued function $\left\{\frac{d f(\Sb^{(-k)},\Thetahatb^{(-k)})}{d\Thetab}\right\}^{\top}$ around $(\Sb,\Thetahatb)$. We expand the transposed term because we consider vectors as columns.
+\begin{eqnarray*}
+ \ob_{p^2}&=&\left\{\frac{d f(\Sb^{(-k)},\Thetahatb^{(-k)})}{d\Thetab}\right\}^{\top}\approx \left\{\frac{d f(\Sb,\Thetahatb)}{d\Thetab}\right\}^{\top}+\frac{d^2 f(\Sb,\Thetahatb)}{d\Thetab^2}\vect(\Thetahatb^{(-k)}-\Thetahatb)\\
+&+&\frac{d^2 f(\Sb,\Thetahatb)}{d\Thetab d\Sb}\vect(\Sb^{(-k)}-\Sb),
+\end{eqnarray*}
+where $\ob_{p^2}$ is the column vector of zeros of dimension $p^2$. From here it follows that
+$$\vect(\Thetahatb^{(-k)}-\Thetahatb)\approx-\left\{\frac{d^2  f(\Sb,\Thetahatb)}{d\Thetab^2}\right\}^{-1}\frac{d^2  f(\Sb,\Thetahatb)}{d\Thetab d\Sb}\vect(\Sb^{(-k)}-\Sb).$$	
+We have $d f(\Sb,\Thetahatb)/d\Thetab=\vect(\Thetahatb^{-1}-\Sb)^{\top}$, so $d^2 f(\Sb,\Thetahatb)/d\Thetab d\Sb=-\Ib_{p^2}$,$d^2  f(\Sb,\Thetahatb)/d\Thetab^2=-\Thetahatb^{-1}\otimes\Thetahatb^{-1}$ and consequently
+$$\vect(\Thetahatb^{(-k)}-\Thetahatb)\approx-(\Thetahatb\otimes\Thetahatb)\vect(\Sb^{(-k)}-\Sb).$$
+It follows that the approximation of $\LOOCV$, denoted by $\KLCV$, has the form
+$$
+\KLCV= -\frac{1}{n}l(\Thetahatb)+\frac{1}{2n}\sum_{k=1}^n\vect(\Thetahatb^{-1}-\Sb_k)^{\top}(\Thetahatb\otimes\Thetahatb)\vect(\Sb^{(-k)}-\Sb).
+$$
+After simplifying the term in the sum we finally obtain 
+\begin{equation}
+\label{eq:klcvmle} 
+\KLCV=-\frac{1}{n}l(\Thetahatb)+1/2n(n-1)\sum_{k=1}^n \vect(\Thetahatb^{-1}-\Sb_k)^{\top}(\Thetahatb\otimes\Thetahatb)\vect(\Sb-\Sb_k).
+\end{equation}
+This formula is equivalent to the formula \eqref{eq3:klcv} where the Schur product is removed. This will be shown in the next section.
+
+\subsection{Extension of the GIC and the KLCV for the MPLE}
+\label{sec3:extension}
+Before we propose the formulae for the penalized case we formulate two auxiliary results. \begin{lemma}
+\label{ch3:lemma1}
+Let $\Ab$ and $\Thetab$ be symmetric matrices of order $p$. Then the following identity holds
+$$(\Thetab\otimes\Thetab)\vect(\Ab)=\Mb_p(\Thetab\otimes\Thetab)\vect(\Ab),$$
+where $\Mb_p=1/2(\Ib_{p^2}+\Kb_p)$, and $\Ib_{p^2}$ and $\Kb_p$ are identity matrix and commutation matrix of order $p^2$ respectively.
+\end{lemma}
+\begin{lemma}
+\label{ch3:lemma2}
+Let $\Ab$ be a symmetric matrix of order $p$ and $\xb,\yb$ any vectors of dimension $p$. Then the value of the bilinear form 
+$$B(\xb,\yb)=\xb^{\top}\Ab\yb,$$
+when $i$th row (respectively column) of the matrix $\Ab$ is set to zero is the same as the value of $B(\xb,\yb)$ when $i$th entry of the vector $\xb$ (respectively $\yb$) is set to zero.
+\end{lemma}
+The proof of Lemma \ref{ch3:lemma1} is given in the Appendix \ref{app3:lemma1_proof}, while Lemma \ref{ch3:lemma2} is obtained by straightforward calculation.
+Penalty terms added to the log-likelihood in  GIC and KLCV can be written in terms of the expression 
+\begin{equation}
+\label{eq3:T}
+T(\Ab,\Bb)=(\vect\Ab)^{\top}(\Thetahatb\otimes \Thetahatb)\vect \Bb,
+\end{equation}
+where $\Ab$ and $\Bb$ are symmetric matrices of order $p$. Indeed, 
+\begin{align}
+\label{eq3:T_KLCV}
+\bias_{\KLCV}&= 1/2n(n-1)\sum_{k=1}^n T(\Thetahatb^{-1}-\Sb_k,\Sb-\Sb_k),\\ 
+\df_{\GIC}&= \frac{1}{2n}\sum_{k=1}^n T(\Sb_k,\Sb_k)- \frac{1}{2}T(\Sb,\Sb).
+\label{eq3:T_GIC}
+\end{align}
+According to Lemma \ref{ch3:lemma1}it follows that 
+$$T(\Ab,\Bb)=(\vect\Ab)^{\top} \Mb_p(\Thetahatb\otimes \Thetahatb)\vect \Bb.$$
+The fact that  $2\Mb_p(\Thetahatb\otimes\Thetahatb)$ is an estimate of the asymptotic covariance matrix of $\Thetahatb$ (Proposition \ref{prop:ggmmle}) motivates us to use an asymptotic argument to propose an estimate in the case of
+a penalized estimator. Essentially, we only need to define the term $T(\Ab,\Bb)$ for the penalized estimator.
+\newline
+To obtain the formula for the MPLE, we assume standard conditions like in \cite{lam2009sparsistency} that guarantee a sparsistent MPLE. These conditions 
+imply that $\lambda\rightarrow 0$ when $n\rightarrow \infty$, so we use formula \eqref{eq3:T}, derived for the MLE, as an approximation in the penalized case. By sparsistency it follows that with 
+probability one the zero coefficients will be estimated as zero when $n$ tends to infinity. This implies that, asymptotically, the covariances between zero elements and nonzero elements in the estimated precision matrix are equal to
+zero. Thus, to obtain the term $T_{\lambda}(\Ab,\Bb)$ for the MPLE we do not only plug in the expression $\Thetahatb_{\lambda}$ in the formula for the term $T(\Ab,\Bb)$, but we also  set the elements of the matrix
+$\Mb_p(\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda})$ that correspond to covariances between zero and nonzero elements to zero. According to Lemma \ref{ch3:lemma2} this is  equivalent to setting the corresponding entries of 
+vectors  $\vect \Ab$ and $\vect \Bb$ to zero, i.e.
+\begin{equation}
+\label{eq3:T_lambda_1}
+ T_{\lambda}(\Ab,\Bb)=\vect(\Ab\circ \Ib_{\lambda})^{\top}\Mb_p(\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda})\vect(\Bb\circ \Ib_{\lambda}),
+\end{equation}
+where $\Ib_{\lambda}$ is the indicator matrix, whose entry is $1$ if the corresponding entry in the precision matrix $\Thetahatb_{\lambda}$ is nonzero and zero if the corresponding entry in the precision matrix is zero.
+By applying Lemma \ref{ch3:lemma1} to the \eqref{eq3:T_lambda_1} we obtain
+\begin{equation}
+\label{eq3:T_lambda_2}
+T_{\lambda}(\Ab,\Bb)=\vect(\Ab\circ \Ib_{\lambda})^{\top}(\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda})\vect(\Bb\circ \Ib_{\lambda}).
+\end{equation}
+The obtained formula involves matrices of order $p^2$, which entails high cost in terms of both memory usage and floating-point operations. For this reason, we rewrite the formula in a way that it is computationally feasible. 
+Applying the identity $\vect(\Ab\Bb\Cb)=(\Cb^{\top}\otimes \Ab)\vect \Bb$ to
+\eqref{eq3:T_lambda_2} we obtain 
+\begin{equation}
+\label{eq3:T_lambda_3}
+T_{\lambda}(\Ab,\Bb)=\vect(\Ab\circ \Ib_{\lambda})^{\top}\vect\{\Thetahatb_{\lambda}(\Bb\circ \Ib_{\lambda})\Thetahatb_{\lambda}\}.
+\end{equation}
+For the details on the implementation of this formula, see next section. Finally, it follows that bias and degrees of freedom terms for GIC and KLCV in the case of the  MPLE are obtained by substituting $T$ with $T_{\lambda}$ in 
+expressions \eqref{eq3:T_KLCV} and \eqref{eq3:T_GIC}, i.e
+\begin{align}
+\label{eq3:T_KLCV_lambda}
+\bias_{\KLCV}(\lambda)&= 1/n(n-1)\sum_{k=1}^n T_{\lambda}(\Thetahatb_{\lambda}^{-1}-\Sb_k,\Sb-\Sb_k),\\ 
+\df_{\GIC}(\lambda)&= \frac{1}{2n}\sum_{k=1}^n T_{\lambda}(\Sb_k,\Sb_k)- \frac{1}{2}T(\Sb,\Sb),
+\label{eq3:T_GIC_lambda}
+\end{align}
+which are formulae presented in \eqref{eq3:klcv_bias} and \eqref{dfgic}.
+\par
+To conclude this section, we show that the derived formulae for MPLE are extensions of the corresponding formulae for MLE, meaning that applying the MPLE formulae on the maximum likelihood estimator yields the same result like the 
+corresponding MLE formulae. To this aim, let $\Thetahatb$ be maximum likelihood
+estimator of the precision matrix, which is the MPLE for $\lambda=0$, i.e. $\Thetahatb=\Thetahatb_{\lambda}$, for $\lambda=0$. Since with probability one all the elements of $\Thetahatb$ are nonzero it follows that $\Ib_{\lambda}$ is the 
+matrix with all entries equal to one. This implies that in the formula \eqref{eq3:T_lambda_2} we have $\Ab\circ \Ib_{\lambda}=\Ab$ and $\Bb\circ \Ib_{\lambda}=\Bb$, which in turn implies $T_{\lambda}(\Ab,\Bb)=T(\Ab,\Bb)$.
+ 
+\section{Implementation}
+\label{sec3:implementation}
+In this section we give more details on why formula \eqref{eq3:T_lambda_3} is computationally much more efficient than \eqref{eq3:T_lambda_2}. Also, we show how to implement $\eqref{eq3:T_lambda_3}$  efficiently. First, the computational complexity of 
+\eqref{eq3:T_lambda_3} is $\Ocal(p^3)$ while for \eqref{eq3:T_lambda_2} it is $\Ocal(p^4)$ (see Appendix \ref{sec3:computational_complexity} for details). Furthermore, \eqref{eq3:T_lambda_2} requires storing matrices of order $p^2$, which is 
+$p^4$ elements per matrix. Even for moderate $p$, allocation of that amount of memory on standard desktop computer will not be possible. On the other hand, formula \eqref{eq3:T_lambda_3} is written in terms of vectors of dimension $p^2$, which 
+implies storing of $p^2$ elements per vector. Simplifying it further, we show that we can avoid the usage of the transpose and vectorization operator. For any matrices $\Xb=(x_{ij})_{ij}$ and $\Ybmat=(y_{ij})_{ij}$ 
+it holds $(\vect\Xb)^{\top}\vect\Ybmat=\sum_{i,j}x_{ij}y_{ij}$  so it follows that $(\vect\Xb)^{\top}\vect\Ybmat$ is just the sum of elements of the matrix $\Xb\circ\Ybmat$, i.e. $(\vect\Xb)^{\top}\vect\Ybmat=\sum_{ij}(\Xb\circ\Ybmat)_{ij}$.
+Applying this on \eqref{eq3:T_lambda_3} we obtain 
+$$T_{\lambda}(\Ab,\Bb)=\sum_{ij}(\Ab\circ \Ib_{\lambda}\circ\{\Thetahatb_{\lambda}(\Bb\circ \Ib_{\lambda})\Thetahatb_{\lambda}\})_{ij}.$$
+In the statistical programming language R, expression $\sum_{ij}(\Xb\circ\Ybmat)_{ij}$ can be efficiently implemented as {\tt sum(X*Y)}. This can be used in expressions \eqref{dfgic} and \eqref{eq3:klcv_bias}.
+
+
+
+
+
+
+
+\section{Simulation Study}
+\label{sec3:simulation_study}
+In this section we test the performance of the proposed formula in terms of Kullback-Leibler loss. We do this in the case of a LASSO 
+penalty for two sparse hub graphs. The graphs have $p=40$ nodes and 38 edges and $p=100$ nodes and 95 edges. Sparsity values of these graphs are 0.049 and 0.019 respectively.
+The graphs are shown in figure \ref{fig1}.
+
+\begin{figure}[ht]
+\centering
+\begin{minipage}[b]{0.45\linewidth}
+\includegraphics[scale=0.5]{Hubgraphp-40.pdf}
+\end{minipage}
+\quad
+\begin{minipage}[b]{0.45\linewidth}
+\includegraphics[scale=0.5]{Hubgraphp-100.pdf}
+\end{minipage}
+\caption{Hub graphs with $p$=40 and $p=100$ nodes used in the simulation study.\label{fig1}}
+\end{figure}
+
+
+
+We compare the following estimators: the KL oracle estimator , the proposed KLCV estimator, and the AIC and GACV estimators. The KL oracle estimator is that $\Thetab_{\lambda}$ in the LASSO solution path that minimizes the KL loss if 
+we knew the true matrix $\Thetab$. Under each model, we generated 100 simulated data sets with different combinations of $p$ and $n$. We focus on cases where $n\leq p$. For the simulations we use the {\bf huge} package in R \citep{huge}.
+The results are given in the Tables \ref{table1} and \ref{table2}. The KLCV outeperforms AIC and GACV for all sample sizes when $p=40$ and for $p=100$. For $n=400$ the KLCV is slightly worse than the AIC. The KLCV method is
+close to the KL oracle score, even for very small $n$. Overall, KLCV exhibits similar performance to AIC and GACV in large sample size scenarios, but it clearly outperforms both when the sample size is small. GIC also outperforms AIC
+and GACV, except that it underperforms comparing to AIC when the sample size is really small; in the cases $p=40$ and $n=8,12$ and $p=100$ and $n=20,30$.  As for the comparison between KLCV and GIC, results show that KLCV is overall better
+and more stable, it performs well for any sample size while the GIC suffers somewhat for very small sample sizes.
+\par
+Computationally, our formulae are slightly slower than the GACV since we have an additional Schur product in the calculation. We omit the results for other type of graphs for the same combinations of $n$ and $p$.
+The method was tested for a band graph, a random graph, a cluster graph and a scale-free graph. Our estimator exhibits similar performance in all these cases. 
+ 
+\begin{table}[ht]
+\centering
+%KL_gic=    c(24.11, 9.28,5.11,3.74 ,2.5,2.05,1.02)
+%KL_gic_sd  =c(2.92 ,2.28,1.09,0.62,0.37,0.21,0.11)
+\begin{tabulary}{\linewidth}{rrrrrr}
+\toprule
+ p=40  & KL ORACLE & KLCV & GIC& AIC & GACV \\ 
+\midrule
+  n=8  & 3.68   & {\bf 3.71}  &24.11  &\underline{6.46}  & 26.80 \\ 
+       & (0.27) & {\bf (0.28)}&(2.92) &\underline{(2.12)}& (1.66) \\ 
+  n=12 & 3.29   & {\bf 3.36 } &9.28   &\underline{6.58}  & 18.34 \\ 
+       & (0.26) & {\bf (0.28)}&(2.28) &\underline{(3.54)} & (1.61) \\ 
+  n=16 & 2.93   & {\bf 3.01 } & \underline{5.11}  &6.62  & 13.07 \\ 
+       & (0.26) & {\bf (0.26)}&\underline{(1.09)} &(3.07)& (1.36) \\ 
+  n=20 & 2.67   & {\bf 2.76 } & \underline{3.74}  &6.48  & 10.08 \\ 
+       & (0.23) & {\bf (0.25)}& \underline{(0.62)}&(2.50)&(1.20) \\ 
+  n=30 & 2.18   & {\bf 2.27 } &\underline{2.5}    &4.59  & 5.81 \\ 
+       & (0.23) & {\bf (0.25)}&\underline{(0.37)} &(1.11)& (0.66) \\ 
+  n=40 & 1.91   & {\bf 2.00 } &\underline{2.05}  &3.18  & 4.13 \\ 
+       & (0.19) & {\bf (0.21)}&\underline{(0.21)} &(0.66)& (0.43) \\ 
+  n=100& 1.00   &\underline{1.04 } &{\bf 1.02}   &1.17  & 1.32 \\ 
+       & (0.10) & \underline{(0.11)}&{\bf (0.11)}&(0.11)& (0.14)\\ 
+\bottomrule
+\end{tabulary}
+\caption{Simulation results for hub graph with $p=40$ nodes. Performance in terms of Kullback-Leibler loss of different estimators for different sample size $n$ is showed. The results are based on 100 simulated data sets.
+ Standard errors are shown in brackets. The best result is boldfaced and the second best is underlined.}
+\label{table1}
+\end{table}
+
+
+
+\begin{table}[ht]
+\centering
+\begin{tabulary}{\linewidth}{rrrrrr}
+ \toprule
+  p=100 & KL ORACLE & KLCV & GIC& AIC & GACV \\ 
+\midrule
+  n=20  & 8.06   & {\bf8.60 }  &29.7   & \underline{12.24}  & 28.59 \\ 
+        & (0.37) & {\bf(0.45)} &(4.56) & \underline{(0.28)} & (19.94) \\ 
+  n=30  & 6.87   & {\bf 7.29}   &11.5   & \underline{10.59}  & 32.07 \\ 
+        & (0.34) & {\bf(0.39)} &(1.82) & \underline{(0.41)} & (2.77) \\ 
+  n=40  & 5.92   & {\bf6.34 }  &\underline{7.5}    & 9.15   & 22.48 \\ 
+        & (0.30) & {\bf(0.38)} &\underline{(0.84)} & (0.59) & (1.88) \\ 
+  n=50  & 5.24   & {\bf5.63  } &\underline{5.99}   & 7.33   & 16.93 \\ 
+        & (0.27) & {\bf(0.33)} &\underline{(0.59)} & (0.81) & (1.40) \\ 
+  n=75  & 4.08   & \underline{4.36}  &{\bf4.26}   & 4.76   & 9.80 \\ 
+        & (0.27) & \underline{(0.31)} &{\bf(0.31)} & (0.71) & (0.71) \\ 
+  n=100 & 3.34   & \underline{3.57}   &{\bf 3.4}    & 3.63   & 6.81 \\ 
+        & (0.19) & \underline{(0.23)} &{\bf(0.19)} & (0.48) & (0.52) \\ 
+  n=400 & 1.13   & \underline{1.20}   &{\bf 1.17}   & {\bf1.17 }  & 1.24 \\ 
+        & (0.07) & \underline{(0.08)} &{\bf(0.08)} & {\bf(0.08)} & (0.07 )\\ 
+\bottomrule
+\end{tabulary}
+\caption{Simulation results for hub graph with $p=40$ nodes. Performance in terms of Kullback-Leibler loss of different estimators for different sample size $n$ is showed. The results are based on 100 simulated data sets.
+ Standard errors are shown in brackets.The best result is boldfaced and the second best is underlined.}
+\label{table2}
+\end{table}
+\par
+
+\section{Using KLCV and GIC for graph estimation}
+\label{sec3:graph_estimation}
+Information criteria, such as AIC, (E)BIC, for model selection in Gaussian graphical models are based on penalizing the log-likelihood with a term that involves the degrees of freedom, which are typically defined as  
+\begin{equation}\label{eq3:df}
+ \df(\lambda)=\sum_{1\leq i<j\leq p}I(\thetahat_{ij,\lambda}\neq 0),
+\end{equation}
+where  $(\thetahat_{ij,\lambda})_{1\leq i<j\leq p}$ are the estimated parameters \citep{yuan2007model}. As we pointed out in Section 2, the AIC should not be used for graph estimation but (E)BIC. However, even though (E)BIC has
+a consistency property, in sparse data setting they can perform poorly. The reason is the instability of the degrees of freedom defined in (\ref{eq3:df}). As \cite{li2006gradient} points out, in the high-dimensional case there is often 
+considerable uncertainty in the number of non-zero elements in the precision matrix.  To overcome this uncertainty, the authors propose to use the bootstrap method to determine the statistical accuracy and the importance of each 
+non-zero element identified by the procedure they proposed. One can then choose only the elements with high probability of being non-zero in the precision matrix over the bootstrap samples. Here we propose an alternative, faster, 
+approach.
+
+
+Recall that AIC  has the form  
+$$\AIC(\lambda)=-2l(\Thetahatb_{\lambda})+2\df(\lambda),$$
+where $\df(\lambda)$ is defined in \eqref{eq3:df}. AIC is an estimate of KL loss scaled by  $2n$.  It follows that the degrees of freedom in AIC
+is the estimate of the bias of the KL loss scaled by $n/2$. Since, the KLCV also provides an estimate of this bias, we define  $$\df_{\KLCV}(\lambda)=\frac{n}{2}\widehat{\bias}_{\KLCV},$$
+where $\widehat{\bias}_{\KLCV}$ is defined in \eqref{eq3:klcv_bias}. For the GIC no scaling is needed, the degrees of freedom are already defined in \eqref{dfgic}. Since the (E)BIC has better model selection properties than the AIC, 
+we can use $\df_{\KLCV}(\lambda)$ and $\df_{\GIC}(\lambda)$ with the BIC. In other words, we define 
+\begin{align}
+ \BIC_{\KLCV}(\lambda)=-2l(\Thetahatb_{\lambda})+\log n\df_{\KLCV}(\lambda)\\
+\BIC_{\GIC}(\lambda)=-2l(\Thetahatb_{\lambda})+\log n\df_{\GIC}(\lambda).
+\end{align}
+We can also do the same for EBIC. We compare the $\BIC_{\GIC}(\lambda)$  and $\BIC_{\KLCV}(\lambda)$ to BIC and StARS in terms of F1 score. The largest possible value of the F1 score is given by the F1 oracle and is evaluated by using
+the true matrix $\Theta$. Averaged results over 100 simulations are given in Figure\ref{fig2}. The results suggest that $\BIC_{\GIC}(\lambda)$  and $\BIC_{\KLCV}(\lambda)$  can improve BIC for small sample sizes and can be competitive
+with the computationally much more involved StARS. In the case of the adaptive LASSO penalty the improvement is evident. Theoretical properties of  $\BIC_{\KLCV}(\lambda)$ and $\BIC_{\GIC}(\lambda)$ are unclear, due to the complicated
+form of the bias terms. Anyway, we propose the method only when the sample size is small since for larger $n$the degrees of freedom defined in \ref{eq3:df}  are stable which can be seen from the performance of AIC in the Tables \ref{table1}
+and \ref{table2}. 
+%We have also done the simulations for EBIC with values $\gamma=0.5$ and $\gamma=1$, but we do not show it here because of its bad performance. 
+
+
+\begin{figure}
+\begin{center}
+\subfloat[GLASSO]{\includegraphics[width=6.5cm]{F1ResultsGL.pdf}} 
+\end{center}
+\begin{center}
+\subfloat[SCAD]{\includegraphics[width=6.5cm]{F1ResultsSCAD.pdf}}  
+\end{center}
+\begin{center}
+\subfloat[ADAPTIVE GLASSO]{\includegraphics[width=6.5cm]{F1ResultsAGL.pdf}} 
+\end{center}
+ \caption{Simulations results for hub graph with $p=100$ nodes. Average performance in terms of F1 score of different estimators for different sample size $n$ is showed.
+ The results are based on 100 simulated data sets. \label{fig2}}
+\end{figure}
+
+% \begin{figure}
+% \hfill
+% \subfloat[GLASSO]{\includegraphics[width=5cm]{F1ResultsGL.pdf}}
+% \hfill
+% \subfloat[SCAD]{\includegraphics[width=5cm]{F1ResultsSCAD.pdf}}
+% \hfill
+% \subfloat[ADAPTIVE GLASSO]{\includegraphics[width=5cm]{F1ResultsAGL.pdf}}
+%  \caption{Simulations results for hub graph with $p=100$ nodes. Average performance in terms of F1 score of different estimators for different sample size $n$ is showed.
+%  The results are based on 100 simulated data sets. \label{fig2}}
+% \end{figure}
+
+
+
+
+\section{Appendix}
+
+\subsection{Matrix differential calculus}
+\label{sec3:diff_calc}
+If $\Fb$ is a differentiable $m\times p$ matrix function of an $n\times q$ matrix $\Xb$ of variables then the natural question is how to define the Jacobian matrix of $\Fb$. There are different definitions in the literature, since it
+is possible to construct the matrix that contains the $mnpq$ partial derivatives of $\Fb$ in many ways. In this thesis we opt for the definition proposed in \cite{magnus1985matrix} where the authors point out the following issues with
+other definitions of the derivative.
+\begin{enumerate}
+\item The definition does not give the Jacobian matrix, it just displays the partial derivatives.
+\item The determinant of the matrix that contains partial derivatives has no interpretation.
+\item The definition is such that the chain rule does not exist.
+\end{enumerate}
+The authors show that the only natural and viable generalization of the notion of a Jacobian matrix of a vector function to a Jacobian matrix of a matrix function is the following. 
+\begin{definition}
+Let $\phi$ be a scalar function of an $n\times 1$ vector $\xb=(x_1,\ldots,x_n)^{\top}$, $\fb$ be an $m\times 1$ vector function of $\xb$ and $\Fb$ be a differentiable $m\times p$ real matrix function of an $n\times q$ matrix of real 
+variables $\Xb=(x_{ij})$. Then the derivative of $\phi$ at $\xb$ is the $n\times 1$ vector 
+ $$\sD\phi(\xb)=\left(\frac{\partial\phi(\xb)}{\partial x_1},\ldots,\frac{\partial \phi(\xb)}{\partial x_n}\right)=\frac{\partial\phi(\xb)}{\partial \xb^{\top}},$$
+the derivative (or Jacobian matrix) of $\fb$ at $\xb$ is the $m\times n$ matrix
+$$\sD \fb(\xb)=\begin{pmatrix}
+\frac{\partial f_1(\xb)}{\partial x_1} &\ldots&\frac{\partial f_n(\xb)}{\partial x_n},\\
+\vdots  &  & \vdots   \\
+\frac{\partial f_m(\xb)}{\partial x_1} &\ldots&\frac{\partial f_m(\xb)}{\partial x_n}
+\end{pmatrix}=\frac{\partial \fb(\xb)}{\partial \xb^{\top}},$$
+and the derivative (or Jacobian matrix)  Jacobian matrix of $\Fb$ at $\Xb$ is the $mp\times nq$ matrix 
+$$\sD \Fb(\Xb)=\frac{\partial \vect \Fb(\Xb)}{\partial(\vect \Xb)^{\top}}.$$
+\end{definition}
+
+We also use the following notation for the matrix derivatives of scalar function $\phi$ of two matrix arguments $\Xb=(x_{ij})$ and $\Ybmat=(y_{ij})$
+\begin{align}
+\label{eq:partial}
+% \frac{\partial\phi(\Xb)}{\partial \Xb}&:=D\phi(X)=\frac{\partial \phi(\Xb)}{\partial(\vect \Xb)^{\top}},\\ 
+% \frac{\partial\phi(\Xb,\Yb)}{\partial \Xb\partial \Yb}&:=D_{\Xb}\left(D_{\Yb}\phi(\Xb,\Yb)\right)^{\top},\label{eq:double_partial}
+\frac{d\phi(\Xb,\Ybmat)}{d \Xb}&:=\sD_{\Xb}\phi(\Xb,\Ybmat)=\frac{\partial \phi(\Xb,\Ybmat)}{\partial (\vect \Xb)^{\top}},\\ 
+\frac{d\phi(\Xb,\Ybmat)}{d \Xb d \Ybmat}&:=\sD_{\Xb}\left\{\sD_{\Ybmat}\phi(\Xb,\Ybmat)\right\}^{\top},\label{eq:double_partial}
+\end{align}
+where $\sD_{\Xb}$ and $\sD_{\Ybmat}$ stress that the derivatives are with respect to $\Xb$ and $\Ybmat$, respectively.  The transpose sign of a row vector $\sD_{\Yb}\phi(\Xb,\Ybmat)$ in \eqref{eq:double_partial} is necessary since, in this 
+framework, the calculus is developed for column vector valued functions.\par
+Regarding the previous comment, in matrix calculus attention should be payed to the dimension of the matrix. Taking the derivative of the matrix is not the same as taking the derivative of the transpose matrix. Indeed, for the matrix
+$\Xb$ the derivative of the transpose function $\Fb(\Xb) = \Xb^{\top}$ is not an identity matrix, but it is given by 
+$\sD \Fb(\Xb) = \Kb_{p^2}$, where  $\Kb_{p^2}$  is the commutation matrix of order $p^2$. 
+For more on this subject see \cite{magnus2007matrix}, on which our discussion is based on and which also contains the following results that we use.
+\begin{lemma}
+\label{eq:diff_results}
+Let $\Xb$ be a square matrix of order $p$, $\Ab$ be a constant matrix od order $p$ and $\Ib_{p^2}$ and $\mathbf{O}_{p^2}$ the identity and the zero matrix of order $p^2$, respectively. 
+The following identities hold
+\begin{align}
+\label{eq3:diff_det}
+\sD|\Xb|&=|\Xb|\{\vect(\Xb^{-1})^{\top}\}^{\top},\\
+\label{eq3:diff_tr}
+\sD\tr(\Ab\Xb)&=\{\vect(\Ab^{\top})\}^{\top},\\
+\label{eq3:diff_vec}
+\sD\vect(\Xb)&=\Ib_{p^2},\\
+\label{eq3:diff_inv}
+\sD\Xb^{-1}&=-(\Xb^{\top})^{-1}\otimes \Xb^{-1},\\ 
+\label{eq3:diff_const}
+\sD\Ab&=\mathbf{O}_{p^2}. 
+\end{align}
+\end{lemma}
+As a final remark, we note that a good reference on an alternative approach to matrix derivatives frequently used is given in \citep{turkington2005matrix}. Another useful reference is \cite{harville2008matrix}.
+
+%schott2005matrix}.
+
+\subsection{Calculation of the derivatives}
+For the derivation of the GIC we need expressions for $\sD l_{k}(\Thetab)$, $\psib(\yb_{k},\Thetab)$ and $\sD\psib(\yb_{k},\Thetab)$. Recall that $l_k(\Thetab)=\frac12 \left\{\log|\Thetab|-\tr(\Thetab \Sb_k)\right\}$
+and $f(\Sb,\Thetab)=\log|\Thetab|-\tr(\Sb\Thetab)$.
+First, 
+\begin{equation}
+\label{term1}
+\sD l_{k}(\Thetab)=\frac12\vect(\Thetab^{-1}-\Sb_{k})^{\top},
+\end{equation}
+which we establish by using formulae for the derivatives of the determinant and the trace \eqref{eq3:diff_det} and \eqref{eq3:diff_tr}, the chain rule and that matrices $\Thetab$ and $\Sb_k$ are symmetric. Since
+$\psib(\yb_k,\Thetab)=\vect \sD l_{k}(\Thetab)$ from \eqref{term1} we conclude that
+\begin{equation}
+\label{term2}
+\psib(\yb_{k},\Thetab)=\frac12(\Thetab^{-1}-\Sb_{k}).
+\end{equation}
+To obtain $\{\sD\psib(\yb_{k};\Thetab)\}^{\top}$, we use \eqref{eq3:diff_vec} and the chain rule which implies that $\sD\{\vect(\Thetab^{-1}-\Sb_{k})\}=\sD(\Thetab^{-1}-\Sb_{k}).$
+Since $\Thetab$ is symmetric, using \eqref{eq3:diff_inv} implies $\sD\Thetab^{-1}=-\Thetab^{-1}\otimes \Thetab^{-1}$. Also, by  \eqref{eq3:diff_const} $\sD\Sb_k=\mathbf{O}_{p^2}$, as $\Sb_k$ is constant. Finally, since $\Thetab^{-1}$ is a 
+symmetric matrix applying $(\Ab\otimes\Bb)^{\top}=\Ab^{\top}\otimes\Bb^{\top}$ yields
+\begin{equation}
+\label{term3}
+\{\sD\psib(y_{k};\Thetab)\}^{\top}=-\frac12\Thetab^{-1}\otimes \Thetab^{-1}.
+\end{equation}
+For the derivation of the  KLCV we need to show that the following holds
+\begin{align}
+\label{sec3:derivatives_kl1}
+\frac{d f(\Sb,\Thetab)}{d\Thetab}&=\vect(\Thetab^{-1}-\Sb)^{\top},\\
+\label{sec3:derivatives_kl2}
+\frac{d^2 f(\Sb,\Thetab)}{d\Thetab d\Sb}&=-\Ib_{p^2},\\
+\label{sec3:derivatives_kl3}
+\frac{d^2  f(\Sb,\Thetab)}{d\Thetab^2}&=-\Thetab^{-1}\otimes\Thetab^{-1}.
+\end{align}
+Equalities \eqref{sec3:derivatives_kl1} and \eqref{sec3:derivatives_kl3} are already derived above, see the derivation of \eqref{term1} and \eqref{term3}. 
+The quality \eqref{sec3:derivatives_kl2} follows from \eqref{eq3:diff_vec}. 
+
+
+\subsection{Derivation of the expression for $\Qb$ }
+\label{app3:calculation_Q}
+Since 
+\begin{equation}
+\label{qnew} 
+\sD l(\Thetahatb)=\sum_{k=1}^n \psib(\yb_k,\Thetahatb)=\frac12\sum_{k=1}^n \vect\big(\Thetahatb^{-1}-\Sb_{k}\big)=\ob_{p^2}.
+\end{equation}
+From this it follows that $\vect\big(n\Thetahatb^{-1}-n\Sb)=\ob_{p^2}$ which implies
+\begin{equation}
+\label{qnew1} 
+\vect\big(\Thetahatb^{-1}\big)=\vect \Sb.
+\end{equation}
+Equality $\Qb=\frac{1}{4n}\sum_{k=1}^n \vect\big(\Thetahatb^{-1}-\Sb_k\big)\vect(\Thetahatb^{-1}-\Sb_k)^{\top}$ is equivalent to
+$$\Qb=\frac{1}{4n}\left\{\sum_{k=1}^n \vect\left(\Thetahatb^{-1}-\Sb_k\right)\right\}\vect(\Thetahatb^{-1})^{\top}+\frac{1}{4n}\sum_{k=1}^n \vect\left(\Thetahatb^{-1}-\Sb_k\right)\vect(\Sb_k)^{\top}$$
+which is by (\ref{qnew}) equal to 
+$$\Qb=\frac{1}{4n}\sum_{k=1}^n \vect\big(\Thetahatb^{-1}-\Sb_k\big)\vect(\Sb_k)^{\top}.$$
+Applying (\ref{qnew1}) we obtain 
+$$\Qb=\frac{1}{4n}\sum_{k=1}^n (\vect \Sb-\vect \Sb_k )\vect(\Sb_k)^{\top}=\frac{1}{4n}\vect \Sb\sum_{k=1}^n \vect(\Sb_k)^{\top}-\frac{1}{4n}\sum_{k=1}^n \vect \Sb_k \vect(\Sb_k)^{\top}$$
+From here we finally obtain 
+$$\Qb=\frac{1}{4}\vect \Sb\vect(\Sb)^{\top}-\frac{1}{4n}\sum_{k=1}^n \vect \Sb_k \vect(\Sb_k)^{\top}$$
+
+\subsection{Proof of Lemma \ref{ch3:lemma1}}
+\label{app3:lemma1_proof}
+Commutation matrix $\Kb_p$ is defined as a matrix that has the property $\Kb_p \vect(\Ab)=\vect(\Ab^{\top})$. By substituting $\Mb_p=1/2(\Ib_{p^2}+\Kb_p)$ in the equality we obtain that it is equivalent to 
+$$(\Thetab\otimes\Thetab)\vect(\Ab)=\Kb_p(\Thetab\otimes\Thetab)\vect(\Ab).$$
+To show this, we use identities  $\vect(\Ab\Bb\Cb)=(\Cb^{\top}\otimes \Ab)\vect \Bb$, $\Kb_p \vect(\Ab)=\vect(\Ab^{\top})$ and symmetry of $\Ab$ and $\Thetab$ 
+$$\Kb_p\Thetab\otimes \Thetab\vect\Ab = \Kb_p\vect(\Thetab \Ab\Thetab)=\vect\{(\Thetab \Ab\Thetab)^{\top}\}=\vect(\Thetab \Ab\Thetab)=\Thetab\otimes \Thetab\vect\Ab.$$
+$\Box$
+
+\subsection{Calculation for the algorithmic complexity}
+\label{sec3:computational_complexity}
+In calculations that follow we use Lemma \eqref{sec5:wood2} from Section \ref{sec5:comp_cost}. We also use the following result which follows from the definition of the Kronecker product.
+\begin{lemma}
+ \label{sec3:kronecker}
+ If $\Thetab$ is a matrix of dimension $p\times p$ then the computational cost of $\Thetab\otimes\Thetab$ is $\Ocal(p^4)$ flops. 
+\end{lemma}
+The dimension of the matrices that appear in the calculations have the following dimensions.
+\begin{itemize}
+ \item $\Thetahatb_{\lambda},\Ab,\Bb,\Ib_{\lambda}$ are of dimension $p\times p$.
+ \item $\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda}$ is of dimension $p^2\times p^2$.
+ \item $\vect(\Ab\circ \Ib_{\lambda})^{\top}$ is of dimension $1\times p^2$.
+ \item $\vect(\Bb\circ \Ib_{\lambda})$ and $\vect\{\Thetahatb_{\lambda}(\Bb\circ \Ib_{\lambda})\Thetahatb_{\lambda}\}$ are of dimension $p^2\times 1$.
+\end{itemize}
+\par
+We do not take into account vectorization and transpose operator since they are connected with memory allocation and also because in \ref{sec3:implementation} we show that these can be avoided.
+
+{\bf The cost for the term $\vect(\Ab\circ \Ib_{\lambda})^{\top}(\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda})\vect(\Bb\circ \Ib_{\lambda})$ }
+\par
+\begin{itemize}
+ \item $\Thetahatb_{\lambda}\mapsto\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda}$ costs $p^4$ flops. 
+ \item $(\Ab,\Ib_{\lambda})\mapsto \vect(\Ab\circ\Ib_{\lambda})$ costs $p^2$ flops. 
+ \item $(\Bb,\Ib_{\lambda})\mapsto \vect(\Bb\circ\Ib_{\lambda})$ costs $p^2$ flops. 
+ \item $(\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda},\vect(\Bb\circ\Ib_{\lambda}))\mapsto (\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda})\vect(\Bb\circ \Ib_{\lambda})$  costs $\Ocal(p^4)$ flops.  
+ \item $(\vect(\Ab\circ \Ib_{\lambda})^{\top}, (\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda})\vect(\Bb\circ \Ib_{\lambda}))\mapsto 
+\vect(\Ab\circ \Ib_{\lambda})^{\top}(\Thetahatb_{\lambda}\otimes\Thetahatb_{\lambda})\vect(\Bb\circ \Ib_{\lambda})$  
+costs $p^2$ flops. 
+\end{itemize}
+Thus, the total computational cost is  $\Ocal(2p^4+3p^2)$ which is equal to $\Ocal(p^4)$ flops.
+
+{\bf The cost for the term $\vect(\Ab\circ \Ib_{\lambda})^{\top}\vect\{\Thetahatb_{\lambda}(\Bb\circ \Ib_{\lambda})\Thetahatb_{\lambda}\}$ }
+\par
+It is already shown that calculation of $\vect(\Ab\circ\Ib_{\lambda})$  and $\vect(\Bb\circ\Ib_{\lambda})$ costs in total $2p^2$ flops. 
+\begin{itemize}
+ \item $(\Bb\circ \Ib_{\lambda},\Thetahatb_{\lambda})\mapsto (\Bb\circ \Ib_{\lambda})\Thetahatb_{\lambda}$ costs $p^3$ flops. 
+ \item $(\Thetahatb_{\lambda},(\Bb\circ \Ib_{\lambda})\Thetahatb_{\lambda})\mapsto \Thetahatb_{\lambda}(\Bb\circ \Ib_{\lambda})\Thetahatb_{\lambda}$ costs $p^3$ flops. 
+ \item $(\vect(\Ab\circ \Ib_{\lambda})^{\top},\vect\{\Thetahatb_{\lambda}(\Bb\circ \Ib_{\lambda})\Thetahatb_{\lambda}\})\mapsto \vect(\Ab\circ \Ib_{\lambda})^{\top}\vect\{\Thetahatb_{\lambda}(\Bb\circ \Ib_{\lambda})\Thetahatb_{\lambda}\}$  
+costs $\Ocal(p^2)$ flops.  
+\end{itemize}
+Thus, the total computational cost is  $\Ocal(2p^3+3p^2)$ which is equal to $\Ocal(p^3)$ flops.
+
+
+\subsection{Proof of Theorem \ref{eq3:AIC_theorem}}
+\label{sec3:AIC_proof}
+\begin{itemize}
+
+\item $\bar{\alpha}=\{(i,j):i,j=1,\ldots,p;\,i<j\}$ full model (labels of elements in the precision matrix of order $p$; here all elements are nonzero) 
+\item $\alpha\subset\bar{\alpha}$ candidate model, meaning that the only nonzero elements of the precision matrix are those labelled by $\alpha$
+\item $\Acal$ collection of all candidate models
+\item $d_{\alpha}$ size of model $\alpha$
+\item $\Thetahatb^*_{\alpha}$ the nonpenalized MLE computed via the model $\alpha$
+\item $\Thetahatb_{\lambda}$ MPLE that corresponds to tuning parameter $\lambda$
+\item $\alpha_{\lambda}$ the model associated with $\Thetahatb_{\lambda}$
+% \item $df_{\lambda}$ size of model $\alpha_{\lambda}$, i.e. number of nonzero elements in the upper diagonal of the precision matrix $\Thetahatb_{\lambda}$
+\item $\Omega_{-}=\{\lambda:\alpha_{\lambda}\not\supset \alpha_0\}$ set of $\lambda$s that induce an underfitted model
+\item $\Omega_{0}=\{\lambda:\alpha_{\lambda}=\alpha_0\}$ set of $\lambda$s that induce the true model
+\item $\Omega_{+}=\{\lambda:\alpha_{\lambda}\supset \alpha_0 \,\,\,{\rm and }\,\,\, \alpha_{\lambda}\neq\alpha_0\}$ set of $\lambda$s that induce an overfitted model
+\item $l(\Thetab)=\frac{n}{2}\{\ln|\Thetab|-\tr(\Thetab \Sb)\}$ log-likelihood
+\item $D(\lambda)=-2l(\Thetahatb_{\lambda})$ deviance evaluated in MPLE
+\item $D^{*}(\alpha)=-2l(\Thetahatb^*_{\alpha})$ deviance evaluated in MLE  $\Thetahatb^*_{\alpha}$ that corresponds to model $\alpha$
+\item $\AIC(\lambda)=D(\lambda)/n+2df_{\lambda}/n$; AIC for MPLE 
+\item $\AIC^*(\alpha)=D^{*}(\alpha)/n+2d_{\alpha}/n$; AIC for MLE $\Thetahatb^*_{\alpha}$ that corresponds to model $\alpha$
+\end{itemize}
+
+\begin{lemma}
+  For any candidate model $\alpha\in\Acal$, there exists $c_{\alpha}$ such that 
+$$\frac{D^*(\alpha)}{n}=c_{\alpha}+o_P(1)\\.$$
+In addition for any underfitted model $\alpha\not\supset \alpha_0$, it holds 
+$$c_{\alpha}>c_{\alpha_0},$$
+where  $c_{\alpha_0}$ is the limit of $\frac{D^*(\alpha_0)}{n}$ and $\Thetahatb^*_{\alpha_0}$ is the precision matrix of the true model $\alpha_0$.
+\end{lemma}
+\begin{proof}
+Note that 
+$$\frac{D^*(\alpha)}{n}=\tr(\Thetahatb^*_{\alpha} \Sb)-\ln|\Thetahatb^*_{\alpha}|.$$
+Fix any candidate model $\alpha\in\Acal$. Since $\Thetahatb^*_{\alpha}$ is the MLE under model $\alpha$ the limit in probability, denoted by $\Thetab_{\alpha}$, of $\Thetahatb^*_{\alpha}$  when $n\rightarrow\infty$, exists. By 
+consistency of the estimator  $\Sb$ (MLE under the full model) it follows that  $\Sb\xrightarrow{P}\Thetab_{\alpha_0}^{-1}$, where $\Thetab_{\alpha_0}$ is the true precision matrix. By continuous mapping theorem it follows that 
+\begin{equation}
+ \label{eq9:C4_1}
+\lim_{n\rightarrow\infty}\frac{D^*(\alpha)}{n}= \tr(\Thetab_{\alpha}\Thetab_{\alpha_0}^{-1})-\ln|\Thetab_{\alpha}|:=c_{\alpha},
+\end{equation}
+which establishes the existence of $c_{\alpha}$. Let $\alpha\not\supset \alpha_0$ be any underfitted model and $\Thetab_{\alpha_0}$ the precision matrix of the true model. According to \eqref{eq9:C4_1} 
+\begin{eqnarray}
+\nonumber
+ c_{\alpha}-c_{\alpha_0}&=&\tr(\Thetab_{\alpha}\Thetab_{\alpha_0}^{-1})-\ln|\Thetab_{\alpha}|-\tr(\Thetab_{\alpha_0}\Thetab_{\alpha_0}^{-1})+\ln|\Thetab_{\alpha_0}|\\ \nonumber
+&=&\tr(\Thetab_{\alpha}\Thetab_{\alpha_0}^{-1})-\ln|\Thetab_{\alpha}\Thetab_{\alpha_0}^{-1}|-p\\\nonumber
+&=&2\KL(\Thetab_{\alpha_0};\Thetab_{\alpha})>0
+\end{eqnarray}
+since the densities $N_p(\yb;0,\Thetab_{\alpha}^{-1})$ are not equal $N_p(\yb;0,\Thetab_{\alpha_0}^{-1})$. The last equality follows from the formula for the KL \citep{penny2001kullback}.
+
+\end{proof}
+
+\begin{lemma}
+\label{sec9:ch3:lemma2}
+Let $\alpha_0$ denote the true model and $\bar{\alpha}$ the full model. With the notation of the previous lemma we have $c_{\alpha_0}=c_{\bar{\alpha}}$
+\end{lemma}
+\begin{proof}
+Let $\Thetab_{\alpha_0}$ be the true precision matrix. According to  \eqref{eq9:C4_1}
+$$c_{\alpha}=\tr(\Thetab_{\alpha}\Thetab_{\alpha_0}^{-1})-\ln|\Thetab_{\alpha}|,$$
+where $\Thetab_{\alpha}=\lim_{n\rightarrow\infty}\Thetahatb^*_{\alpha}$, in probability.
+It follows that
+$$c_{\alpha_0}=\tr(\Thetab_{\alpha_0}\Thetab_{\alpha_0}^{-1})-\ln|\Thetab_{\alpha_0}|=p-\ln|\Thetab_{\alpha_0}|.$$
+
+Since $\Thetahatb^*_{\bar{\alpha}}=\Sb$ it follows that  $\Thetab_{\bar{\alpha}}=\Thetab_{\alpha_0}$ since $\Sb$ is consistent and consequently
+$$c_{\bar{\alpha}}=\tr(\Thetab_{\bar{\alpha}}\Thetab_{\alpha_0}^{-1})-\ln|\Thetab_{\bar{\alpha}}|=\tr(\Thetab_{\alpha_0}\Thetab_{\alpha_0}^{-1})-\ln|\Thetab_{\alpha_0}|=p-\ln|\Thetab_{\alpha_0}|=c_{\alpha_0}.$$
+\end{proof}
+
+\begin{lemma}
+ $P\left\{\inf_{\lambda\in \Omega_{-}} \AIC(\lambda)>\AIC(\bar{\alpha})\right\}\rightarrow 1$
+\end{lemma}
+For a given $\lambda>0$ the nonpenalized MLE $\Thetahatb^*_{\alpha_{\lambda}}$ maximizes log-likelihood function under the model $\alpha_{\lambda}$ so $l(\Thetahatb^*_{\alpha_{\lambda}})\geq  l(\Thetahatb_{\lambda})$ which is 
+equivalent to 
+\begin{align}
+  &\Leftrightarrow -2l(\Thetahatb^*_{\alpha_{\lambda}})\leq -2 l(\Thetahatb_{\lambda})\\
+\label{eq9:1}
+ &\Leftrightarrow D(\lambda)\geq  D^{*}(\alpha_{\lambda}).
+\end{align}
+According to \eqref{eq9:1}  and definition of $\AIC(\lambda)$ it follows 
+$$\AIC(\lambda)=\frac{D(\lambda)}{n}+\frac{2df_{\lambda}}{n}>\frac{D^{*}(\alpha_{\lambda})}{n}+\frac{2df_{\lambda}}{n}>\frac{D^{*}(\alpha_{\lambda})}{n}$$
+since $2df_{\lambda}/n>0$. Hence
+\begin{equation}
+\label{eq9:2}
+ \AIC(\lambda)-\AIC^*(\bar{\alpha})>\frac{D^{*}(\alpha_{\lambda})}{n}-\frac{D^{*}(\bar{\alpha})}{n}-\frac{2d_{\bar{\alpha}}}{n},\,\,\,\text{for every}\,\,\lambda>0.
+\end{equation}
+Consequently, the last inequality holds also for any $\lambda\in\Omega_{-}=\{\lambda:\alpha_{\lambda}\not\supset \alpha_0\}$, which implies 
+\begin{equation}
+\label{eq9:3}
+P\left\{\ \inf_{\lambda\in \Omega_{-}} \AIC(\lambda)-\AIC^*(\bar{\alpha})>0\right\}\geq P\left\{\ \inf_{\alpha_{\lambda}\not\supset \alpha_0} \frac{D^{*}(\alpha_{\lambda})}{n}-\frac{D^{*}(\bar{\alpha})}{n}-\frac{2d_{\bar{\alpha}}}{n}>0\right\}.
+\end{equation}
+Since subset of all underfitted models contains the subset of underfitted models obtained by MPLE, i.e. $\{\alpha_{\lambda}: \alpha_{\lambda}\not\supset \alpha_0\}\subset\{\alpha:\alpha\not\supset \alpha_0\}$ according to Lemma 
+\ref{sec9:ch3:lemma1} it follows that 
+$$\inf_{\alpha_{\lambda}\not\supset \alpha_0}\left\{ \frac{D^{*}(\alpha_{\lambda})}{n}-\frac{D^{*}(\bar{\alpha})}{n}-\frac{2d_{\bar{\alpha}}}{n}\right\}
+\geq \inf_{\alpha\not\supset \alpha_0}\left\{ \frac{D^{*}(\alpha)}{n}-\frac{D^{*}(\bar{\alpha})}{n}-\frac{2d_{\bar{\alpha}}}{n}\right\}$$
+and consequently by monotonicity of  probability 
+\begin{equation}
+\label{eq9:4}
+P\left\{\ \inf_{\alpha_{\lambda}\not\supset \alpha_0} \frac{D^{*}(\alpha_{\lambda})}{n}-\frac{D^{*}(\bar{\alpha})}{n}-\frac{2d_{\bar{\alpha}}}{n}>0\right\}
+\geq P\left\{\ \inf_{\alpha\not\supset \alpha_0} \frac{D^{*}(\alpha)}{n}-\frac{D^{*}(\bar{\alpha})}{n}-\frac{2d_{\bar{\alpha}}}{n}>0\right\}.
+\end{equation}
+Because $p$ is fixed $0\leq \frac{2d_{\bar{\alpha}}}{n}\leq \frac{2p^2}{n}$ so it follows that $\frac{2d_{\bar{\alpha}}}{n}=o_P(1)$. By condition (C4) it follows that 
+\begin{align}
+\frac{D^*(\alpha)}{n}=c_{\alpha}+o_P(1),\\
+ \frac{D^{*}(\bar{\alpha})}{n}=c_{\bar{\alpha}}+o_P(1),
+\end{align} 
+so $\frac{D^{*}(\alpha)}{n}-\frac{D^{*}(\bar{\alpha})}{n}--\frac{2d_{\bar{\alpha}}}{n}=c_{\alpha}-c_{\bar{\alpha}}+o_P(1)$ and thus 
+\begin{equation}
+\label{eq9:5}
+P\left\{\ \inf_{\alpha\not\supset \alpha_0} \frac{D^{*}(\alpha)}{n}-\frac{D^{*}(\bar{\alpha})}{n}-\frac{2d_{\bar{\alpha}}}{n}>0\right\}
+=P\left\{\ \inf_{\alpha\not\supset \alpha_0} c_{\alpha}-c_{\bar{\alpha}}+o_P(1)>0\right\}
+\end{equation}
+Since there are finite number of underfitted models infimum is equal to minimum so 
+\begin{equation}
+\label{eq9:6}
+ P\left\{\ \inf_{\alpha\not\supset \alpha_0} c_{\alpha}-c_{\bar{\alpha}}+o_P(1)>0\right\}= P\left\{\ \min_{\alpha\not\supset \alpha_0} c_{\alpha}-c_{\bar{\alpha}}+o_P(1)>0\right\}
+\end{equation}
+According to Lemma \ref {sec9:ch3:lemma2} $c_{\bar{\alpha}}=c_{\alpha_0}$ From this, the sequence of inequalities \eqref{eq9:3},\eqref{eq9:4},\eqref{eq9:5},\eqref{eq9:6}  and condition (C4), i.e. $c_{\alpha}>c_{\alpha_0}$,
+it follows that 
+$$P\left\{\inf_{\lambda\in \Omega_{-}} \AIC(\lambda)>\AIC(\alpha)\right\}\rightarrow 1.$$
+
+\begin{lemma}
+ $\lim\inf_{n\rightarrow\infty}P\left\{\inf_{\lambda\in \Omega_{0}} \AIC(\lambda)>\AIC(\bar{\alpha})\right\}\geq \pi>0$
+\end{lemma}
+
+Let $\lambda\in \Omega_{0}$ be arbitrary. If we apply \eqref{eq9:2} on $\alpha_{\lambda}=\alpha_0$ and take infimum over $\lambda\in \Omega_{0}$ we obtain
+\begin{eqnarray}
+\label{eq9:7}
+\nonumber 
+\inf_{\lambda\in \Omega_{0}}\AIC(\lambda)-\AIC^*(\bar{\alpha})&>&\frac{D^{*}(\alpha_0)}{n}-\frac{D^{*}(\bar{\alpha})}{n}-\frac{2d_{\bar{\alpha}}}{n}\\
+&=&\frac{1}{n}\left\{D^{*}(\alpha_0)-D^{*}(\bar{\alpha}\right\}-\frac{2d_{\bar{\alpha}}}{n}
+\end{eqnarray}
+We have that 
+\begin{equation}
+\label{eq9:8}
+ D^{*}(\alpha_0)-D^{*}(\bar{\alpha})=-2\{l(\Thetahatb^*_{\alpha_0})-l(\Thetahatb^*_{\bar{\alpha}})\},
+\end{equation}
+where $\Thetahatb^*_{\alpha_0}$ and $\Thetahatb^*_{\bar{\alpha}}$ are the nonpenalized MLEs computed via the true and the full model, respectively. According to \cite[p.134]{lauritzen1996graphical}
+\begin{equation}
+\label{eq9:9}
+-2\{l(\Thetahatb^*_{\alpha_0})-l(\Thetahatb^*_{\bar{\alpha}})\}\xrightarrow{d}\chi^2_{d_{\bar{\alpha}}-d_{\alpha_0}}.
+\end{equation}
+Hence, according to \eqref{eq9:7},\eqref{eq9:8} and \eqref{eq9:9} we have 
+\begin{eqnarray}
+ P\left\{\inf_{\lambda\in \Omega_{0}} \AIC(\lambda)>\AIC(\alpha)\right\}&\geq& P\left\{-\frac{2}{n}\{l(\Thetahatb^*_{\alpha_0})-l(\Thetahatb^*_{\bar{\alpha}})\}-\frac{2d_{\bar{\alpha}}}{n}>0\right\}\\
+&=&P\left\{-2\{l(\Thetahatb^*_{\alpha_0})-l(\Thetahatb^*_{\bar{\alpha}})\}>2d_{\bar{\alpha}}\right\}\\
+&\rightarrow& P\{\chi^2_{d_{\bar{\alpha}}-d_{\alpha_0}}>2d_{\bar{\alpha}}\}=\pi,
+\end{eqnarray}
+where $0<\pi<1$.
+
+
+
+
+\begin{lemma}
+\label{sec9:ch3:lemma1}
+ Suppose that $A$ and $B$ are subsets of $R$ such that $A\subset B$. If $\inf A$ and $\inf B$ exist then 
+$$\inf A \geq \inf B . $$
+
+\end{lemma}
+
+
+\section{Summary}
+In this chapter, we discussed model selection in Gaussian graphical models. We argued that minimizing KL divergence performs well in obtaining a model with good predicting power, but poorly in retrieving the graph structure.
+For obtaining the model with a good predictive power we have proposed two new, closed-form estimators of the Kullback-Leibler loss. After an extensive literature review, we have found that these estimators are the best
+closed-form estimators available for selecting a predictively accurate model in sparse data settings for sparse Gaussian graphical models. We demonstrated that the estimators can be implemented relatively efficiently. 
+We concluded the chapter by illustrating that the proposed estimators of KL can be useful for the graph selection problem when the sample size is small.

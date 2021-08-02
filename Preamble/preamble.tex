@@ -1,0 +1,413 @@
+% ******************************************************************************
+% ****************************** Custom Margin *********************************
+
+% Add `custommargin' in the document class options to use this section
+% Set {innerside margin / outerside margin / topmargin / bottom margin}  and
+% other page dimensions
+\ifsetMargin
+\else
+    \RequirePackage[left=10mm,right=10mm,top=5mm,bottom=10mm]{geometry}
+    \setFancyHdr % To apply fancy header after geometry package is loaded
+\fi
+
+% *****************************************************************************
+% ******************* Fonts (like different typewriter fonts etc.)*************
+
+% Add `customfont' in the document class option to use this section
+\ifsetFont
+\else
+    % Set your custom font here and use `customfont' in options. Leave empty to
+    % load computer modern font (default LaTeX font).  
+    \RequirePackage{libertine} 
+\fi
+
+% *****************************************************************************
+% *************************** Bibliography  and References ********************
+
+%\usepackage{cleveref} %Referencing without need to explicitly state fig /table
+%\usepackage[round]{natbib}
+% Add `custombib' in the document class option to use this section
+\ifsetBib % True, Bibliography option is chosen in class options
+\else % If custom bibliography style chosen then load bibstyle here
+     \RequirePackage[round,authoryear]{natbib} % CustomBib
+ \fi
+
+% changes the default name `Bibliography` -> `References'
+\renewcommand{\bibname}{References}
+
+% *****************************************************************************
+% *************** Changing the Visual Style of Chapter Headings ***************
+% Uncomment the section below. Requires titlesec package.
+
+%\RequirePackage{titlesec}
+%\newcommand{\PreContentTitleFormat}{\titleformat{\chapter}[display]{\scshape\Large}
+%{\Large\filleft{\chaptertitlename} \Huge\thechapter}
+%{1ex}{}
+%[\vspace{1ex}\titlerule]}
+%\newcommand{\ContentTitleFormat}{\titleformat{\chapter}[display]{\scshape\huge}
+%{\Large\filleft{\chaptertitlename} \Huge\thechapter}{1ex}
+%{\titlerule\vspace{1ex}\filright}
+%[\vspace{1ex}\titlerule]}
+%\newcommand{\PostContentTitleFormat}{\PreContentTitleFormat}
+%\PreContentTitleFormat
+
+
+% *****************************************************************************
+% **************************** Custom Packages ********************************
+% *****************************************************************************
+
+
+% ************************* Algorithms and Pseudocode **************************
+
+%\usepackage{algpseudocode} 
+
+
+% ********************Captions and Hyperreferencing / URL **********************
+
+% Captions: This makes captions of figures use a boldfaced small font. 
+%\RequirePackage[small,bf]{caption}
+
+\RequirePackage[labelsep=space,tableposition=top]{caption} 
+\renewcommand{\figurename}{Fig.} %to support older versions of captions.sty
+
+% ************************ Formatting / Footnote *******************************
+
+%\usepackage[perpage]{footmisc} %Range of footnote options 
+%IVAN: I added
+\usepackage[export]{adjustbox}
+%\usepackage{fontspec,lipsum} %i added for the fonsts
+% ****************************** Line Numbers **********************************
+
+%\RequirePackage{lineno}
+%\linenumbers
+
+% ************************** Graphics and figures *****************************
+%\usepackage{mathgifg} %i added
+%\usepackage{winfonts} for Georgia fonts
+%\usepackage{mathgifg} for Georgia fonts
+\usepackage[figuresright]{rotating}
+\usepackage{commath} %for norm and absolute value
+%\usepackage{wrapfig}
+%\usepackage{float}
+\usepackage{subfig} %note: subfig must be included after the `caption` package. 
+\usepackage{nomencl}
+% temporary
+\usepackage[table]{xcolor}
+%\usepackage[margin=1in]{geometry}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\definecolor{green}{HTML}{66FF66}
+\definecolor{myGreen}{HTML}{009900}
+%\renewcommand{\familydefault}{\sfdefault}
+%\renewcommand{\arraystretch}{1.5}
+% temporary
+%for tables
+\usepackage{booktabs} 
+\usepackage{tabulary}
+\usepackage{multirow}
+\usepackage{geometry}
+
+%%% for graph picture: Mehdi
+% Graphics
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+
+
+% Other packages
+\usepackage{enumitem}
+\usepackage[boxed, vlined, linesnumbered]{algorithm2e}
+\usepackage{authblk}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% blank page
+\usepackage{afterpage}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+% Colors for graph colorings
+\definecolor{graphcol1}{rgb}{0.89, 0.10, 0.11}
+\definecolor{graphcol2}{rgb}{0.22, 0.49, 0.72}
+\definecolor{graphcol3}{rgb}{0.30, 0.69, 0.29}
+\definecolor{graphcol4}{rgb}{0.60, 0.31, 0.64}
+
+% Different edge types in graphs
+\newlength{\edgelength}
+\setlength{\edgelength}{2.5ex}
+\newcommand{\grarright}{\mathbin{\tikz[baseline] \draw[->] (0pt, 0.7ex) -- (\edgelength, 0.7ex);}}
+\newcommand{\grarleft}{\mathbin{\tikz[baseline] \draw[<-] (0pt, 0.7ex) -- (\edgelength, 0.7ex);}}
+\newcommand{\grline}{\mathbin{\tikz[baseline] \draw[-] (0pt, 0.7ex) -- (\edgelength, 0.7ex);}}
+\newcommand{\grdots}{\mathbin{\tikz[baseline] \draw[dotted, thick] (0pt, 0.7ex) -- (\edgelength, 0.7ex);}}
+
+
+
+% Example graphs
+\newlength{\exgredge}
+\setlength{\exgredge}{9mm}
+
+
+\newenvironment{fournodeex}{%
+\begin{tikzpicture}[baseline=(v1.base)]
+  \node[circle] (v1) at (0, 0) {$1$};
+  \node [circle](v2) at (0, 1.5) {$2$};
+  \node[circle] (v3) at (1.5, 1.5) {$3$};
+  \node [circle](v4) at (1.5, 0) {$4$};
+   \draw[black, very thick] (v1) circle (3mm);
+     \draw[black, very thick] (v2) circle (3mm);
+     \draw[black, very thick] (v3) circle (3mm);
+     \draw[black, very thick] (v4) circle (3mm);
+}
+{\end{tikzpicture}}
+
+% ********************************* Table **************************************
+
+%\usepackage{longtable}
+%\usepackage{multicol}
+%\usepackage{multirow}
+%\usepackage{tabularx}
+
+
+% ***************************** Math and SI Units ******************************
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\allowdisplaybreaks % Ivan: I added this so he can brake formula on the next page
+\usepackage{amssymb}
+%\usepackage{siunitx} % use this package module for SI units
+
+%mypackages 
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{amsbsy}
+%\usepackage{grffile}
+\usepackage{ifpdf}
+\usepackage{epstopdf}
+\usepackage{epsfig,amssymb,amsfonts,verbatim}
+\usepackage{fancyhdr,lastpage}
+\usepackage{graphics}
+\usepackage{color,soul}
+\usepackage{setspace}
+%\usepackage{subfiles}
+%\usepackage{subfigure}
+
+
+% ******************************************************************************
+% ************************* User Defined Commands ******************************
+% ******************************************************************************
+\newtheorem{example}{Example}
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{definition}{ Definition}[chapter]
+\newtheorem{lemma}{Lemma}[chapter]
+% ******************************************************************************
+%http://tex.stackexchange.com/questions/154530/a-conditional-independence-symbol-that-looks-good-with-mid
+\newcommand*{\bigCI}{%
+  \mathrel{\text{%
+    {\begin{tikzpicture}[baseline = {(0,0)}]%
+        \draw[line width = 0.1ex] (0,0) -- (0,1.7ex);
+        \draw[line width = 0.1ex] (0.3ex,0) -- (0.3ex,1.7ex);
+        \draw[line width = 0.1ex] (-0.8ex,0) -- (1.1ex,0);
+     \end{tikzpicture}%
+    }%
+  }}%
+}
+\newcommand{\eqdef}{\stackrel{\mathrm{def}}{=}}
+\newcommand{\Rp}{\rR^p}
+\newcommand{\cl}{\mathrm{ cl}}
+\newcommand{\ybar}{\bar{y}}
+\newcommand{\nei}{\mathrm{ne}}
+%%%%%%%%%%%%%%%%%bolds%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%	GREEK bolds%%%%%%%%%%%%%%%%%%
+%small
+\newcommand{\alphab}{\bm{\alpha}}
+\newcommand{\alphahatb}{\hat{\bm{\alpha}}}
+\newcommand{\betab}{\bm{\beta}}
+\newcommand{\xib}{\bm{\xi}}
+\newcommand{\epsilonb}{\bm{\epsilon}}
+\newcommand{\varepsilonb}{\bm{\varepsilon}}
+\newcommand{\lambdab}{\bm{\lambda}}
+\newcommand{\zetab}{\bm{\zeta}}
+\newcommand{\etab}{\bm{\eta}}
+\newcommand{\omegab}{\bm{\omega}}
+\newcommand{\thetab}{\bm{\theta}}
+\newcommand{\psib}{\bm{\psi}}
+\newcommand{\phib}{\bm{\phi}}
+\newcommand{\sigmab}{\bm{\sigma}}
+\newcommand{\mub}{\bm{\mu}}
+\newcommand{\muhatb}{\hat{\bm{\mu}}}
+\newcommand{\thetabhat}{\hat{\bm\theta}}
+\newcommand{\thetahatb}{\hat{\bm{\theta}}}
+%capital
+\newcommand{\Thetab}{\bm{\Theta}}
+\newcommand{\Thetahatb}{\hat{\bm{\Theta}}}
+\newcommand{\Thetabtilde}{\tilde{\bm{\Theta}}}
+\newcommand{\Sigmab}{\bm{\Sigma}}
+%%%%%%%%%%%%%%%%%bolds%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%	ROMAN bolds%%%%%%%%%%%%%%%%%%
+%small
+\newcommand{\zb}{\bm{z}}
+\newcommand{\ab}{\bm{a}}
+\newcommand{\cb}{\bm{c}}
+\newcommand{\ub}{\bm{u}}
+\newcommand{\xb}{\bm{x}}
+\newcommand{\yb}{\bm{y}}
+\newcommand{\fb}{\bm{f}}
+\newcommand{\gb}{\mathbf{g}}
+\newcommand{\ob}{\mathbf{0}}
+\newcommand{\tb}{\bm{t}}
+\newcommand{\xbdot}{\mathbf{\dot{x}}}
+\newcommand{\cbhat}{\bm{\hat{c}}}
+\newcommand{\xhatb}{\hat{\bm{x}}}
+%capital
+\newcommand{\Obi}{\bm{O}}
+\newcommand{\Yb}{\bm{Y}}
+\newcommand{\Ybmat}{\mathbf{Y}}
+\newcommand{\Ab}{\mathbf{A}}
+\newcommand{\Bb}{\mathbf{B}}
+\newcommand{\Cb}{\mathbf{C}}
+\newcommand{\Eb}{\mathbf{E}}
+\newcommand{\Tb}{\mathbf{T}}
+\newcommand{\Kb}{\mathbf{K}}
+\newcommand{\Ib}{\mathbf{I}}
+\newcommand{\Lb}{\mathbf{L}}
+\newcommand{\Db}{\mathbf{D}}
+\newcommand{\Fb}{\mathbf{F}}
+\newcommand{\Pb}{\mathbf{P}}
+\newcommand{\Gb}{\mathbf{G}}
+\newcommand{\Mb}{\mathbf{M}}
+\newcommand{\Rb}{\mathbf{R}}
+\newcommand{\Qb}{\mathbf{Q}}
+\newcommand{\Ob}{\mathbf{O}}
+\newcommand{\Sb}{\mathbf{S}}
+\newcommand{\Xb}{\mathbf{X}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%   	TEXT 
+\newcommand{\AIC}{\mathrm{ AIC}}
+\newcommand{\BIC}{\mathrm{ BIC}}
+\newcommand{\GIC}{\mathrm{ GIC}}
+\newcommand{\EBIC}{\mathrm{ EBIC}}
+\newcommand{\CV}{\mathrm{ CV}}
+\newcommand{\GACV}{\mathrm{ GACV}}
+\newcommand{\GCV}{\mathrm{ GCV}}
+\newcommand{\KLCV}{\mathrm{ KLCV}}
+\newcommand{\KLBIC}{\mathrm{ KLBIC}}
+\newcommand{\KL}{\mathrm{ KL}}
+\newcommand{\LOOCV}{\mathrm{ LOOCV}}
+\newcommand{\Entropy}{\text{Entropy}}
+\newcommand{\MCC}{\mathrm{ MCC}}
+\newcommand{\Fone}{{rm F}_1}
+\newcommand{\precision}{\mathrm{ precision}}
+\newcommand{\recall}{\mathrm{ recall}}
+\newcommand{\TP}{\mathrm{ TP}}
+\newcommand{\TN}{\mathrm{ TN}}
+\newcommand{\FP}{\mathrm{ FP}}
+\newcommand{\FN}{\mathrm{ FN}}
+\newcommand{\vect}{\mathrm{ vec}}
+\newcommand{\tr}{\mathrm{ tr}}
+\newcommand{\df}{\mathrm{ df}}
+\newcommand{\bias}{\mathrm{ bias}}
+\newcommand{\sign}{\mathrm{ sign}}
+\newcommand{\diag}{\mathrm{ diag}}
+\newcommand{\loglik}{\mathrm{ loglik}}
+\newcommand{\argmax}{\mathrm{ argmax}}
+\newcommand{\argmin}{\mathrm{ argmin}}
+\newcommand{\E}{\mathrm{ E}}
+\newcommand{\var}{\mathrm{ var}}
+\newcommand{\cov}{\mathrm{ cov}}
+\newcommand{\z}{\mathrm{ z}}
+\newcommand{\x}{\mathrm{ x}}
+\newcommand{\g}{\mathrm{ g}}
+\newcommand{\F}{\mathrm{ F}}
+\newcommand{\Y}{\mathrm{ Y}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\chat}{\hat{c}}
+\newcommand{\lambdahat}{\hat{\lambda}}
+\newcommand{\xidot}{\dot{\xi}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\concat}{\ensuremath{+\!\!\!\!+\,}} 
+\newcommand{\Sigmahat}{\hat{\Sigma}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% 		hats, italics, caligraphic, tilde
+\newcommand{\xhat}{\hat{x}}                                 
+\newcommand{\Thetait}{{\it \Theta}}
+\newcommand{\thetahat}{\hat{\theta}}
+\newcommand{\sigmahat}{\hat{\sigma}}
+\newcommand{\Ghatb}{\hat{\mathbf{G}}}
+\newcommand{\muhat}{\hat{\mu}}
+\newcommand{\Ltilde}{\tilde{L}}
+\newcommand{\Stilde}{\tilde{S}}
+\renewcommand{\hat}{\widehat}
+\newcommand{\Hcal}{\mathcal{H}} 
+\newcommand{\Dcal}{\mathcal{D}}     
+\newcommand{\Acal}{\mathcal{A}}   
+\newcommand{\Gcal}{\mathcal{G}} 
+\newcommand{\Ncal}{\mathcal{N}} 
+\newcommand{\Ocal}{\mathcal{O}} 
+\newcommand{\Ycal}{{\mathcal Y}}
+\renewcommand{\tilde}{\widetilde}
+\newcommand{\rf}[1]{(\ref{eq:#1})}
+\newcommand{\rR}{\mathbb R}
+\newcommand{\rd}{\mathrm{d}}
+\newcommand{\rP}{\mathrm{P}}
+\newcommand{\rG}{\mathrm{G}}
+\newcommand{\sd}{{\sf d}}
+\newcommand{\sD}{{\sf D}}
+\newcommand\dependent{\not\protect\mathpalette{\protect\independenT}{\perp}}
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+%%%%%%%%%%%%%%
+%RKHS notation
+%%%%%%%%%%%%%%%%
+
+
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\thh}{^\mathrm{th}}
+
+\newcommand{\thetaof}[2]{\theta \langle #1;#2\rangle}
+\newcommand{\Mpa}{M_\mathrm{P,A}}
+\newcommand{\Ma}{M_\mathrm{A}}
+\newcommand{\rjaccept}{\mathcal{A}}
+
+\def\Skip{\par\bigskip\nobreak}
+\def\dj{d\kern-0.4em\char"16\kern-0.1em}
+\def\Dj{\mbox{\raise0.3ex\hbox{-}\kern-0.4em D}}
+\def\bbbr{\mathrm{ I\!R}}
+\def\bbbn{\mathrm{ I\!N}}
+\def\bbbr{\mathrm{ I\!R}}
+% ********************** TOC depth and numbering depth *************************
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+% ******************************* Nomenclature *********************************
+
+% To change the name of the Nomenclature section, uncomment the following line
+
+\renewcommand\nomname{Symbols}
+
+
+% ********************************* Appendix ***********************************
+
+% The default value of both \appendixtocname and \appendixpagename is `Appendices'. These names can all be changed via: 
+
+%\renewcommand{\appendixtocname}{List of appendices}
+
+%\renewcommand{\appendixname}{Appndx}
+

@@ -1,0 +1,511 @@
+\chapter{Inferring latent gene regulatory network kinetics}
+\chaptermark{GRNs}
+
+\graphicspath{{Chapter6/Figs/}{Chapter6/Figs/PDF/}{Chapter6/Figs/}}%
+
+\nomenclature[A]{$\text{diag}(a_1,\dots,d_n)$}{diagonal matrix with the diagonal equal to the vector $(a_1,\dots,d_n)$}%
+\nomenclature[A]{$\Omega_p(x_k)$}{$\Omega_p(x_k) =\|\textbf{P}_{\delta_k} x_k(\textbf{t})-p(\textbf{t};\theta_k,\mub) \|^2,$}%
+\nomenclature[A]{$\Omega_0(\tilde{x}_k)$}{$\Omega_0(\tilde{x}_k) = \|\textbf{P}_{\delta_k}\tilde{x}_k(\textbf{t})\|^2$}%
+\nomenclature[A]{$\Db$}{difference operator}%
+\nomenclature[A]{$\xb(t)$}{vector $(x_1(t),\ldots,x_m(t))^{\top}$, where $\xb=(x_1,\ldots,x_m)$ and $t\in T$ }% ???
+\nomenclature[A]{$\Sb_{\lambda,k}$}{influence matrix for gene $k$}%
+\nomenclature[A]{$\mathcal{O}(\cdot)$}{big Oh; for functions $f$ and $g$ on $N$, we write $f(n) = O(g(n))$ if the term $f(n)/g(n)$ is bounded as $n\rightarrow\infty$}%
+\nomenclature[A]{$\|\xb\|_{\Ab}$}{inner product induced by symmetric positive definite matrix $\Ab$, $\|x\|_{\Ab}=\xb^{\top}\Ab\xb$}%  ???
+
+\nomenclature[Z]{MM}{Michaelis Menten}%
+\nomenclature[Z]{SIM}{single input motif}%
+\nomenclature[Z]{GRN}{ gene regulatory network}%
+\nomenclature[Z]{EM algorithm}{expectation minimization algorithm}%
+
+\nomenclature[X]{LexA}{ a particular transcriptional factor (repressor) in Escherichia coli bacterium}%
+\nomenclature[X]{SOS response}{response to DNA damage}%
+\nomenclature[X]{p53}{tumour repressor transcription factor}%
+
+
+% 
+% In all biological activities that take place in the cell, like growth, replication, glucose assimilation, etc., gene regulation plays a central role. In the central dogma of molecular biology, genes perform their functions by transferring
+% their genetic information to mRNA molecules in the \emph{transcription} phase. Subsequently, proteins are synthesized in the ribosomes in the so-called \emph{translation} step. Reversely, some proteins, called transcription factors (TFs), 
+% have the ability to bind to the DNA and regulate (activate or repress) the activities of the genes. These complex biological systems made up of genes, mRNA molecules and proteins are called gene regulatory networks (GRN). 
+% 
+% Considerable efforts have been directed in the post-genomic era to determine the target genes of the TFs and to model the dynamic patterns of interaction in regulatory systems \citep{khanin2006reconstructing}. It is known that genes regulated by 
+% the same TF are generally co-expressed. However, the primary problem is that the TF expression profile provides only partial information about the TF activity. Given the current lack of reliable high-throughput  techniques to 
+% measure protein activity levels in real time, it is  crucial to know whether this activity can be reconstructed from gene expression data. 
+% 
+% Ordinary differential equation (ODE) models are the staple modelling tool to represent the dependence on the concentration among mRNA molecules and proteins. Joint inference of transcription factor and ODE parameters, the problem that we are 
+% considering in this article, has been addressed in literature in both likelihood and Bayesian settings.
+% \cite{barenco2006ranked} formulate and investigate the model describing the regulation  of genes by the tumour repressor transcription factor protein p53. 
+% They identify the targets of p53 using hidden variable dynamic modeling, which involves Bayesian sampling to estimate the model parameters.
+% \cite{khanin2007statistical} use a likelihood approach combined with the explicit solution of the ODE to infer the kinetic parameters of the gene regulation model together with the profile of the TF regulator.
+% \cite{rogers2007bayesian} carry out fully Bayesian inference by sampling from the full posterior over transcription factor profiles  and parameter values.
+% \cite{lawrence2006modelling} develop Gaussian process model that allows for Bayesian inference of transcription factor profiles as well as ODE parameters.
+% For an overview of Gaussian processes and other simpler models for differential equations of transcriptional regulation see \cite{lawrence2011gaussian}. 
+% \cite{calderhead2008accelerating} propose a general Bayesian method for estimating ODE parameters. They also show that the method can deal with unobserved transcription factors.
+% 
+% 
+% \cite{ramsay2007parameter} develop a general method for ODE parameter estimation that combines spline smoothing with penalized inference. See also the references therein for accounts of earlier work. Their method was applied in 
+% \cite{cao2008estimating} to estimate the ODE parameters in a gene regulation network. \cite{girolami2011riemann} propose novel Riemann manifold Monte Carlo methods that exploit the Riemannian geometry of a statistical model. These methods can be 
+% applied not only to estimation of dynamic systems described by non-linear differential equations, but to many classes of statistical models. \cite{auliac2008evolutionary} propose an evolutionary approach for the reverse engineering in gene 
+% regulatory networks. \cite{quach2007estimating} come up with an ODE method for estimating parameters and hidden variables in non-linear state-space models for biological networks inference.  In \cite{secrier2009abc} an Approximate Bayesian 
+% Computation approach is used to deal with the identification of biological systems. \cite{lillacci2010parameter} estimates ODE parameters without numerically solving the ODE by using  extended Kalman filter, while \cite{voit2004decoupling} 
+% accomplish this by substitution of differentials with slopes that are estimated by artificial neural network (ANN). \cite{chou2009recent} give an overview of different methods and list  challenges of parameter estimation and structure 
+% identification tasks in inverse modeling.  \cite{iserles2009second} gives a concise introduction to numerical analysis of ODE, which is also covered by \cite{antia2002numerical}. The last reference also includes a chapter on numerical 
+% differentiation where various formulas are discussed and some of them are used in this paper.
+\footnotetext{This chapter is published as an article \cite{gonzalez2013inferring}.} 
+Regulatory networks consist of genes encoding transcription factors (TFs) and the genes they activate or repress. Various types of systems of ordinary differential equations (ODE) have been proposed to model these networks, ranging from linear to
+Michaelis-Menten approaches. In practice, a serious drawback to estimate these models is that the TFs are generally unobserved. The reason is the actual lack of high-throughput techniques to measure abundance of proteins in the cell. The challenge
+is to infer their activity profile together with the kinetic parameters of the ODE using level expression measurements of the genes they regulate. In this chapter we show how the framework presented in the previous chapter can be used to infer the kinetic
+parameters of regulatory networks with one or more TFs using time course gene expression data. Our approach is also able to predict the activity levels of the TF. We show this on the example of a SOS repair system in Escherichia coli. The 
+reconstructed TF exhibits a similar behaviour to experimentally measured profiles and the genetic expression data are fitted properly.
+
+This rest of the chapter is organized as follows. In Section \ref{sec:system}, we introduce a model for observed gene data expression with one transcription factor. In Section \ref{sec:algorithm}, we detail the estimation procedure, which is 
+for this specific example complemented by EM algorithm. In Section \ref{sec:applic}, our statistical framework is applied to 6 time-course gene expression data in an SOS system in \emph{Escherichia coli} with one
+TF. We show some results regarding the reconstruction of the TF and the fit of the model to the data. This chapter is based on \cite{gonzalez2013inferring}.
+
+
+
+\section{System and methods}\label{sec:system}
+
+
+\subsection{Modelling transcriptional GRN with ODE models}
+
+In gene regulatory networks, the variables of interest are the concentrations of mRNA molecules and the abundance of proteins produced by a set of $d$ genes. For simplicity, in the sequel we will assume that one gene contains the information
+to produce only one protein. We denote by $\etab(t) = (\eta_1(t),\dots,\eta_d(t))^{\top}$ the abundance of the proteins (TFs) and by $\xb(t)=(x_1(t),\dots,x_d(t))^{\top}$ the concentrations of the mRNA molecules at time $t$. We consider that $t$ 
+varies in some time interval $T=[0,\tau]$, in which the GRN is studied. Following mass-action kinetics we assume that the expressions of the genes of the network on average satisfy the ODE 
+\begin{equation}\label{eq:system}
+ x'_k(t)  =   p (t;\theta_k, \etab) - \delta_k x_k(t),
+\end{equation}
+for $k=1,\dots,d$, where $\delta_k$s are the degradation rates of mRNAs and $p(t;\theta_k,\eta)$ is a function that describes how the TFs regulate the gene $k$ for some set of parameters $\theta_k$. In general, it is assumed that the TFs satisfy
+$$\eta'_k(t)  = \beta_k^{\eta} x_k(t)  -  \delta_k^{\eta}  {\eta}_k(t),$$ 
+where $\delta_k^{\eta}$ is the protein degradation rate and $\beta_k^{\eta}$ is the translational rate for gene $k$.
+
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=8.5cm]{SIM.pdf}
+\caption{Single Input Motif (SIM) of a gene regulatory network with one transcription factor.}
+ \label{fig:SIM}
+\end{center}
+\end{figure}
+
+Several models have been considered in the literature to define $p(t;\etab,\theta)$ in (\ref{eq:system}) ranging from linear approaches \citep{chen1999modeling} to non-parametric methods \citep{aijo2009learning}. 
+In practice, experimental work suggests that the response of the mRNA abundance  to the concentration of a TF follows a \emph{Hill curve} \citep{de2002modeling}. This response can be well described by the Michaelis-Menten (MM) formulation. 
+In case of activation of gene $k$ by the transcription factor $s$, the transcription function is assumed to satisfy  
+\begin{equation}\nonumber
+p^+(t;\theta_k,\eta_s) = \beta_k\frac{\eta_s(t)}{\gamma_k + \eta_s(t)} + \varphi_k,
+\end{equation}
+ for  $\theta_k = \{\varphi_k, \beta_k,\gamma_k\}$.
+Similarly, in cases of repression, the response can be modelled by
+\begin{equation}\label{eq:repression} 
+p^-(t;\theta_k,\eta_s) = \beta_k\frac{1}{\gamma_k + \eta_s(t)} + \varphi_k.
+\end{equation}
+If a gene is regulated by several TFs, a product of type-$p^+$ and  type-$p^-$ functions can be used to model the regulatory component of expression (\ref{eq:system}). The only non-standard part in this model is the presence of $\varphi_k$ which 
+is added to detect possible non-specific activation. 
+\subsection{GRN with one TF: single input motif}
+
+In expression (\ref{eq:system}) several genes encoding TFs are involved in the model. Nevertheless, these types of regulatory networks are hardly identifiable given the actual lack of reliable methods to measure TF activities. For this reason, 
+networks involving only one TF and the genes it regulates as in Figure \ref{fig:SIM} are mostly studied in the literature and the primary focus of our following analysis. 
+
+These one-to-many patterns of interaction between one TF and several genes are called single input motifs (SIM), a term first introduced in \cite{milo2002network}. Within a SIM, the expression of gene $k$ depends
+on the decay constant $\delta_k$ and on the transcription function $p(t;\theta_k,\eta)$ where $\eta$ is the unique transcription factor of the network. 
+
+The profile $\eta$ is unobserved and it has to be reconstructed from the expression of the genes. In this work, we will assume that $\eta$ is a function which can be written in terms of a basis of splines functions defined in $T$. That is,
+\begin{equation}\label{eq:TF}
+\eta(t) = \sum_{j=1}^m \mu_j \phi_j(t), 
+\end{equation}
+where $\mu_j\in \bbbr$ and $\{\phi_1,\ldots,\phi_m\}$ is a truncated-power basis set .
+
+Although the transcription factor $\eta$ is common to all target genes in the network, the kinetic parameters of each gene are expected to be target-dependent. That is,
+$$x_{k}(t) \equiv x_{k}(t; \delta_k,\theta_k, \mub),$$
+where $\mub = (\mu_1,\dots,\mu_m)^{\top}$ is the vector of weights of the TF in the spline representation (\ref{eq:TF}).
+Biologically,  it is reasonable to assume that the gene-specific parameters $\theta_k$ and $\delta_k$ are the same across different biological conditions. However, this is not the case with the initial amount of gene expression $x_k(0)$ since the 
+gene transcription can be affected by an uncontrolled number of external conditions.
+
+
+\subsection{Noise model}
+Let $y_{ki}$ denote the measured expression of gene $k$ at a time-point $t_i$. We assume that the observed gene expression measurements of the target genes are conditionally independent given the transcription
+factor activity and that each target gene $k$ is normally distributed with location parameter $x_k(t)$ and scale parameter $\sigma^2_k(t)$. That is, we assume that
+\begin{equation}\label{eq:sample.system}
+ y_{ki} \sim \mathcal{N}(x_k(t_i),\sigma_k^2(t_i)),
+\end{equation}
+where $\mathcal{N}$ is the normal distribution. 
+%  Notice that by allowing flexibility in $\sigma^2$ with the normal model we can mimic various distributions, \emph{e. g.} when the variance is proportional to the mean, then the normal model
+% can deal with typical log-normal scenarios.  
+
+In our context, the log-likelihood contribution of a single observation is, up to an additive constant, given by
+\begin{equation}
+\label{eq:likelihood}
+l(x_k(t_i), \sigma^2_{ki} | y_{ki})  =  - \frac{1}{2}\left\{ \frac{y_{ki}-x_k(t_i)}{\sigma_{ki}} \right\}^2-\frac12\log(\sigma_{ki}^2).  \nonumber
+\end{equation}
+
+Let $\mathcal{D}_k=\{(y_{ki},t_i) \in \bbbr \times T\}_{i=1}^n$ denote the set of gene expression measurements of gene $k$ across the time points $t_1,\dots,t_n$. Then, the contribution of each gene $k$ to the likelihood of the network is
+\begin{equation}\label{def7:like.univ.ode}
+ l_{k} ( \delta_k,\theta_k, \Sigmab_k, \mub|\mathcal{D}_k)=\sum_{i=1}^n l(x_k(t_i), \sigma^2_{ki} | y_{ki}), 
+\end{equation}
+for $\Sigmab_k = \text{diag}(\sigma^2_{k1},\dots,\sigma^2_{kn})$ and where  it is assumed that each function $x_k$ satisfies (\ref{eq:system}).
+
+\subsection{Penalized likelihood of a GRN with one TF}\label{sec:2.5}
+The system of differential equations described by (\ref{eq:system}) describes the dynamics of the gene regulatory system in interval $T$. However, in practical scenarios, we only have access to a finite number of measurements of the gene
+expression levels. Following the approach from previous chapter we approximate the rate of gene expression by the first order difference.
+\par
+Let $\textbf{t}=(t_1\dots,t_n)^{\top}$  denote the vector whose elements represent the time points in which gene expression measurements are available and define $x_k(\textbf{t}) = (x_k(t_1),\dots,x_{k}(t_n))^{\top}$ and 
+$p(\textbf{t};\theta_k,\eta) = (p(t_1;\theta_k,\eta),\dots,p(t_n;\theta_k,\eta))^{\top}$. Then, one can rewrite the discrete version of dynamics of the gene $k$ in (\ref{eq:system}) as
+\begin{equation}\label{eq:diff.eq}
+\Db x_k(\textbf{t}) =  p(\textbf{t};\theta,\eta) -\delta_k x_k(\textbf{t}), 
+\end{equation}
+where the matrix $\Db$ is the difference operator defined in \eqref{eq6:D}.
+
+Let $\Ib$ be the identity matrix and denote by $\textbf{P}_{\delta_k} = \Db+ \delta_k \Ib $ the difference operator associated to gene $k$. To define penalized loss, we assume that $\textbf{P}_{\delta_k}$ is invertible and introduce
+\begin{align}
+\label{eq7:tildex}
+\tilde{x}_k(\textbf{t})= x_k(\textbf{t}) - \textbf{P}_{\delta_k}^{-1} p(\textbf{t};\theta,\mub),\\
+\label{eq:y.transform}
+\tilde{\yb}_k = \yb_k - \textbf{P}_{\delta_k}^{-1} p(\textbf{t};\theta,\mub),\\
+\label{eq:omega}
+\Omega_0(\tilde{x}_k)   =  \| \tilde{x}_k (\textbf{t}) \|^2_K =\alphab_k^{\top} \textbf{K}_{\delta_k} \alphab_k, 
+\end{align}
+where $\textbf{K}_{\delta_k} = (\textbf{P}_{\delta_k}^{\top} \textbf{P}_{\delta_k})^{-1}$ and $\alphab_k$ is the vector in $\bbbr^n$ characterizing $\tilde{x}_k(\tb)$. 
+
+Denote by $\tilde{\mathcal{D}}_k$ the transformed set of expression measurements associated to the gene $k$. Using the framework from previous chapter, for a GRN where a  single TF $\eta$ regulates all genes in the network the 
+penalized-log-likelihood can be written as
+\begin{eqnarray}
+l_{\lambda}(\Delta,\Theta,\Sigmab, \mub| \tilde{\mathcal{D}}) & =& \sum_{k=1}^d  l_k ( \delta_k, \theta_k, \Sigmab_k, \mub|\tilde{\mathcal{D}}_k)-\frac{\lambda}{2}\sum_{k=1}^d \Omega_0(\tilde{x}_k)\label{eq:like}
+\end{eqnarray}
+where $\tilde{\mathcal{D}} = \{\tilde{\mathcal{D}}_1,\dots,\tilde{\mathcal{D}}_d\}$ represents the whole sample available for the network; $\Theta$ represent all sets of kinetic parameters $\theta_k$, $\Delta= \{\delta_1,\dots, \delta_d\}$, 
+$\Sigmab$ stands for all scale parameters of the normal distribution and $\mub$ is the set of weights corresponding to the representation of the TF activity in a spline basis. 
+
+In the RKHS framework, the (transformed) expression level of each gene $k$ is given by 
+\begin{equation}\label{eq7:geneprofile}
+\tilde{x}_k(\textbf{t}) = \textbf{K}_{\delta_k} \alphab_k=\textbf{S}_{\lambda,k}\tilde{\yb}_k,
+\end{equation}
+where 
+\begin{equation}\label{influencematrix}
+\textbf{S}_{\lambda,k} =  \textbf{K}_{\delta_k}(\textbf{K}_{\delta_k} + \lambda\Sigmab_k)^{-1},
+\end{equation}
+is its influence matrix. Estimates of the gene expression profiles $x_1,\dots,x_d$ can be recovered using (\ref{eq7:tildex}) and (\ref{eq7:geneprofile}).
+
+\subsection{Parameter estimation} 
+Denote by $A = \{\alphab_1,\dots,\alphab_d \}$ the set of parameters characterizing the gene profiles $\tilde{x}$. Then, the penalized maximum likelihood estimators of $\Delta,\Theta,\Sigmab, \mub$ and $A$ are given by
+\begin{equation}\label{eq:MLE}
+(\hat{\Delta}_{\lambda},\hat{\Theta}_{\lambda},\hat{\Sigmab}_{\lambda}, \hat{\mub}_{\lambda},\hat{A}_{\lambda})=\mbox{arg} \max_{\Delta,\Theta,\Sigmab, \mub,A} l_{\lambda}(\Delta,\Theta,\Sigmab, \mub,A| \tilde{\mathcal{D}}).
+\end{equation}
+In contrast to most approaches in the literature, previous estimators do not require solving the ODE explicitly.
+
+\subsection{Model selection}\label{sec:AIC}
+For selecting $\lambda$ we use AIC we derived in the previous chapter. For the linear smoother (\ref{eq7:geneprofile}) the influence matrix for gene
+ $k$ is given by (\ref{influencematrix}). Effective number of parameters is defined as $\df_k = \tr(\hat{\Sb}_{\lambda,k})$ where $\tr(\cdot)$ represents the trace operator. Then the AIC-type of criteria is defined in our context as
+\begin{equation}\label{eq:AIC}
+\AIC_k(\lambda) = -2 \cdot l_{k} (\hat{\delta}_k,\hat{\theta}_k, \hat{\Sigmab}_k, \hat{\mub}|\mathcal{D}_k) + 2 \cdot \df_k.
+\end{equation}
+Extending the criteria to all genes of the network, we can select  the optimal $\lambda$ as  
+$$\lambda_{{\rm opt}} = \mbox{arg} \min_{\lambda} \sum_{k=1}^d \text{AIC}_{k}(\lambda).$$ 
+In the literature, $\lambda$ and $\Sigmab_k$ are normally not allowed to change simultaneously. As detailed in \cite{rasmussen2006gaussian}, $\lambda$ is sometimes fixed to $1/2$ or to $1/n$ if the variance parameters are allowed to vary. In this 
+work the variance parameters are estimated off-line and the matrices $\Sigmab_k$ are fixed in the estimation process. Then the parameter $\lambda$ is obtained using the above mentioned AIC or other sensible model selection criteria.
+
+\subsection{Confidence intervals}\label{sec:CI}
+In maximum likelihood estimation approaches the most standard way of obtaining the variance of a parameter estimate $\hat{\theta}$ is by means of the negative Hessian evaluated at  $\hat{\theta}$. In our context, however, the parameters estimates 
+of the gene regulatory network are obtained by a penalized likelihood approach and the aforementioned approach is not directly applicable. 
+
+To circumvent this issue we propose a parametric bootstrap \citep{efron1979bootstrap} to obtain confidence intervals in our setting. To this aim, and by virtue of (\ref{eq:sample.system}) we consider the fitted model 
+$ \mathcal{N}(\hat{x}_k(t_i),\hat{\sigma_k}^2(t_i)),$ where the hat-expressions are estimated values. Then from such model we generate $B$ bootstrap data sets for which we use the proposed method to obtain new estimates of the 
+parameters. The quantiles of the empirical distribution of the bootstrap estimates are then used to estimate the confidence intervals.
+
+\section{Algorithm}\label{sec:algorithm}
+In this section we detail the steps to obtain the estimators $\hat{\Delta}_{\lambda}$, $\hat{\Theta}_{\lambda}$, $\hat{\Sigmab}_{\lambda}$ and $\hat{\mub}_{\lambda}$ in (\ref{eq:MLE}). Also, estimators for the
+gene profiles $\hat{x}_k$ are provided. To this aim, we propose an augmented formulation of the problem. The reason is to provide a manner to deal with the common lack of observations in real applications. Since the derivative 
+approximation is better for smaller discretization steps, increasing the number of data points will result in a better estimation of the parameters. To use this idea we propose an EM algorithm to accommodate potential
+observations. 
+
+
+\subsection{Augmented data formulation}
+
+Denote by $\mathcal{D}_k^O=\{(y^O_{ki},t^O_i) \in \bbbr \times T\}_{i=1}^n$  the set of expression measurements of the gene $k$ across the observed time points $t^O_1,\dots,t^O_n$. Consider a refinement of hidden observations, all 
+different from those in $\mathcal{D}_k^{O}$, given by $\mathcal{D}^H=\{(y_{ki}^H,t_{ki}^H) \in \bbbr \times T\}_{i=1}^r$ . Denote by
+$$\textbf{t}^O = (t^{O}_1,\dots,t^{O}_n)^{\top}, \,\textbf{t}^H = (t_{1}^H,\dots,t_{r}^H)^{\top},$$
+and 
+$$\yb_k^O = (y^{O}_{k1},\dots,y_{kn}^O)^{\top}, \, \yb_k^H = (y^{H}_{k1},\dots,y^{H}_{kr})^{\top},$$
+the vectors of times and data of both samples for gene $k$. Define $ \textbf{t}= oc(\textbf{t}^O, \textbf{t}^H)$, the vector resulting from the ordered concatenation of $\textbf{t}^O$ and $\textbf{t}^H$, and let $\yb_k=oc(\yb_k^O,  
+\yb_k^H),$ the augmented data vector whose entries are ordered according to the sequencing in $\textbf{t}$. Then the likelihood for the augmented data formulation is given by
+
+
+\begin{eqnarray}\label{eq:like2}
+l_{\lambda}(\cdot| \tilde{\mathcal{D}}^O,\tilde{\mathcal{D}}^H) & = &-\frac{1}{2} \sum_{k=1}^d (\tilde{\yb}_k-\textbf{K}_{\delta_k}\alphab_k)^{\top}\Sigmab^{-1}_k(\tilde{\yb}_k-\textbf{K}_{\delta_k}\alphab_k)\\
+& -& \frac{1}{2}\sum_{k=1}^{d}\sum_{i=1}^{n+r} \log(\sigma_{ki}^2)-\lambda \sum_{k=1}^d \alphab_k^{\top}\textbf{K}_{\delta_k}\alphab_k 
+\end{eqnarray}
+where $\tilde{\yb}_k$ is the vector of transformed data defined in (\ref{eq:y.transform}), $\textbf{K}_{\delta_k} = ( \textbf{P}^{\top}_{\delta_k}\textbf{P}_{\delta_k})^{-1}$, and $\alphab_k \in \bbbr^{n+r}$.
+
+\subsection{E-step}
+In this expectation (E) step, we need to calculate the expectation of $l_{\lambda}(\cdot| \tilde{\mathcal{D}}_O,\tilde{\mathcal{D}}_H)$ in terms of the hidden observations. For simplicity of notation, define
+$$Q_{\lambda}(\Delta,\Theta,\Sigmab, \mub,A)=E_{\yb^H} \left\{ l_{\lambda}(\cdot| \tilde{\mathcal{D}}_O,\tilde{\mathcal{D}}_H)  | S_O, \Delta^*,\Theta^*,\Sigmab^*, \mub^*,A^* \right\}.$$
+Consider the matrix
+\begin{equation}\nonumber%\label{eq:Ch}
+\textbf{C}_H \in \bbbr^{r \times (n+r)}\,\,\text{where}    \left\lbrace
+  \begin{array}{l}
+    (\textbf{C}_H)_{ij} = 1 \text{ if $\textbf{t}_{Hi}=\textbf{t}_{j}$ } \\
+    (\textbf{C}_H)_{ij} = 0 \text{ otherwise}. \\
+  \end{array}
+  \right.
+\end{equation}
+Then, it can be proven that 
+\begin{equation}\label{eq:likefordata.expected}
+Q_{\lambda}(\Delta,\Theta,\Sigmab, \mub,A)  =  l_{\lambda}(\cdot| \tilde{\mathcal{D}}^O,\tilde{\mathcal{D}}^{H*}) - \frac12\sum_{k=1}^d\sum_{i=1}^{r}(\sigma_{ki}^*)^2,
+\end{equation}
+for $\tilde{\mathcal{D}}^{H*} = \{\tilde{\mathcal{D}}^{H*}_1,\dots,\tilde{\mathcal{D}}^{H*}_d\}$ where the (augmented) vector of observations  associated to each gene $k$ is given by the ordered concatenation 
+\begin{equation}\label{eq:augmented}
+\tilde{\yb}_k^*=oc(\tilde{\yb}_k^O,  \textbf{C}_H \textbf{K}_{\delta_k^{\ast}}\alphab_k^{\ast})^{\top}.
+\end{equation}
+See appendix for details.
+%Details are omitted here due to space limitations.
+
+\subsection{M-step}
+In the maximization (M) step, we maximize the augmented log-likelihood over the parameters of interest. Assume that some values for $ \Delta^*,\Theta^*,\Sigmab^*, \mub^*$ and $A^{\ast}$ are given and consider the augmented 
+vectors of observations in (\ref{eq:augmented}). Then, in this step we search for the values of the parameters such that  
+$$(\hat{\Delta},\hat{\Theta},\hat{\Sigmab}, \hat{\mub},A)= \mbox{arg} \max_{{\Delta},{\Theta}, {\Sigmab}, {\mub}} g_{\lambda}(\Delta,\Theta,\Sigmab, \mub,A). $$
+In practice, the problem can be split into two different maximization problems. Parameters $\Delta, \Theta, \Sigmab$ and $\mub$ can be calculated independently of $A$ by taking 
+\begin{eqnarray}\label{M-step}\nonumber
+(\hat{\Delta},\hat{\Theta},\hat{\Sigmab}, \hat{\mub}) & = & \mbox{arg}  \max_{{\Delta},{\Theta},{\Sigmab},{\mub}} - \frac{1}{2}\sum_{k=1}^d (\tilde{\yb}_k^*)^{\top} \Sigmab_k^{-1}(\textbf{I}-\textbf{S}_{\lambda,k}) \tilde{\yb}_k^*\\ 
+\label{eq:E1}
+& - &  \frac{1}{2}\sum_{k=1}^d\sum_{i=1}^{n+r}  \log(\sigma_{ki}^2)- \frac12\sum_{k=1}^d\sum_{i=1}^{r}(\sigma_{ki}^*)^2,  
+\end{eqnarray}
+where $\textbf{S}_{\lambda,k}$ is the influence matrix associated to each gene defined in (\ref{influencematrix}). 
+Regarding the set of parameters $A$, made up of the vectors $\alphab_1,\dots.\alphab_d$, it can be shown using standard methods of differential calculus that they can be calculated by
+\begin{equation}\label{eq:E2}
+\hat{\alphab}_k= (\textbf{K}_{\hat{\delta}_k} + \lambda \hat{\Sigmab}_k )^{-1}\tilde{\yb}_k^*.
+\end{equation}
+See appendix for details.
+
+\subsection{EM algorithm}
+In order to apply the EM algorithm we need to consider some initial values of the parameters. If no other information about the system is provided, a reasonable way to proceed is to smooth each $\tilde{\yb}^O_k$ with some
+standard smoothing technique. In this way, for each individual gene, we obtain a reasonable initial set of hidden observations $\tilde{\yb}^H_k$ and we can define $\tilde{\yb}_k = (\tilde{\yb}^O_k,\tilde{\yb}_k^H)^{\top}$. 
+Assuming some values for $\Delta^*,\Theta^*,\Sigmab^*$ and $\mub^*$ we can now calculate each $\alphab_k^{\ast}= (\tilde{\textbf{K}}_{\delta_k^{\ast}} + \lambda \Sigmab_k^{\ast} )^{-1}\tilde{\yb}_k$ to obtain reasonable initial value
+for $A^*$. The steps of the EM algorithm are detailed next.
+
+\begin{enumerate}
+\item \textbf{Start}: Consider some initial values $\Delta^*,\Theta^*,\Sigmab^*, \mub^*$ and $A^{\ast}$.
+\item \textbf{E-step}: Compute each $\textbf{K}_{\delta_k^{\ast}}$ and obtain $\tilde{\yb}^{\ast}_k$ as in (\ref{eq:augmented}).
+\item \textbf{M-step}: Obtain $(\hat{\Delta},\hat{\Theta},\hat{\Sigmab}, \hat{\mub})$ as in (\ref{eq:E1}) using a conjugate gradient algorithm and each $\hat{\alphab}_k$ using (\ref{eq:E2}). GO to step 2.
+\item \textbf{End}: Upon convergence, take $(\hat{\Delta}_{\lambda},\hat{\Theta}_{\lambda},\hat{\Sigmab}_{\lambda}, \hat{\mub}_{\lambda})=(\hat{\Delta},\hat{\Theta},\hat{\Sigmab}, \hat{\mub})$ and 
+$\hat{\alphab}_{\lambda,k}= \hat{\alphab}_k$ for $k=1\dots,d$.
+\end{enumerate}
+
+
+% \subsection{Computational complexity and scalability of the method}
+% 
+% 
+% 
+% The computational complexity of the proposed EM algorithm is dominated by two main factors: the calculation of the inverse of the $d$
+%  influence matrices $\textbf{S}_{\lambda,1}, \dots\textbf{S}_{\lambda,d}$ and the use of a conjugate gradient algorithm to estimate the
+%  parameters of the gene regulatory network.
+% 
+% 
+% The inverse of the $d$ influence matrices has a complexity of order $\mathcal{O} (d\cdot (rn)^3 )$ which is linear in $d$, the
+%  number equations. This makes this step computationally feasible for large systems with a large number of genes. It has, however, a cubic
+%  complexity in the number of observations. In most real applications this will not be a problem since, typically, the number of observed 
+% time-course data points is small. The parameter $r$, the number of intermediate points, is controlled by the user. Therefore it can be
+%  fixed in order to find a balance between the accuracy of the method (given by the inclusion of a larger number of intermediate points) and its computational cost.
+% 
+% 
+% As reported in the literature, the complexity of the conjugate gradient algorithm is quadratic in the number of parameters of the 
+% function to be optimized \citep{shanno1978convergence}. In our context this means an order $\mathcal{O}((4d+m)^2)$.
+
+
+\section{SOS repair system in Escherichia coli}\label{sec:applic}
+
+The changes in the expression levels of genes in \emph{Escherichia coli} as a result of DNA damage (SOS response) have been extensively studied in the last few years. However their behaviour has not been completely understood 
+\citep{khanin2006reconstructing}. The SOS system includes more than 30 genes controlled by a (transcriptional repressor) protein called LexA. In normal conditions the levels of LexA are high and the expression of the gene is repressed.
+Under DNA damage, the LexA protein is inactivated causing the up-regulation of the genes suppressed by the LexA in normal conditions. The aim of this analysis is twofold. First, to reconstruct the activity level of the repressor LexA
+by using the expression profiles of its target genes. Second, to identify the system and to order the genes of the SOS system in terms of the speed they are repressed by the LexA protein. To this aim, we will use the proposed 
+penalized likelihood approach. 
+
+\subsection{Dataset and goal}
+
+The data set used for this experiment is made up of 14 expression genes (dinF, dinI, lexA, recA, recN, ruvA, ruvB, sbmC, sulA, umuC, umuD, uvrB, yegG and ijW) of the Escherichia coli SOS system.  The 14 genes are targets of the master
+repressor LexA and their expression is studied under UV exposure (40 $J/m^2$) in both wild-type cells and lexA1 mutants.  \citep{khanin2006reconstructing}. The abundance of the mRNA molecules associated to the genes was measured at 
+six time points, at 0, 5, 10, 20, 40 and 60 minutes. Raw data are normalized as detailed in \citep{khanin2006reconstructing}. The master repressor is unobserved.  Following expression (\ref{eq:TF}) we assume that its activity can be 
+described by a cubic spline function with $d=5$ basis functions. In this example we assume a Michaelis-Menten approach detailed in (\ref{eq:repression}). The goal of this experiment is to use this gene expression sample to reconstruct
+the activity of the repressor $\eta(t)$ and to estimate the kinetic parameters in (\ref{eq:system}). In addition, the gene profiles will be inferred by means of \eqref{eq7:tildex} and \eqref{eq7:geneprofile}. The parameters to 
+estimate are the kinetic parameters of the 14 genes together with the TF weights and the vectors $\alphab_1,\dots,\alphab_{14}$ characterizing the gene profiles. 
+
+
+\subsection{Estimation process}
+Only six data points are available per gene. This lack of observations might cause instabilities in the estimation process that we correct as follows. First, the variance parameters are assumed to be constant for the data within the 
+same gene. We estimate $\sigma^2_1,\dots,\sigma^2_{14}$ off-line by fitting smoothing splines to the data and estimating the residual variance in each case. The TF factor is assumed to be normalized between zero and one which 
+robustifies the estimation of the parameters of the system. This is not a problem in practice since the repression or activation of the LexA protein is expressed in arbitrary units, which can be interpreted as relative levels. 
+
+Reconstruction of the TF and estimation of the gene-specific kinetic parameters are done in two steps. In both of them maximization of the penalized likelihood is achieved by means of the conjugate gradient method. First
+estimate the TF profile. To do so we estimate the system without intermediate points. The penalization parameter $\lambda$ is calculated by using the AIC as detailed in Section \ref{sec:AIC}. We consider the 
+estimates of the weights of the spline basis $\hat{\mu}_1,\dots,\hat{\mu}_5$ and we reconstruct the TF profile. We observe that the values of the $\hat{\varphi}_i$ are zero for most of the genes. Given the lack of data, in order to gain more 
+precision in the estimation of the remaining kinetics parameters we assume all the $\hat{\varphi}_i$ to be zero and we re-estimate each gene independently considering fixed the TF profile obtained above. A different penalization term
+is now recalculated for each gene using the AIC. Four intermediate points are considered in order to improve the estimation. Confidence intervals for the parameters were obtained using parametric bootstrap as detailed in Section 
+\ref{sec:CI}. 
+
+
+
+\subsection{Reconstruction of the LexA activity}
+The reconstructed LexA repressor is shown in Figure \ref{fig:TFactor}.  The smoothed LexA profile obtained using a cubic spline is shown. The crucial aspect of the obtained profile is that it agrees with the behaviour of 
+experimentally observed profiles in \cite{ronen2002assigning} and \cite{sassanfar1990nature}. It has been observed that after irradiation, the amount of LexA decreases and, after a recovery phase it increases again. This is the
+behaviour shown in Figure \ref{fig:TFactor} where the level of the LexA decreases to zero within the first 20 minutes to completely recover by 60 minutes.
+
+
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[scale=0.65]{TF1.pdf}
+\caption{Reconstruction of the activity of the master repressor LexA scaled between 0 an 1. The smoothed LexA profile is obtained using a cubic spline. Time is given in minutes.  }
+\label{fig:TFactor}
+\end{center}
+\end{figure}
+
+
+
+ \subsection{Inferred kinetics profiles}
+
+ 
+ \begin{figure}[t!]
+   \begin{center}
+    \mbox{
+        \subfloat[Estimated profile of the gene dinI. This gene exhibits an up-regulation after UV radiation. Its expression levels decline after minute 20.   ]{\includegraphics[height=7cm,width=7cm]{dinI.pdf}} \quad
+        \subfloat[Estimated profile of the gene recN. This gene exhibits an up-regulation after UV radiation. Its expression levels remains stable after minute 20.  ] {\includegraphics[height=7cm,width=7cm]{recN.pdf}}\quad
+         }
+\caption{Data and reconstructed profiles of two genes which represent the two expression patters found in the database.  Raw data are represented by empty points. Dense points represent the values of the estimated profiles in the 6 
+observed and 20 hidden points of each gene. }
+  \label{fig:twoprofiles}
+ \end{center}
+ 
+\end{figure}
+
+
+The reconstructed gene profiles show a good fit with the data in the 14 cases. In Figure \ref{fig:twoprofiles} we show the data and the estimated profiles for the genes dinI and recN. These two genes were selected because they exhibit
+a  different types of profiles.  Genes dinI shows a fast increasing in regulation until min 20-30 to later descend gradually. Notice that this coincide with the time point in which the master repressor start to recover. On the other 
+hand gene recN is stable in time after minute 20. The introduced intermediate points help to recover a smooth version of the gene profiles and to improve the precision of the parameters estimates.
+
+\subsection{Estimated kinetic parameters and interpretation}
+
+
+The values of the estimated gene-dependent kinetic parameters and their corresponding 95\% confidence intervals are shown in Table \ref{Tab:01}. Two genes, recN and umuC (on top of the table) show significant differences in the 
+parameters compared to the rest. These two genes are the only ones in the database that do not show a decrease in the expression pattern after minute 20. This seems to indicate a misspecification in the model for these two genes. 
+Particularly, as also suggested in \citep{khanin2006reconstructing}, this type of behaviour can be modelled by a linear degradation ODE $\dot{x} = \varphi + \delta x$.   
+
+The rest of the genes are sorted in the Table by using the effective production rate calculated by 
+$$r_k=\frac{\beta_k}{\gamma_k+\bar{\eta}}\times 100,$$
+where $\bar{\eta}$ is the averaged TF level. Genes ijW ruvA and lexA are the fastest in being regulated. Genes sbmC dinF are the slowest ones. Regarding the precision of the estimates we observe that confidence intervals for the 
+parameters in gene ijW and dinF are larger than for the rest of the genes indicating that  for these the genes the data are probably too noisy. 
+\begin{sidewaystable}[!htbp]
+\begin{center}
+\begin{tabulary}{\linewidth}{lccccccccccc}
+  \toprule
+Gene & $\sigma_k$ & $r_k$& $\hat{\beta}_k$ & $CI_{95\%}(\beta_k)$ & $\hat{\delta_k}$ & $CI_{95\%}(\delta_k)$ & $\hat{\gamma_k}$ & $CI_{95\%}(\gamma_k)$ \\ 
+  \midrule
+  recN   & 0.37 & - & 6912.05 & (6465.54, 6933.12) & 0.29 & (0.21, 0.30) & 3568.39 & (3527.46, 4433.54) \\ 
+  umuC & 0.38 & - & 79.94 & (78.22, 88.71) & 0.09 & (0.09, 0.10) & 123.21 & (117.45, 124.12) \\ 
+  \midrule
+  ijW    & 0.04 & 0.80 & 12.44 & (2.90, 28.20) & 0.42 & (0.21, 0.46) & 22.54 & (9.05, 76.17) \\ 
+  ruvA   & 0.06 & 0.34 & 5.27 & (3.82, 6.30) & 0.42 & (0.35, 0.45) & 6.02 & (4.64, 7.15) \\ 
+  lexA   & 0.07 & 0.31 & 4.75 & (2.28, 7.56) & 0.33 & (0.25, 0.38) & 7.70 & (4.23, 11.75) \\ 
+  sulA   & 0.55 & 0.28 & 4.36 & (1.03, 9.24) & 0.39 & (0.15, 0.40) & 2.66 & (1.42, 6.88) \\ 
+  umuD & 0.08 & 0.19 & 2.99 & (2.13, 3.94) & 0.15 & (0.13, 0.16) & 5.11 & (4.08, 6.66) \\ 
+  yegG  & 0.04 & 0.14 & 2.10 & (1.79, 2.42) & 0.23 & (0.21, 0.25) & 3.72 & (3.31, 4.20) \\ 
+  ruvB   & 0.01 & 0.13 & 1.98 & (1.79, 2.23) & 0.27 & (0.26, 0.29) & 4.38 & (4.11, 4.74) \\ 
+  uvrB   & 0.04 & 0.12 & 1.89 & (1.26, 3.40) & 0.10 & (0.09, 0.11) & 7.11 & (5.07, 12.08) \\ 
+  dinI    & 0.08 & 0.06 & 0.99 & (0.56, 1.39) & 0.21 & (0.15, 0.27) & 2.36 & (1.71, 2.83) \\ 
+  recA   & 0.19 & 0.03 & 0.48 & (0.39, 0.67) & 0.11 & (0.10, 0.13) & 0.85 & (0.72, 1.11) \\ 
+  sbmC  & 0.04 & 0.02 & 0.26 & (0.22, 0.30) & 0.11 & (0.11, 0.12) & 0.71 & (0.62, 0.78) \\ 
+  dinF   & 0.02 & 0.00 & 5.01  & (2.06, 32.16) & 0.12 & (0.08, 0.18) & 31.59 & (17.32, 167.07) \\ 
+   \bottomrule
+\end{tabulary}\caption{Parameters estimates and confidence intervals for the 14 genes of the Ecoli-SOS system. On top, genes recN and umuC which whose expression do not decline after minute 20. Down, the 12 remaining genes of the 
+database which decline after minute 20 sorted by the ratio $r_k$. 95 \% confidence intervals a calculated using parametric bootstrap.}
+ \label{Tab:01}
+\end{center}
+\end{sidewaystable}
+
+
+\section{Appendix}
+\label{app}
+
+
+\noindent {\it Notation}\newline
+For the proofs below we introduce some notation.
+We define a matrix
+\begin{equation}\nonumber
+\textbf{C}_O \in \bbbr^{n \times (n+r)}\,\,\text{where}    \left\lbrace
+  \begin{array}{l}
+   (\textbf{C}_O)_{ij} = 1 \text{ if $\textbf{t}_{Oi}=\textbf{t}_{j}$ } \\
+    (\textbf{C}_O)_{ij} = 0 \text{ otherwise} \\
+  \end{array}
+  \right.,
+\end{equation}
+ vectors $\Phi_k= (\delta_k,\thetab_k, \Sigmab_k,\mub, \alphab_k) $, 
+$\Phi_k^{\ast} =(\delta_k^{\ast},\thetab_k^{\ast}, \Sigmab^{\ast}_k,\mub^{\ast}, \alphab_k^{\ast})$
+and functions
+\begin{eqnarray}\nonumber
+l_{\lambda,k}(\Phi_k)&=&l_k (\Phi_k|\tilde{\mathcal{D}}_k) -\frac{\lambda}{2}\alphab^{\top}_k \textbf{K}_{\delta_k}\alphab_k\\
+ & = &-\frac{1}{2} (\tilde{\yb}_k-\textbf{K}_{\delta_k}\alphab_k)^{\top}\Sigmab^{-1}_k(\tilde{\yb}_k-\textbf{K}_{\delta_k}\alphab_k)\\
+& -& \frac{1}{2}\sum_{i=1}^{n+r} \log(\sigma_{ki}^2)-\frac{\lambda}{2}\alphab_k^{\top}\textbf{K}_{\delta_k}\alphab_k 
+\end{eqnarray}
+$k=1,\ldots,d$.
+With this notation we can write the penalized log-likelihood as 
+$$
+l_{\lambda}(\Delta,\Theta,\Sigmab, \mub) = \sum_{k=1}^d l_{\lambda,k}(\Phi_k).
+$$
+\begin{proof}[Proof of (\ref{eq:likefordata.expected})] (Expectation step of EM algorithm.)
+
+For every $k=1,\ldots,d$ we calculate $E_{\yb_k^H} \left( l_{\lambda,k}  | \mathcal{D}_k^O, \Phi_k^{\ast}\right)$. Denote with $\Sigmab_{H,k}$ and $\Sigmab_{O,k}$ diagonal matrices whose diagonals are vectors of variances of observed
+and hidden observations of $k$th equation respectively. Splitting the likelihood in two parts corresponding to the hidden and the observed observations we obtain  that 
+\begin{eqnarray}\nonumber
+E_{\yb_k^H} \left( l_{\lambda,k}  | \mathcal{D}_k^O,\Phi_k^{\ast} \right)  & = &  -\frac{1}{2}\sum_{i=1}^{n+r}\log\sigma_{ki}^2  -\frac{\lambda}{2}\alphab_k^{\top}  \textbf{K}_{\delta_k}\alphab_k
+ - \frac{1}{2} \|\yb_k^O- \textbf{C}_O  \textbf{K}_{\delta_k}\alphab_k\|_{(\Sigmab^*_{O,k})^{-1}}^2 \\ \nonumber
+& - &  \frac{1}{2}  E_{\yb_k^H}\left( \|\yb_k^H- \textbf{C}_H  \textbf{K}_{\delta_k}\alphab_k\|_{(\Sigmab^*_{H,k})^{-1}}^2  | \mathcal{D}_k^O, \delta_k^{\ast},\Sigmab^{\ast}_k, \alphab_k^{\ast}\right),
+\end{eqnarray}
+where $\|\xb\|^2_{\Ab} = \xb^{\top}\Ab\xb$.
+In the previous expression we have that
+\begin{eqnarray}\nonumber
+ E_{\yb_k^H}\left(\|\yb_k^H- \textbf{C}_H  \textbf{K}_{\delta_k}\alphab_k\|_{\Sigmab_k}^2   | \mathcal{D}_k^O,\Phi_k^{\ast}\right)  & = & E_{\yb_k^H} \big\{(\yb_k^H)^{\top}(\Sigmab^*_{H,k})^{-1}\yb_k^H  | \mathcal{D}_k^O, \delta_k^{\ast},
+ \Sigmab^{\ast}_k, \alphab_k^{\ast}\big\} \\ \nonumber
+ & - & 2 E_{\yb_k^H} \left\{(\yb_k^H)^{\top}(\Sigmab^*_{H,k})^{-1}\textbf{C}_H  \textbf{K}_{\delta_k}\alphab_k  | \mathcal{D}_k^O, \delta_k^{\ast},\Sigmab^{\ast}_k, \alphab_k^{\ast}\right\} \\ \nonumber
+ & + & \alphab_k^{\top}    \textbf{K}_{\delta_k}\textbf{C}_H^{\top}(\Sigmab^*_{H,k})^{-1}\textbf{C}_H    \textbf{K}_{\delta_k}\alphab_k.
+\end{eqnarray}
+By using the properties of the expectation and the variance and by factorizing terms it is straightforward to obtain that
+
+\begin{equation}\label{eq:expect.hiden}
+ E_{\yb_k^H} \left(\|\yb_k^H- \textbf{C}_H  \textbf{K}_{\delta_k}\alphab_k\|_{\Sigmab_k}^2 | \mathcal{D}_k^O,\Phi_k^{\ast}\right)  = \|\textbf{C}_H\textbf{K}_{\delta_k^{\ast}}\alphab_k^{\ast}-\textbf{C}_H   
+ \textbf{K}_{\delta_k}\alphab_k\|_{(\Sigmab^*_{H,k})^{-1}}^2+\sum_{i=1}^{r}(\sigma_{ki}^*)^2.	
+\end{equation}
+Replacing eq. (\ref{eq:expect.hiden}) in the expected likelihood we obtain that
+\begin{eqnarray}\nonumber
+E_{\yb_k^H} \left( l_{\lambda,k}  | \mathcal{D}_k^O, \Phi_k^{\ast} \right)  & = &  -\frac{1}{2}\sum_{i=1}^{n+r}\log\sigma_{ki}^2  -\frac{\lambda}{2}\alphab_k^{\top}  \textbf{K}_{\delta_k}\alphab_k
+- \frac{1}{2}  \|\yb_k^O- \textbf{C}_O  \textbf{K}_{\delta_k}\alphab_k\|_{(\Sigmab^*_{O,k})^{-1}}^2 \\ \nonumber
+& - &  \frac{1}{2} \left\{ \|\textbf{C}_H\textbf{K}_{\delta_k^{\ast}}\alphab_k^{\ast}-\textbf{C}_H    \textbf{K}_{\delta_k}\alphab_k\|_{(\Sigmab^*_{H,k})^{-1}}^2+\sum_{i=1}^{r}(\sigma_{ki}^*)^2  \right\}.
+\end{eqnarray}
+Define $\yb_k^*=(\yb_k^O,  \textbf{C}_H \textbf{K}_{\delta_k^{\ast}}\alphab_k^{\ast})^{\top}$. Grouping the terms we obtain that
+\begin{eqnarray}\nonumber
+E_{\yb_k^H} \left( l_{\lambda,k}(\yb_k^O,\yb_k^H | \Phi_k )   | \mathcal{D}_k^O, \Phi_k^{\ast} \right) & = & -\frac{1}{2}\sum_{i=1}^{n+r}\log\sigma_{ki}^2 -\frac12\|\tilde{\yb}^*_k-\textbf{K}_{\delta_k}\alphab_k\|^2_{\Sigmab^{-1}_k}\\ 
+\nonumber
+& - & \frac{\lambda}{2}\alphab_k^{\top}  \textbf{K}_{\delta_k}\alphab_k -\frac12\sum_{i=1}^{r}(\sigma_{ki}^*)^2.
+\end{eqnarray}
+By taking the sum over $k$'s and taking into account  (\ref{eq:like2}) it is straightforward to conclude the proof. 
+
+\end{proof}
+
+\begin{proof}[Proof of (\ref{M-step})] (Maximization step of EM algorithm).
+Denote by $\yb_k^*=(\yb_k^O,  \textbf{C}_H \textbf{K}_{\delta_k^{\ast}}\alphab_k^{\ast})^{\top}$. Then for fixed $\delta_k$ and $\Sigmab_k$ the maximum of $E_{\yb_k^H} \left(l_{\lambda,k}  | \mathcal{D}_k^O, \delta_k^{\ast}, \Sigmab^{\ast}_k, 
+\alphab_k^{\ast} \right)$  is
+given for the vector $\alphab_k=( \textbf{K}_{\delta_k}+\lambda\Sigmab_k)^{-1}\yb^*_k$.
+By substituting $\alphab_k$ into the expression and simplifying we obtain that
+\begin{eqnarray}\nonumber
+E_{\yb_k^H} \left(l_{\lambda,k}  | \mathcal{D}_k^O, \Phi_k^{\ast} \right)= -\frac{1}{2}\sum_{i=1}^{n+r}\log\sigma_{ki}^2-
+\frac12\sum_{i=1}^{r}(\sigma_{ki}^{\ast})^2-\frac{1}{2}(\tilde{\yb}^*_k)^{\top}\Sigmab_k^{-1}(\textbf{I}-\textbf{S}_{\lambda,k}) \tilde{\yb}^*_k,  \nonumber
+\end{eqnarray}
+where $\textbf{S}_{\lambda,k} =  \textbf{K}_{\delta_k}(\textbf{K}_{\delta_k} + \lambda\Sigmab_k^2)^{-1}$.
+By taking sum over $k$'s we obtain 
+\begin{eqnarray}\nonumber
+(\hat{\Delta},\hat{\Theta},\hat{\Sigmab}, \hat{\mub}) & = & \mbox{arg}  \max_{{\Delta},{\Theta},{\Sigmab},{\mub}} - \frac{1}{2}\sum_{k=1}^d (\tilde{\yb}^*_k)^{\top} \Sigmab_k^{-1}(\textbf{I}-
+\textbf{S}_{\lambda,k}) \tilde{\yb}^*_k\\ \label{eq:E3}
+& - &  \frac{1}{2}\sum_{k=1}^d\sum_{i=1}^{n+r}  \log(\sigma_{ki}^2)- \frac12\sum_{k=1}^m\sum_{i=1}^{r}(\sigma_{ki}^*)^2,  
+\end{eqnarray}
+as we aimed to prove.
+\end{proof}
+
+
+\section{Summary}\label{sec:conc}
+In this chapter, we have presented an application of RKHS method from previous chapter to inferring GRN with one hidden TF from time-course expression measurements. The proposed approach does not require that the transcription factor
+activity has a predefined shape and a general spline representation allows it  to capture the dynamics of the TF. The EM algorithm has been proposed to estimate the model due to the lack of observed data points.
+
+The proposed method was applied in the reconstruction of the SOS repair system in Escherichia Coli. In this example, the reconstructed TF exhibits a similar behaviour to (independent) experimentally measured profiles. In addition the
+gene expression data are fitted and the results are coherent with those obtained in previous works \citep{khanin2006reconstructing}. 

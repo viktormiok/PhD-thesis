@@ -1,0 +1,683 @@
+\chapter{Time course window estimator for ordinary differential equations linear in the parameters}
+\chaptermark{Window estimator}
+\label{chapter:Window estimator}
+
+\graphicspath{{Chapter5/Figs/}{Chapter5/Figs/PDF/}{Chapter5/Figs/}}
+
+\nomenclature[A]{$L$ and $L_n$}{loss functions}%
+
+The subject of this chapter is the estimation of parameters in autonomous system of ordinary differential equations. We consider systems that have a special structure,
+those for which the vector field is linear in the parameters. The structure of these systems allows construction of an estimator which have an explicit form.  By using this estimator not only
+the usage of numerical ODE solvers is avoided but optimization as well. The consequence of this is that the estimator that we present is extremely fast. 
+This is very important, since in both, Bayesian and likelihood approaches for estimating parameters of ODEs, the speed and the convergence of the estimation procedure may crucially depend on good initial values of the
+parameters. We prove that the proposed estimator is  $\sqrt{n}$-consistent. The estimator does not require initial guess for the parameters and is computationally fast, and therefore can serve as a good initial estimate
+for more efficient estimators. In simulation studies we illustrate our results.
+\par
+The rest of the chapter is organized as follows. The probem is introduced in Section \ref{sec5:introduction}. In Section \ref{sec5:estimator} we define the time course window estimator and present the formulas for the estimators of the parameters.
+ In Section \ref{sec5:simulation} we show results for different examples. Section \ref{sec5:computation} deals with the computational speed and complexity of the estimation procedure. In Section \ref{sec5:realdata} we illustrate our method on a 
+real data set. The appendix contains the
+proofs.
+
+\section{Introduction}
+\label{sec5:introduction}
+Consider the system of differential equations of the form
+\begin{equation}\label{eq:ode_model}
+\bigg\{
+\begin{array}{l}
+\xb^{\prime}(t)=\fb(\xb(t);\thetab),\ t\in[0,1],
+\\
+\xb(0)=\xib,
+\end{array}
+\end{equation}
+where $\xb(t)$ takes values in $\rR^d,\, \xib$ in $\Xi\subset \rR^d,$ and $\thetab$ in $\Theta\subset\rR^p.$
+\par
+From (\ref{eq:ode_model}) we obtain the system of integral equations
+\begin{equation}\label{eq:int_model}
+\xb(t)=\xib + \int_0^t \fb(\xb(s);\thetab)\, \rd s,\,t\in[0,1].
+\end{equation}
+Given the values of $\xib$ and $\thetab$, we denote the solution of (\ref{eq:ode_model})-(\ref{eq:int_model}) by $\xb(t; \thetab,\xib)$. In practice, the values of $\xib$ and $\thetab$ are unknown and need to be estimated from the 
+data which consists of noisy observations of $\xb(t; \thetab,\xib)$ at certain time points in [0,1]. We denote the observations  by
+\begin{equation}\label{eq:observation_model_nonrepeated}
+\yb(t_i)=\xb(t_i;\thetab,\xib)+\varepsilonb(t_i),\quad i=1,\dots,n,
+\end{equation}
+where for simplicity $t_i=i/n,\ i=1,\dots,n$ and $\varepsilonb(t_i)$, are the $d$-dimensional column vectors of measurement errors at time $t_i.$ Let $\hat{\xb}_n(t),
+t\in[0,1],$ be an estimator of $\xb(t; \thetab,\xib)$ based on these observations. 
+\cite{dattner2013estimation} focus on the special class of nonlinear systems that are linear in the parameter $\thetab$,
+\begin{equation}\label{eq:main_idea}
+\fb(\xb(t);\thetab)=\gb(\xb(t))\thetab,
+\end{equation}
+where the measurable function $\gb:\rR^d \to \rR^{d\times p}$ maps the $d$-dimensional column vector $\xb$ into a $d\times p$ matrix. 
+The estimators of the parameters $\thetab$ and $\xib$ are obtained by minimizing
+\begin{equation}\label{criterion}
+L(\zetab,\etab)=\int_0^1 \left|\left|
+\hat{\xb}_n(t)-\zetab-\int_0^t\gb(\hat{\xb}_n(s))\,\rd s\,\etab
+\right|\right|^2\,\rd t,
+\end{equation}
+with respect to $\zetab$ and $\etab$. Here, $\parallel \cdot \parallel$ denotes the Euclidean norm $\|\xb(t)\|=\{\sum_{k=1}^dx^2_k(t)\}^{1/2}$. Minimization of (\ref{criterion}) results in an explicit form for the estimators $\hat{\thetab}_n$ and 
+$\hat{\xib}_n$. 
+\par 
+In  case of repeated measures, using a step function estimator for $\xb(t)$ yields a very simple and computationally fast estimator.
+The estimators of the parameters are $\sqrt{n}$-consistent if, roughly speaking, the number of time points is of order $\sqrt{n}$
+and for most time points the number of replicates is of the same order \citep{dattner2013estimation}.
+In case of time course data, without repeated measurements as we introduced above, the aforementioned consistency result does not hold, unless some smoothing is applied. In this chapter, we study this case. We show that by defining a suitable step-wise 
+function estimator of the solution of the system  we obtain explicit estimators  of the parameters that are $\sqrt{n}$-consistent. 
+\par
+As we mentioned in the first chapter, the idea of smoothing as a way to avoid numerical integration of the system of differential equations has been used before and is referred to as {\it collocation} estimation methods, for example, 
+{\it two-step} methods  (e.g., \cite{bellman1971use,varah1982spline,brunel2008parameter,liang2008parameter,fang2011two,gugushvili2012sqrt,gugushvili2012parametric,dattner2013estimation}) 
+and {\it generalized profiling} (\cite{ramsay2007parameter,qi2010asymptotic,hooker2011parameterizing,xun2013parameter}).
+In most cases, the main computational bottleneck lies in optimization of an nonlinear objective function.
+Indeed, standard problems connected with optimization also appear here. For example, poor initial guess may lead to the convergence to the global optimum in considerably more time or  can  lead to a local solution that is not global.
+For the systems that are linear in the parameters, this optimization can be avoided, since the estimator can be obtained explicitly \citep{dattner2013estimation}. 
+
+\section{Time-course window estimator}
+\label{sec5:estimator}
+Let ${t_1,\ldots,t_n}$ be equidistant time points of the observations. We divide interval $[0,1]$ in $I=\lfloor\sqrt{n}\rfloor$ subintervals of the same length so that in every interval we have at least $\lfloor\sqrt{n}\rfloor$
+and at most $\lfloor\sqrt{n}\rfloor+2$ time points, i.e. $I$, $I+1$ or $I+2$ points. Denote the subinterval $i$ ($i=1,\ldots,I$) by $S_i$ and  for $t\in [0,1]$ denote by $S(t)$ the subinterval to which $t$ belongs. 
+In other words, if $t\in S_i$ then $S(t)=S_i$.  The window estimator is defined as 
+\begin{equation}\label{eq:window}
+\xhatb_n(t)=\frac{1}{|S(t)|}\sum_{t_j\in S(t)}\yb(t_j),\qquad t \in S(t).
+\end{equation}
+This estimator is a stepwise function that estimates $\xb(t)$ in each interval as the mean of the observations that belong to that interval.
+We estimate $\int_0^t\gb(\xb(s))ds$  by 
+\begin{equation*}\label{eq:Ghat}
+\Ghatb_n(t)=\frac{1}{n}\sum_{\ell=1}^i \gb(\hat{\xb}_n(t_\ell)),\quad (i-1)/n < t \leq i/n,\quad i=1,\dots,n.
+\end{equation*}
+Minimizing the criterion function (cf. (\ref{criterion}))
+\begin{equation}\label{criterion_ns}
+L_n(\zetab,\etab)=\frac{1}{n}\sum_{i=1}^n \left|\left|\hat{\xb}_n(t_i)-\zetab-\Ghatb_n(t_i)\etab \right|\right|^2 
+\end{equation}
+ with respect to $\zetab$ and $\etab$ yields explicit formulae for the estimators of the parameters. Indeed, the objective function $L_n$ can be written as
+\begin{equation}
+L_n(\omegab)=\omegab^{\top}\frac{1}{n}\sum_{i=1}^n\Fb_i^{\top}\Fb_i\omegab-2\omegab^{\top}\frac{1}{n}\sum_{i=1}^n\Fb_i^{\top}\hat{\xb}_n(t_i)
++\frac{1}{n}\sum_{i=1}^n\|\hat{\xb}_n(t_i)\|^2,
+\end{equation}
+where $\omegab=(\xib ;\etab)^{\top}$ and $\Fb_i=(\Ib_d ;\Ghatb_n(t_i))$. Thus, $L_n$ is quadratic in $\omegab$ and its minimizer is given by 
+$$\hat{\omegab}=\left(\frac{1}{n}\sum_{i=1}^n\Fb_i^{\top}\Fb_i\right)^{-1}\frac{1}{n}\sum_{i=1}^n\Fb_i^{\top}\hat{\xb}_n(t_i)=
+\begin{pmatrix} \Ib_n& \hat{\Ab}_n\\\hat{\Ab}_n^{\top}&\hat{\Bb}_n
+\end{pmatrix}^{-1}\begin{pmatrix} \frac{1}{n}\sum_{i=1}^n\hat{\xb}_n(t_i)\\\frac{1}{n}\sum_{i=1}^n\Ghatb_n(t_i)^{\top}\hat{\xb}_n(t_i)
+\end{pmatrix},
+$$
+where
+\begin{align}
+\hat{\Ab}_n &= \frac{1}{n}\sum_{i=1}^n \Ghatb_n(t_i), \\
+\hat{\Bb}_n  &= \frac{1}{n}\sum_{i=1}^n \Ghatb_n(t_i)^{\top}\Ghatb_n(t_i). \nonumber
+\end{align}
+By using the matrix block inversion \cite[Chapter~2]{bernstein2009matrix} we obtain
+
+ \begin{align}\label{thetahatstep}
+\hat{\xib}_n &= \left(\Ib_d - \hat{\Ab}_n \hat{\Bb}_n^{-1} \hat{\Ab}_n^{\top}\right)^{-1} \frac{1}{n}\sum_{i=1}^n \left(\Ib_d -\hat{\Ab}_n \hat{\Bb}_n^{-1}\Ghatb_n(t_i)^{\top}\right) \hat{\xb}_n(t_i),\\
+\hat{\thetab}_n &= \hat{\Bb}_n^{-1}\, \frac{1}{n}\sum_{i=1}^n\Ghatb_n(t_i)^{\top} \left( \hat{\xb}_n(t_i) -\hat{\xib}_n \right).
+\end{align}
+
+Next, we formulate the $\sqrt{n}$-consistency of $\hat{\xib}_n$ and $\hat{\thetab}_n$ in the following theorem. We note that a prerequisite for consistent estimation is that the parameters are
+identifiable. There are several concepts of identifiability and here we are concerned with {\it structural identifiability}, a property that depends on the model structure and is not affected by the experimental set-up.
+ This means that the knowledge of a solution $\xb(t),\, t\in[0,1]$ yields the values of the parameters $\xib$ and $\thetab$. For $\xib=\xb(0)$ this is obviously true, while identifiability for $\thetab$ means that
+$\thetab^\prime\ne\thetab\Rightarrow \xb(\cdot;\thetab^\prime,\xib)\ne \xb(\cdot;\thetab,\xib)$; see \cite{dattner2013estimation} for a necessary and sufficient condition for identifiability in the case of systems linear in the parameters.
+\begin{theorem}\label{th:step}
+Let an ODE model be defined by (\ref{eq:ode_model}),(\ref{eq:int_model}) and (\ref{eq:main_idea}) with the twice continuously differentiable map $\gb:\rR^d\rightarrow\rR^d\times\rR^p$. Fix $\xib\in\Xi$ and $\thetab\in\Theta$ 
+and let $\xb(\cdot)=\xb(\cdot;\thetab, \xib)$ exist and be bounded on $[0,1].$ Assume that $\thetab$ is identifiable. Let the observations be given by model (\ref{eq:observation_model_nonrepeated})
+with $t_i=i/I,\ i=1,...,n$. Assume that $\varepsilon_k(t_i),\ k=1,\dots, d,\ i=1,\dots,n,$ are i.i.d. random variables with zero expectation and finite variance $\sigma_\varepsilon^2$. Let
+$\hat \xb_n(\cdot)$ be given by (\ref{eq:window}) and let $\hat{\thetab}_n, \hat{\xib}_n$ be defined as in (\ref{thetahatstep}). 
+Then
+\begin{equation}
+(\hat{\thetab}_n -\thetab, \hat{\xib}_n -\xib)= O_p(n^{-1/2}),\quad n
+\to \infty,
+\end{equation}
+holds.
+\end{theorem}
+Below we sketch the proof of this theorem. The full proof is deferred to the appendix.
+\par
+\noindent
+The main idea is that if $\xhatb_n(\cdot)$ is a consistent estimator of $\xb(\cdot)$ in the sup norm,  then also the estimators $\hat{\thetab}_n$  and  $\hat{\xib}_n$ are consistent. If, in fact, the estimator $\xhatb_n(\cdot)$ 
+satisfies some stronger conditions, then it even implies $\sqrt{n}$-consistency  of $\hat{\thetab}_n$  and  $\hat{\xib}_n$. 
+\par
+The proof can be divided into two parts. In the first part we analyze the behavior of the expected value of the window estimator and in the second we analyze its variance.
+In order to obtain the consistency of  $\xhatb_n$ we first need to show that the sup norm of $\xhatb_n$ is bounded in probability, i.e.
+\begin{equation}
+\label{eq:cond1}
+\|\xhatb_n\|_{\infty}=O_p(1), 
+\end{equation}
+and that the expected value of $\xhatb_n$ converges to $\xb(\cdot)$ in sup norm. We note that if $\gb(\cdot)$ is bounded, then this condition is not needed. 
+However, to obtain the $\sqrt{n}$-consistency, the convergence needs to be at least at $\sqrt{n}$ rate, i.e.
+\begin{equation}
+\label{eq:cond2}
+\|\E\xhatb_n-\xb\|_{\infty}=O(c_n),
+\end{equation}
+where $c_n=n^{-1/2}$. The equalities (\ref{eq:cond1}) and (\ref{eq:cond2}) can be shown by using the boundedness of parameter space, linearity of the system in the parameters and Chebyshev's inequality.
+Furthermore, we can show that 
+$$\int_0^1\|\xhatb_n(t)-\E\xhatb_n(t)\|^2\rd t=O_p(d_n),$$
+where the convergence is again at the rate $d_n=n^{-1/2}$. This can be shown by using the independence of the observations and the specific form of the window estimator.
+\par
+To prove the conditions related to the variance of the window estimator, let $\phi:[0,1]\rightarrow R$ be any bounded measurable function and denote the $k$-th component of $\xhatb_n(\cdot)$ by $\xhat_{n,k}(\cdot)$, 
+for $j=1,\ldots,d$.  Using the independence of the observations and the fact that the estimator is piecewise constant we can show that 
+$$\int_0^1\var\left\{\int_0^t \phi(s)\xhat_{n,k}(s)\rd s\right\}\rd t=O\left(v_n^2 \right),$$
+$$\var\left\{\int_0^1 \phi(t)\xhat_{n,k}(t)\rd t\right\}=O\left(v_n^2 \right),$$
+where $v_n=n^{-1/2}$. These conditions make sure that our estimator satisfies the "plug-in" properties studied in \cite{goldstein1992optimal} and \cite{bickel2003nonparametric}. 
+We see that here we need the convergence of order $n^{-1}$. The proofs of all these claims we defer to the appendix. By Theorem~2 \citep{dattner2013estimation} it 
+follows that
+\begin{equation}\label{orderconsistency}
+(\hat{\thetab}_n -\thetab, \hat{\xib}_n -\xib) = O_p\left( c_n + d_n +v_n \right)=O_p(n^{-1/2}), \qquad  n\to \infty.
+\end{equation} 
+
+
+
+
+\section{Simulation examples}\label{sec:numerical}
+\label{sec5:simulation}
+
+
+In this section we illustrate the behavior of the estimators $\hat{\xib}_n$ and $\hat{\thetab}_n$ and indicate how the method can be useful in combination with other methods. First of all, 
+the first set of simulations shows that, although primitive, the window-based estimator provides reasonably good estimates. Secondly, we show empirically the $\sqrt{n}$-consistency of the estimates
+$\hat{\thetab}_n$ and $\hat{\xib}_n$ when the sample size increases. Finally, we show how the window-based estimator can provide useful starting values for other methods, which typically require a sensible initial value. 
+
+
+\subsection{Accuracy of the window-based estimator}
+\label{sec:surprise}
+
+We consider the Lotka-Volterra system (see \cite{edelstein2005mathematical} for details on this system) of differential equations. The Lotka-Volterra system consists of two equations depending on the parameter vector 
+$\thetab=(\theta_1,\theta_2,\theta_3,\theta_4)^{\top}$. The system has the form
+\begin{equation}\label{eq:lotka}
+\begin{array}{l}
+x_1^{\prime}(t)=\theta_1x_1(t)-\theta_2x_1(t)x_2(t),
+\\
+x_2^{\prime}(t)=-\theta_3x_2(t)+\theta_4x_1(t)x_2(t),
+\end{array}
+\end{equation}
+with the parameter settings, $\theta_1=0.1,\ \theta_2=0.9, \ \theta_3=0.9, \ \theta_4=0.5$  and the initial conditions $(\xi_1,\xi_2)=(1,0.5)$.
+
+In Figure~\ref{fig:fig1} the estimated states are presented for one realization of 100 equidistant observations
+ on the interval [0, 49.9] in case of Gaussian noise. As can been seen from the picture, the window smoother is rather primitive. For $x_2$ it introduces spurious peaks and seems rather uninformative.
+ However, the estimates for $\thetab$ and $\xib$ are rather good, as can be seen from the dashed curves. They represent the trajectories obtained by numerically solving the ODE system with the parameters set to 
+ the values of the obtained estimates.
+
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.7]{LVplot.pdf}
+\caption{The Lotka-Volterra system. The solid lines correspond to the states $x_1$ and $x_2$ as given by the model (\ref{eq:lotka}) with $\theta_1=0.1$, $\theta_2=0.9$, $\theta_3=0.9$, $\theta_4=0.5$. The 
+dashed lines correspond to the solutions $x_1$ and $x_2$ of the system based on the estimated parameter values for the data. The bold step functions correspond to the window estimator of $\xb$. The data, represented by the
+ circles in the figure, consist of 100 equidistant observations
+ on the interval [0,49.9].  }
+\label{fig:fig1}
+\end{figure}
+
+
+
+
+\subsection{Empirical validation of $\sqrt{n}$-consistency}
+
+In this subsection, we consider a model for HIV viral fitness \citep{bonhoeffer1997virus}. The basic model considers three types of agents: the uninfected cells $x_1$, the infected cells $x_2$ and the virus particles $x_3$.
+ Uninfected cells are produced at constant rate $\theta_1$, and die at the rate $0.108 x_1$. Free virus infects uninfected cells to produce infected cells at rate $\theta_2x_1x_3$. Infected cells die at 
+ rate $0.5 x_2$. 
+New virus is produced from infected cells at rate $0.5\theta_3 x_2$ and dies at rate $\theta_4 x_3$. These assumptions lead to the following set of differential equations:
+\begin{equation}\label{eq:HIV3D}
+\begin{array}{l}
+x_1^{\prime}(t)=\theta_1-0.108x_1(t)-\theta_2x_1(t)x_3(t),
+\\
+x_2^{\prime}(t)=\theta_2x_1(t)x_3(t)-0.5x_2(t),
+\\
+x_3^{\prime}(t)=0.5\theta_3x_2(t)-\theta_4x_3(t).
+\end{array}
+\end{equation}
+We note that  \cite{xue2010sieve} consider the case where $x_1$ and $x_2$ can not be measured separately while \cite{miao2008modeling} study a similar model for which all
+states are measured. Here we assume that all concentrations are measured and following \cite{xue2010sieve} our goal is to
+estimate the parameter vector $\thetab=(\theta_1,\theta_2,\theta_3,\theta_4)^{\top}$. The window-based method is applied for different sample sizes $n$ according the model \rf{observation_model_nonrepeated}. 
+In all examples we assume that all states are measured. Each simulation is repeated 500 times and the results shown are empirical means and standard deviations across those runs. 
+
+
+We first generate the solutions of $x_1,x_2,x_3$ over the time interval $[0, 19.9]$  based on
+$\xi_1=600$, $\xi_2=30$, $\xi_3=10^5$ and $\theta_1=36$, $\theta_2=9.5\cdot10^{-6}$, $\theta_3=1000$, $\theta_4=3$. We add noise to each solution with $\sigma_1=43$, $\sigma_2=12.5$, $\sigma_3=2446$. These noise
+levels correspond to approximately $20\%$ of the average value (over the time interval) of $x_1$, $x_2$ and $x_3$ respectively.
+The experiment is  done for sample sizes $n=100,3000,10000$. The initial values were considered as known. The results are presented in the Table~\ref{tab:tab2}.
+As Theorem 1 suggests, in both examples we see that as the sample size increases the accuracy of the estimates is better. 
+\par  
+We also compare the results with those obtained in \cite{xue2010sieve}, in terms of the average relative estimation error (ARE), which is defined as
+$$\text{ARE}=\frac{1}{M}\sum_{j=1}^M\frac{|\hat{\theta}_{jk}-\theta_k|}{|\theta_k|}\times 100\%,$$
+where $\hat{\theta}_{jk}$ is the estimate of the parameter $\theta_k$, $k=1,\ldots,p$, from the $j$-th simulation data set, and $M$ is the total number of simulation runs. Since the results in \cite{xue2010sieve} are
+obtained with sample size $n=40$ we also did a simulation with 500 random datasets of sample size $n=40$. We obtained ARE for the parameters $\theta_1$, $\theta_3$, $\theta_4$ to be equal to 27.30, 5.59, 2.38 
+percent while the results in \cite{xue2010sieve} are 3.19, 17.7, 17.4 percent (ARE for $\theta_2$ is not given in \cite{xue2010sieve}).
+\begin{table}[!ht]
+\begin{center}
+\begin{tabulary}{\linewidth}{llrrr}
+\toprule
+ \multicolumn{5}{c}{Gaussian error, $\sigma_1=43$, $\sigma_2=12.5$, $\sigma_3=2446$} \\
+\midrule
+\multicolumn{1}{l}{}&				
+\multicolumn{1}{l}{Value}&																					
+\multicolumn{1}{c}{$n=100$}&																					
+\multicolumn{1}{c}{$n=3000$}&																					
+\multicolumn{1}{c}{$n=10000$}\\		
+\midrule															
+
+ $\theta_1$ &36.000    & 36.816 (8.548)      & 35.971 (1.582)         & 35.975 (0.852)     \\ 
+ $\theta_2$ &9.5e-06   & 9.59e-06 (0.170e-06) & 9.51e-06 (0.030e-06)  & 9.50e-06 (0.002e-06)\\ 
+ $\theta_3$ &1000.000  & 999.690 (39.865)    & 1000.717 (7.632)       & 1000.185 (4.354)   \\ 
+ $\theta_4$ &3.000     & 3.024 (0.057)       & 3.002 (0.011)          & 3.001 (0.006)      \\ 
+\bottomrule
+\end{tabulary}  
+\end{center}
+\caption{The empirical mean and standard deviation (in parentheses) of the estimators for the parameters of the HIV dynamics model for Gaussian error.
+Results are based on 500 simulations.\label{tab:tab2}  }
+\end{table}
+
+\subsection{Comparing different error distributions}
+
+The $\sqrt{n}$-consistency does not depend on any particular form of the error distribution for $\epsilon$ in \rf{observation_model_nonrepeated}. In fact, the convergence will merely depend on the variance of the
+ error distribution. In this section, we compare the behavior of the window-based estimator under Gaussian noise and Laplace noise in the case of the Lotka-Volterra system. We consider the same simulation values as
+ were used in Section \ref{sec:surprise}, but we consider three sample size scenarios, $n=100,3000,10000$. The datasets are generated with i.i.d. Gaussian noise  with zero mean and $\sigma_1=\sigma_2=0.5$, as
+ well as i.i.d.  Laplace errors with zero mean and scale parameter $0.5$.
+
+
+ The results are showed in the Table~\ref{tab:tab1}. As we have seen in the previous section, the standard deviation of the estimators seems to follow a $\sqrt{n}$ behavior. Moreover, it can be seen, particularly for
+ larger $n$ (3000, 10000), that the accuracy of the estimator under the Gaussian error scenario is approximately $\sqrt{2}$ better than the accuracy of the same estimator under the Laplace error scenario. The reason for this
+ difference is simply that the ratio of the original error variance of $\epsilon$, in particular, we use a Gaussian with standard deviation $0.5$ and a Laplace with standard deviation $0.5\sqrt{2}$.
+
+
+\begin{table}[!ht]
+\begin{center}
+\begin{tabulary}{\linewidth}{llrrr}
+
+\toprule
+ \multicolumn{5}{c}{Gaussian error, $S.D. = 0.50$} \\
+\midrule
+\multicolumn{1}{l}{}&				
+\multicolumn{1}{l}{Value}&																					
+\multicolumn{1}{c}{$n=100$}&																					
+\multicolumn{1}{c}{$n=3000$}&																					
+\multicolumn{1}{c}{$n=10000$}\\		
+\midrule															
+
+ $\xi_1$   &1.000& 1.123 (0.420) & 0.997 (0.130)  & 0.994 (0.078) \\ 
+ $\xi_2$   &0.500& 0.194 (0.214) & 0.472 (0.094)  & 0.490 (0.057) \\ 
+ $\theta_1$&0.100& 0.052 (0.036) & 0.097 (0.011) & 0.100 (0.006) \\ 
+ $\theta_2$&0.900& 0.427 (0.269) & 0.869 (0.077) & 0.897 (0.042) \\ 
+ $\theta_3$&0.900& 0.227 (0.207) & 0.849 (0.107)  & 0.887 (0.068) \\ 
+ $\theta_4$&0.500& 0.133 (0.126) & 0.471 (0.066)  & 0.493 (0.040) \\ 
+\midrule
+ \multicolumn{5}{c}{Laplace error, $S.D. = 0.71$} \\
+\midrule
+\multicolumn{1}{l}{}&				
+\multicolumn{1}{l}{Value}&																					
+\multicolumn{1}{c}{$n=100$}&																					
+\multicolumn{1}{c}{$n=3000$}&																					
+\multicolumn{1}{c}{$n=10000$}\\	
+\midrule
+ $\xi_1$   &1.000 &1.095 (0.405) & 1.001 (0.191) & 0.995 (0.106) \\ 
+ $\xi_2$   &0.500 &0.174 (0.263) & 0.443 (0.120)  & 0.485 (0.078) \\ 
+ $\theta_1$&0.100 &0.043 (0.037) & 0.096 (0.014) & 0.098 (0.008) \\ 
+ $\theta_2$&0.900 &0.270 (0.241) & 0.850 (0.101)  & 0.885 (0.062) \\ 
+ $\theta_3$&0.900 &0.182 (0.204) & 0.795 (0.134) & 0.874 (0.087) \\ 
+ $\theta_4$&0.500 &0.107 (0.123) & 0.441 (0.080) & 0.486 (0.052) \\ 
+\bottomrule
+\end{tabulary}    
+\end{center}
+\caption{The empirical mean and standard deviation (in parentheses) of the estimators for the parameters and initial values of the Lotka-Volterra system for Gaussian and Laplacian error.
+Results are based on 500 simulations.\label{tab:tab1}}
+\end{table}
+
+
+\subsection{Window-based estimator as initial value in other methods}
+
+To conclude the section, we illustrate  how the proposed method can be used to provide an initial value of the parameters for some more sophisticated procedure. To this aim,
+we again consider Lotka-Volterra system where 400 observations are generated on the interval [0, 49.9] with Gaussian noise. We apply the window estimator and generalized profiling
+procedure by \citep{ramsay2007parameter}, which is one of the most popular methods for estimating parameters of the differential equations.  Ramsay's procedure is applied with two 
+different initial guesses of the parameters. We take one initial guess to be the window estimate and the other is fixed to $\theta_1=\theta_2=\theta_3=\theta_4=10$.
+From Table~\ref{tab:tab4} we see that although it is a good estimation procedure, Ramsay's method can fail to converge to the global optimum if the initial guess is bad. 
+Window estimator, however, does not need any initial guess and thus for a fixed dataset provides an unique estimate of the parameters. Using the estimate provided by the proposed method
+as an initial guess for Ramsay's procedure in this example alleviates the convergence problem.
+
+ 
+
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabulary}{\linewidth}{llcccl}
+\toprule
+
+ \multicolumn{5}{c}{Estimation of parameters in Lotka-Volterra system} \\
+\midrule
+\multicolumn{1}{l}{}&	
+\multicolumn{1}{l}{$\theta_1$}&																						
+\multicolumn{1}{c}{$\theta_2 $}&																					
+\multicolumn{1}{c}{$\theta_3 $}&																					
+\multicolumn{1}{c}{$\theta_4 $}&
+\multicolumn{1}{c}{Time(secs)}\\	
+\midrule										
+True value                                              & 0.1&0.9& 0.9& 0.5\\
+Ramsay naive					         &16.10e+08   & 22.3e+08    &-19.04e+08    &96.77e+08   &26.93e+01 \\
+Window estimator				         &0.08 (0.03) &0.82 (0.24)  & 0.46 (0.16)  & 0.29 (0.13)&0.04 (0.28e-02)\\
+Window + Ramsay 						 &0.10 (0.02) &1.09 (0.40)  & 0.90 (0.15)  & 0.50 (0.06)&19.22 (4.96)\\
+
+
+\bottomrule
+\end{tabulary}    
+\end{center}
+\caption{The empirical mean and standard deviation (in parentheses) of the estimators and running time for the Lotka-Volterra system. The results are obtained from 10 datasets comprising
+ 400 observations with Gaussian noise $\sigma_1=\sigma_2=0.25$ on the interval [0,49.9]. Ramsay's method may not converge to the global optimum (the first row). Here the initial guess is (10,10,10,10).
+ Window estimator does not require initial guess (third row) and as such it can be used as initial guess for the Ramsay's method (the fourth row). Empirical standard deviation is not shown for the case
+ where the Ramsay's method did not converge (the 	second row).  \label{tab:tab4}}
+
+\end{table}
+
+\section{Computational complexity}\label{sec:complexity}
+\label{sec5:computation}
+The main bottleneck in computing the proposed estimator is in inverting the matrices $\hat{\Bb}_n$ and $\Ib_n - \hat{\Ab}_n \hat{\Bb}_n^{-1}
+\hat{\Ab}_n^{\top}$, which are of order $p$ and $d$, respectively. The algorithmic complexity of the procedure is  
+$$O(p^3+d^3+ndp(n+p+d)),$$
+thus cubic in $p$ and $d$, and quadratic in $n$. 
+The derivation is given in the appendix. We compare the proposed estimator, in terms of speed, with the generalized profiling procedure of \cite{ramsay2007parameter}. We repeated the estimation for
+ Lotka-Volterra system 500 times and recorded the running time in seconds. The results are showed in the Table~\ref{tab:tab3}. The advantage of window estimator in terms of speed is evident.
+
+
+
+\begin{table}[ht]
+\begin{center}
+\begin{tabulary}{\linewidth}{llrrrr}
+\toprule
+ \multicolumn{4}{c}{Running time in seconds (500 runs) for Lotka-Volterra system} \\
+\midrule
+\multicolumn{1}{l}{}&																						
+\multicolumn{1}{c}{$n=40$}&																					
+\multicolumn{1}{c}{$n=70$}&																					
+\multicolumn{1}{c}{$n=100$}\\		
+\midrule															
+
+Window estimator   &  0.01 (0.003)   & 0.015 (0.002)      & 0.021 (0.002)   \\ 
+Ramsay             & 10.79 (0.955)   & 72.25 (3.116)    & 257.48 (7.439)  \\ 
+
+\bottomrule
+\end{tabulary}    
+\end{center}
+\caption{The empirical mean and standard deviation (in parentheses) of running time measured in seconds for Lotka-Volterra system. Results are based on 500 simulations.\label{tab:tab3}}
+
+\end{table}
+
+\section{Real data example}\label{sec5:realdata}
+In this section we apply our method on infectious disease data which are taken from the webpage http://ms.mcmaster.ca/~bolker/measdata.html. The data contains weekly case reports of measles collected in England and Wales from $1948$ to $1963$. 
+Modeling dynamics of measles over time has been much studied, (e.g. \cite{finkenstadt2000time,earn2000simple,stone2007seasonal,olinky2008seasonal,he2010plug,hooker2011parameterizing}). Here, our goal is just to show the applicability of our 
+method, so we consider the SIR model for the epidemic process without a seasonality component (see, e.g.,\cite{huppert2012modeling}),
+ \begin{equation}\label{eq:sir}
+\bigg\{
+\begin{array}{l}
+S^{\prime}(t)=-\beta S(t)I(t),\\
+I^{\prime}(t)=\beta S(t)I(t)-\gamma I(t),
+\end{array}
+\end{equation}
+where $S$ stands for the number of susceptible individuals and $I$ stands for the infectious compartment. An individual is transfered into the infectious compartment $I$ at the rate $\beta$ and, when recovered,
+ leaves $I$ at the rate $\gamma$. For measles modeling, an individual experiences one recovery in about $5$ days, so we set $\gamma=1.4$. Note that this is the Lotka-Volterra system studied in the previous section,
+where now two parameters are constrained to be equal and one of the parameters is set to zero. However, in this case we only have observations from state $I(\cdot)$, while the proposed method can be applied only 
+if all the states  are observed. Although, handling unobserved states will be a topic of our future work, this particular case is not difficult to handle by using the proposed method. Indeed, from (\ref{eq:sir}) it follows that
+ $S(t)=-I(t)+I(0)-\gamma\int_0^t I(s)\rd s+S(0)$, which means that $S$ can be obtained from $I(\cdot)$ and $S(0)$. Thus, the statistical problem is reduced to estimating $\beta$ and $S(0)$. In this case, we need 
+to optimize with respect to $S(0)$ and we started the optimization with an initial guess for $S(0)$ generated from a uniform distribution over $[0,10,000,000]$. Measles is a childhood disease, so a time term here starts approximately
+around September when school term begins. The results are showed in the Figure~\ref{fig:fig2}. In the upper panel, the estimated $S(\cdot)$ (dashed line) and the solution based on the parameter estimate for $\beta$ (solid line) are plotted. 
+In the lower panel the observations are displayed with circles while the solution based on the parameter estimate for $\beta$ is plotted in solid line. Window estimator is given by the stepwise solid line.
+The $\beta$ estimate is $3.07*10^{-07}$ while the $S(0)$  estimate is $4.93*10^6$ which is in the order of the estimates obtained in  \cite{fine1982measles}.
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.7]{MeslesPlot.pdf}
+\caption{England Wales measles data. The upper panel. The solid line is the solution $S(\cdot)$ based on the parameter estimate $\beta$ and the dashed line is the estimated $S(\cdot)$.
+The lower panel. The data are given by the circles, the solid line is the solution based on the parameter estimate $\beta$ and the stepwise solid line is the window estimator.}
+\label{fig:fig2}
+\end{figure}
+
+%\appendix
+\section{Appendix}
+\label{sec5:appendix}
+\subsection{Proof of Theorem 1}\label{sec:proofs}
+%\section{Proof from pages 23 and 24}
+Denote the number of time points in subinterval $S_i$  by $I_i$. Note that the length of each subinterval $S(t)$ is $1/I$. We have $\sum_{i=1}^I I_i=n$ and 
+$\lfloor\sqrt{n}\rfloor\leq I_i\leq \lfloor\sqrt{n}\rfloor+2$, which implies
+$$\sum_{i=1}^I\frac{1}{I_i}=O(1).$$
+and
+$$\sum_{i=1}^I \frac{1}{I_i^3}=O\left(\frac{1}{n}\right).$$
+With the following notation 
+$$\varepsilonb(t_i)=(\varepsilon_1(t_i),\ldots,\varepsilon_d(t_i))^{\top}.$$
+$$\varepsilonb(t_i)=\yb(t_i)-\xb(t_i),$$
+we have 
+$$\E\varepsilon_k(t_i)=0,\qquad k=1,\ldots,d,\ i=1,\dots,n$$
+$$\E\xhatb_n(t)=\frac{1}{|S(t)|}\sum_{t_j\in S(t)}\xb(t_j),\ t\in S(t),$$
+$$\xhatb_n(t)-\E\xhatb_n(t)=\frac{1}{|S(t)|}\sum_{t_j\in S(t)}\varepsilonb(t_j),$$
+$$\E\left\{\frac{1}{|S(t)|}\sum_{t_j\in S(t)}\varepsilon_k(t_j)\right\}=0,$$
+$$\cov(\varepsilon_k(t_i),\varepsilon_k(t_j))=\E\left\{\varepsilon_k(t_i)\varepsilon_k(t_j)\right\}=0,\quad i\neq j $$ and for any $t\in[0,1]$ we have
+$$\var\left\{\frac{1}{|S(t)|}\sum_{t_j\in S(t)}\varepsilon_k(t_j)\right\}=\frac{1}{|S(t)|^2}\var\left\{\sum_{t_j\in S(t)}\varepsilon_k(t_j)\right\}=\frac{\sigma^2_{\varepsilon}}{|S(t)|}.$$
+We will use these results throughout the proof. The proof is based on verifying the following conditions as stated in Theorem~2 in \citep{dattner2013estimation}.
+Even though Theorem~2  is valid for the estimator based on
+\begin{equation*}\label{Gtilde}
+\tilde{\Gb}_n(t)=\int_0^t \gb\left(\hat{\xb}_n(s)\right) \rd s,\quad
+0\leq t \leq 1,
+\end{equation*}
+that does not pose any problem since we have 
+\begin{equation}\label{difference}
+\Big\{\int_0^1\parallel\Ghatb_n(t)-\tilde{\Gb}_n(t)\parallel^2\rd
+t\Big\}^{1/2}= O_p\left(\frac 1{\sqrt
+n} \right)
+\end{equation}
+\citep{dattner2013estimation}.
+
+
+\noindent{\bf 1.} $\|\E\xhatb_n-\xb\|^2_{\infty}=O(\frac{1}{n})$
+\newline
+\begin{eqnarray*}
+\|\E\xhatb_n-\xb\|^2_{\infty}&=&\max_{1\leq i\leq I}\sup_{t\in S_i}\|\frac{1}{I_i}\sum_{t_j\in S_i}\xb(t_j)-\xb(t)\|^2\\
+&=&\max_{1\leq i\leq I}\sup_{t\in S_i}\|\frac{1}{I_i}\sum_{t_j\in S_i}\{\xb(t_j)-\xb(t)\}\|^2\\
+&=& \max_{1\leq i\leq I}\sup_{t\in S_i}\|\frac{1}{I_i}\sum_{t_j\in S_i}\int_{t}^{t_j}\xb'(s)\rd s\|^2\\
+&\leq&\max_{1\leq i\leq I}\sup_{t\in S_i}\frac{1}{I_i}\sum_{t_j\in S_i}\|\int_{t}^{t_j}\gb(\xb(s))\thetab \rd s\|^2\\
+&\leq &\max_{1\leq i\leq I}\sup_{t\in S_i}\frac{1}{I_i}\sum_{t_j\in S_i}\sup_{s\in S_i}\|\gb(\xb(s))\|^2\|\thetab\|^2(t_j-t)^2\\
+&\leq &\max_{1\leq i\leq I}\sup_{S_i}\frac{1}{I_i}\sum_{t_j\in S_i}\frac{1}{I^2}\sup_{s\in S_i}\|\gb(\xb(s))\|^2\|\thetab\|^2\\
+&\leq &\max_{1\leq i\leq I}\sup_{t\in S_i}\frac{1}{I_i}I_i\frac{1}{I^2}\cdot O(1)=O\Big(\frac{1}{I^2}\Big)=O\Big(\frac{1}{n}\Big).
+\end{eqnarray*}
+Here we used boundedness of parameter space $\Theta$. Also, since $\gb(\cdot)$ is continuous and $\xb(\cdot)$ is bounded, $\gb(\xb(\cdot))$ is. 
+
+\noindent{\bf 2.} $\|\xhatb_n\|_{\infty}=O_p(1)$
+\newline
+\begin{eqnarray*}
+P(\|\xhatb_n-\E\xhatb_n\|_{\infty}\geq M)&=&P(\sup_{t\in [0,1]}\|\xhatb_n(t)-\E\xhatb_n(t)\|\geq M)\\
+&=&P(\sup_{t\in [0,1]}\parallel\frac{1}{|S(t)|}\sum_{t_j\in S(t)}\varepsilonb(t_j)\parallel\geq M)\\
+&=&P\Big(\max_{1\leq i\leq I}\|\frac{1}{I_i}\sum_{t_j\in S_i}\varepsilonb(t_j)\|\geq M\Big)\\
+&=& 1-P\Big(\max_{1\leq i\leq I}\|\frac{1}{I_i}\sum_{t_j\in S_i}\varepsilonb(t_j)\|\leq M\Big)\\
+&=& 1-\prod_{i=1}^I P\Big(\|\frac{1}{I_i}\sum_{t_j\in S_i}\varepsilonb(t_j)\|\leq M\Big)\\
+&=& 1- \prod_{i=1}^I\Big[1-P\Big(\|\frac{1}{I_i}\sum_{t_j\in S_i}\varepsilonb(t_j)\|\geq M\Big)\Big]\\
+&\underbrace{\leq}_{Chebyshev }& 1-\prod_{i=1}^I\Big(1-\frac{d\sigma^2_{\varepsilonb}}{M^2I_i}\Big)\underbrace{\leq}_{lemma\ref{lemma1}} 1- \Big(1-\sum_{i=1}^I\frac{d\sigma^2_{\varepsilon}}{M^2}\frac{1}{I_i}\Big) \\
+&\leq& \frac{d\sigma^2_{\varepsilon}}{M^2}\sum_{i=1}^I\frac{1}{I_i}.
+\end{eqnarray*}
+Lemma \ref{lemma1} is given in the Appendix \ref{sec:AppB}.
+We conclude that $\xhatb_n-\E\xhatb_n$ is bounded in probability. Since we have 
+$$\xhatb_n=\underbrace{\xhatb_n-\E\xhatb_n}_{O_p(1)}+\underbrace{\E\xhatb_n-\xb}_{O(\frac{1}{n})}+\underbrace{\xb}_{O(1)}$$
+it follows that $\xhatb_n(\cdot)$ is bounded in probability, i.e.
+$$\|\xhatb_n\|_{\infty}=O_p(1).$$
+
+\noindent{\bf 3.} $\E(\int_0^1\|\xhatb_n(t)-\E\xhatb_n(t)\|^2\rd t)=O(\frac{1}{\sqrt{n}}  )$ 
+\newline
+\begin{eqnarray*}
+\E\left(\int_0^1\|\xhatb_n(t)-\E\xhatb_n(t)\|^2\rd t\right)&=&\E\Big(\frac{1}{I}\sum_{i=1}^I\|\frac{1}{I_i}\sum_{t_j\in S_i}\varepsilonb(t_j) \|^2\Big)\\
+&=&\frac{1}{I}\sum_{i=1}^I\frac{1}{I^2_i}\E\Big[\sum_{h=1}^d\big\{\sum_{t_j\in S_i}\varepsilon_k(t_j)\big\}^2\Big]\\
+&=&\frac{1}{I}\sum_{i=1}^I\frac{1}{I^2_i}\sum_{h=1}^d\sum_{t_j\in S_i}\E\varepsilon_k(t_j)^2\\
+&+&\frac{1}{I}\sum_{i=1}^I\frac{1}{I^2_i}\sum_{h=1}^d\sum_{t_j,t_l\in S_i: j\neq l}\underbrace{\E\varepsilon_k(t_j)\varepsilon_k(t_l)}_{=0}\\
+&=&\frac{1}{I}\sum_{i=1}^I\frac{1}{I^2_i}\sum_{h=1}^dI_i\sigma^2_{\varepsilon}=\frac{1}{I}\sum_{i=1}^I\frac{d\sigma^2_{\varepsilon}}{I_i}\\
+&=& O\Big(\frac{1}{I}\Big)=O\Big(\frac{1}{\sqrt{n}}\Big).
+\end{eqnarray*}
+\noindent{\bf 4.} $\int_0^1\var\left\{\int_0^t \phi(s)\xhat_{n,k}(s)ds\right\}\rd t=O(\frac{1}{n})$ 
+\newline
+By using Lemma~\ref{lemma2} we obtain 
+\begin{eqnarray*}
+\int_0^1\var\left\{\int_0^t \phi(s)\xhat_{n,k}(s)\rd s\right\}\rd t&=&\sum_{i=1}^I\int_{S_i}\var\left\{\int_0^t \phi(s)\xhat_{n,k}(s)\rd s\right\}\rd t\\
+&=&\sum_{i=1}^I\int_{S_i}\Big[\sum_{l=1}^I\big\{\int_{S_l\cap[0,t]} \phi(s)\rd s\big\}^2\frac{\sigma_{\epsilon}^2}{I_l}\Big]\rd t\\
+&\leq &\|\phi\|_{\infty}^2\sum_{i=1}^I\int_{S_i}\rd t\sum_{l=1}^I \frac{\sigma_{\epsilon}^2}{I_l^3}=\|\phi\|_{\infty}^2\sum_{i=1}^I\frac{1}{I_i}\sum_{l=1}^I \frac{\sigma_{\epsilon}^2}{I_l^3}\\
+&=&O\Big(\frac{1}{n}\Big),
+\end{eqnarray*}
+where we used that $\sum_{l=1}^I 1/I_l=O(1)$ and $\sum_{l=1}^I 1/I_l^3=O(\frac{1}{n})$. 
+
+\noindent{\bf 5.} $\var\left\{\int_0^1 \phi(t)\xhat_{n,k}(t)\rd t\right\}=O(\frac{1}{n})$
+\newline
+According to Lemma~\ref{lemma2} (Appendix \ref{sec:AppB}) for any $t\in [0,1]$ 
+$$\var\left\{\int_0^t \phi(s)\xhat_{n,k}(s)\rd s\right\}=\sum_{i=1}^I \left\{\int_{S_i\cap [0,t]}\phi(s)\rd s\right\}^2\frac{\sigma_{\epsilon}^2}{I_i}.$$
+From here it follows that 
+$$\var\left\{\int_0^1 \phi(t)\xhat_{n,k}(t)\rd t\right\}=\sum_{i=1}^I \left\{\int_{S_i\cap [0,1]}\phi(t)\rd t\right\}^2\frac{\sigma_{\epsilon}^2}{I_i}=\sum_{i=1}^I \left\{\int_{S_i}\phi(t)\rd t\right\}^2\frac{\sigma_{\epsilon}^2}{I_i}.$$
+Consequently,
+\begin{eqnarray*}
+\var\left\{\int_0^1 \phi(t)\xhat_{n,k}(t)\rd t\right\}&=&\sum_{i=1}^I \left\{\int_{S_i}\phi(t)\rd t\right\}^2\frac{\sigma_{\epsilon}^2}{I_i}\leq \sum_{i=1}^I \left(\|\phi\|_{\infty}\frac{1}{I}\right)^2\frac{\sigma_{\epsilon}^2}{I_i}\\
+&=& \|\phi\|_{\infty}^2\sigma_{\epsilon}^2\frac{1}{I^2}\sum_{i=1}^I\frac{1}{I_i}=O\Big(\frac{1}{I^2}\Big)=O\Big(\frac{1}{n}\Big).
+\end{eqnarray*}
+
+
+\subsection{Auxiliary results}\label{sec:AppB}
+
+\begin{lemma}\label{lemma1}
+For any $0\leq a_1,\ldots,a_n\leq 1$ the following inequality holds
+$$\prod_{i=1}^n(1-a_i)\geq 1-\sum_{i=1}^n a_i.$$
+\end{lemma}
+\begin{proof}
+Using induction. 
+\end{proof}
+
+\begin{lemma}\label{lemma2}
+For any $t\in [0,1]$ the following equality holds
+$${\rm var}\left\{\int_0^t \phi(s)\xhat_{n,k}(s)\rd s\right\}=\sum_{i=1}^I \left\{\int_{S_i\cap [0,t]}\phi(s)\rd s\right\}^2\frac{\sigma_{\epsilon}^2}{I_i}.$$
+\end{lemma}
+\begin{proof}
+Since, $S_i=[\frac{i-1}{I},\frac{i}{I})$, $i=1,\ldots,I$ it follows that $[0,1)=\cup_{i=1}^I S_i$.
+We have $\xhat_{n,k}=const$ in each interval $S_i$ i.e. the window estimator is defined as 
+$$\xhat_{n,k}(t)=\underbrace{\frac{1}{I_i}\sum_{t_j\in S_i}y_k(t_j)}_{=X_i},\qquad t \in S_i.$$
+We write $[0,t]=\cup_{i=1}^I S_i \cap [0,t]=\cup_{i=1}^I (S_i \cap [0,t])$. Now we have
+\begin{eqnarray*}
+\var\left\{\int_0^t \phi(s)\xhat_{n,k}(s)\rd s\right\}&=&\var\left\{\sum_{i=1}^I \int_{S_i\cap [0,t]}\phi(s)\xhat_{n,k}(s)\rd s\right\}\\
+&=&\var\left\{\sum_{i=1}^I \int_{S_i\cap [0,t]}\phi(s)X_i\rd s\right\}=\var\left\{\sum_{i=1}^I \int_{S_i\cap [0,t]}\phi(s)\rd s\cdot X_i\right\}\\
+&=&\sum_{i=1}^I \left\{\int_{S_i\cap [0,t]}\phi(s)\rd s\right\}^2\var(X_i)\\
+&+&2\sum_{1\leq m<l\leq I}\int_{S_m\cap [0,t]}\phi(s)\rd s\int_{S_l\cap [0,t]}\phi(s)\rd s\cdot \cov(X_m,X_l),
+\end{eqnarray*}
+where in the second equality we have used the fact that $\xhat_{n,k}$ is constant on $S_i$ and equal to $X_i$.
+We need $\var(X_i)$ and $\cov(X_k,X_l)$.
+$$\var(X_i)=\var\left\{\frac{1}{I_i}\sum_{t_j\in S_i}y_k(t_j)\right\}=\frac{1}{I_i^2}I_i\sigma_{\epsilon}^2=\frac{\sigma_{\epsilon}^2}{I_i}.$$
+$$\cov(X_m,X_l)=\cov\left(\frac{1}{I_m}\sum_{t_i\in S_m}y_k(t_i),\frac{1}{I_l}\sum_{t_j\in S_l}y_k(t_j)\right)=\frac{1}{I_mI_l}\sum_{t_i\in S_m,t_j\in S_l}\cov\left(y_k(t_i),y_k(t_j)\right)=0$$
+Plugging in the variance and covariance into the expression we obtain the formula.
+\end{proof}
+
+\subsection{Calculation for the algorithmic complexity}
+\label{sec5:comp_cost}
+ The following results are adapted from  \cite{wood2013aptsstatcomputing} and will be used in the sequel.
+\begin{lemma}
+\label{sec5:wood1}
+ If $\Ab$ and $\Bb$ are matrices of dimension $n\times m$ then the computational cost of addition and subtraction i.e. $\Ab+\Bb$, $\Ab-\Bb$ is $O(mn)$ flops. 
+\end{lemma}
+\begin{lemma}
+\label{sec5:wood2}
+ If $\Ab$ is a matrix of dimension $n\times m$ and $\Bb$ is a matrix of $m\times p$ then the computational cost of the matrix multiplication $\Ab\Bb$ is $O(nmp)$ flops. 
+\end{lemma}
+\begin{lemma}
+\label{sec5:wood3}
+ If a matrix $\Ab$ is of order $n$ then then the computational cost of the matrix inversion $\Ab^{-1}$ is $O(n^3)$ flops.
+\end{lemma}
+
+The dimension of the matrices that appear in the form for the estimators have the following dimensions 
+\begin{itemize}
+ \item $\Ib_d$ and $\hat{\Ab}_n\hat{\Bb}_n^{-1}\hat{\Ab}_n^{\top}$ are of dimension $d\times d$.
+ \item $\hat{\Ab}_n$, $\Ghatb_n(t_i)$ and  $\hat{\Ab}_n\hat{\Bb}_n^{-1}$ are of dimension $d\times p$.
+ \item $\hat{\Ab}_n^{\top}$  and $\Ghatb_n^{\top}(t_i)$ are of dimension $p\times d$.
+ \item $\hat{\Bb}_n$  is of dimension $p\times p$.
+ \item $\hat{\xb}_n(t_i)$, $\yb(t_i)$ and $\hat{\xib}_n$  are of dimension $d\times 1$.
+\end{itemize}
+\par
+\noindent
+{\bf 1. The cost for $\hat{\xb}_n(t_i)$ and $\Ghatb_n(t_i)$} 
+
+We calculate $\hat{\xb}_n(t_i)$ $I$ times, because this function is constant on each interval (there are $I$ intervals).
+The cost for $\hat{\xb}_n(t_i)$ is $O((I-1)d)$ so the total cost  is $O(I(I-1)d)=O(I^2d)=O(nd)$.
+The calculation of $\Ghatb_n(t_i)$ involves the calculation of $\gb(\hat{\xb}_n(t_\ell))$ and since the construction of matrix $\gb$ depends on the form of the ODE
+we assume that every entry of the matrix is obtained by at most constant number of flops $C$, that does not depend on $n$, $p$ and $d$. Then the cost of obtaining matrix $\gb(\hat{\xb}_n(t_\ell))$ is $Cdp$ flops. 
+The cost for $\Ghatb_n(t_i)$ is then $O((i-1)Cdp)$, so the total cost when $i$ goes from 1 to $n$ is 
+$$\sum_{i=1}^n O((i-1)Cdp)=O(Cpd(n-1)n/2)=O(pdn^2)$$
+flops. Thus, calculating $\hat{\xb}_n(t_i)$ and $\Ghatb_n(t_i)$ costs $O(nd+pdn^2)$ which is equal to 
+$$O(pdn^2)$$
+ flops.
+\par
+\noindent
+{\bf 2. The cost for  $\hat{\Ab_n}$ and  $\hat{\Bb_n}$} 
+The cost for $\hat{\Ab_n}$ is $(n-1)dp$  flops and cost for $\hat{\Bb_n}$ is $O((n-1)p^2d)$ flops so the total cost is 
+$$O(dnp^2)$$
+ flops.
+\par
+\noindent
+{\bf 3. The cost for $\hat{\xib}_n$}
+\par
+
+{\bf The term $\left(\Ib_d - \hat{\Ab}_n \hat{\Bb}_n^{-1} \hat{\Ab}_n^{\top}\right)^{-1}$ }
+\begin{itemize}
+ \item $\hat{\Bb}_n\mapsto\hat{\Bb}_n^{-1}$ costs $O(p^3)$ flops. 
+ \item $(\hat{\Ab}_n,\hat{\Bb}_n^{-1})\mapsto\hat{\Ab}_n\hat{\Bb}_n^{-1}$ costs $O(p^2d)$ flops. 
+ \item $(\hat{\Ab}_n\hat{\Bb}_n^{-1},\hat{\Ab}_n^{\top})\mapsto \hat{\Ab}_n\hat{\Bb}_n^{-1}\hat{\Ab}_n^{\top}$ costs $O(d^2p)$ flops. 
+ \item $(\Ib_d,\hat{\Ab}_n\hat{\Bb}_n^{-1}\hat{\Ab}_n^{\top})\mapsto \Ib_d-\hat{\Ab}_n\hat{\Bb}_n^{-1}\hat{\Ab}_n^{\top}$  costs $O(d^2)$ flops.  
+ \item $\Ib_d-\hat{\Ab}_n\hat{\Bb}_n^{-1}\hat{\Ab}_n^{\top}\mapsto (\Ib_d-\hat{\Ab}_n\hat{\Bb}_n^{-1}\hat{\Ab}_n^{\top})^{-1}$  costs $O(d^3)$ flops. 
+\end{itemize}
+Thus, the computational cost of $\left(\Ib_d - \hat{\Ab}_n \hat{\Bb}_n^{-1} \hat{\Ab}_n^{\top}\right)^{-1}$  is $O(p^3+p^2d+d^2p+d^2+d^3)$ which is equal to 
+$O(p^3+d^3)$
+flops.
+
+{\bf The term $\frac{1}{n}\sum_{i=1}^n \left(\Ib_d -\hat{\Ab}_n \hat{\Bb}_n^{-1}\Ghatb_n(t_i)^{\top}\right) \hat{\xb}_n(t_i)$ }
+\begin{itemize}
+  \item $(\hat{\Ab}_n\hat{\Bb}_n^{-1},\Ghatb_n^{\top}(t_i))\mapsto \hat{\Ab}_n\hat{\Bb}_n^{-1}\Ghatb_n^{\top}(t_i)$  costs $O(d^2p)$ flops. 
+  \item $(\Ib_d,\hat{\Ab}_n\hat{\Bb}_n^{-1}\Ghatb_n^{\top}(t_i))\mapsto \Ib_d-\hat{\Ab}_n\hat{\Bb}_n^{-1}\Ghatb_n^{\top}(t_i)$ costs $O(d^2)$ flops. 
+  \item $(\Ib_d -\hat{\Ab}_n \hat{\Bb}_n^{-1}\Ghatb_n(t_i)^{\top},\hat{\xb}_n(t_i))\mapsto\left(\Ib_d -\hat{\Ab}_n \hat{\Bb}_n^{-1}\Ghatb_n(t_i)^{\top}\right) \hat{\xb}_n(t_i)$ costs $O(d^2)$ flops. 
+\end{itemize}
+In total  $\left(\Ib_d -\hat{\Ab}_n \hat{\Bb}_n^{-1}\Ghatb_n(t_i)^{\top}\right) \hat{\xb}_n(t_i)$ costs $O(d^2p+d^2+d^2)=O(d^2p)$ flops so 
+calculating $\left(\Ib_d -\hat{\Ab}_n \hat{\Bb}_n^{-1}\Ghatb_n(t_i)^{\top}\right) \hat{\xb}_n(t_i)$ for each $i$  costs 
+$O(nd^2p)$ flops. In expression $\frac{1}{n}\sum_{i=1}^n \left(\Ib_d -\hat{\Ab}_n \hat{\Bb}_n^{-1}\Ghatb_n(t_i)^{\top}\right) \hat{\xb}_n(t_i)$ we have $(n-1)$
+additions so the total cost is $O(nd^2p+(n-1)d)=O(nd^2p)$.
+
+Finally we have the following.
+\begin{itemize}
+ \item $\left(\Ib_d - \hat{\Ab}_n \hat{\Bb}_n^{-1} \hat{\Ab}_n^{\top}\right)^{-1}$ costs $O(p^3+d^3)$.
+ \item $\frac{1}{n}\sum_{i=1}^n \left(\Ib_d -\hat{\Ab}_n \hat{\Bb}_n^{-1}\Ghatb_n(t_i)^{\top}\right) \hat{\xb}_n(t_i)$ costs $O(nd^2p)$.
+\item Multiplication of $\left(\Ib_d - \hat{\Ab}_n \hat{\Bb}_n^{-1} \hat{\Ab}_n^{\top}\right)^{-1}$ and $\frac{1}{n}\sum_{i=1}^n \left(\Ib_d -\hat{\Ab}_n \hat{\Bb}_n^{-1}\Ghatb_n(t_i)^{\top}\right) \hat{\xb}_n(t_i)$ costs
+ $O(d^2)$ flops. 
+\end{itemize}
+In total calculation of $\hat{\xib}_n $ costs $O(p^3+d^3+nd^2p+d^2)$ which is equal to 
+$$O(p^3+d^3+nd^2p)$$
+flops
+
+\par
+\noindent
+{\bf 4. The cost for $\hat{\xib}_n$}
+
+{\bf The term $\sum_{i=1}^n\Ghatb_n(t_i)^{\top} \left( \hat{\xb}_n(t_i) -\hat{\xib}_n \right)$}
+\begin{itemize}
+ \item $(\hat{\xb}_n(t_i),\hat{\xib}_n)\mapsto\hat{\xb}_n(t_i) -\hat{\xib}_n $ costs $O(d)$ flops.
+ \item $(\hat{\xb}_n(t_i) -\hat{\xib}_n,\Ghatb_n(t_i)^{\top} )\mapsto \Ghatb_n(t_i)^{\top} \left( \hat{\xb}_n(t_i) -\hat{\xib}_n \right)$ costs $O(pd)$ flops.
+\end{itemize}
+In total  $\Ghatb_n(t_i)^{\top} \left( \hat{\xb}_n(t_i) -\hat{\xib}_n \right)$ costs $O(d+pd)=O(pd)$ flops, so calculating $\Ghatb_n(t_i)^{\top} \left( \hat{\xb}_n(t_i) -\hat{\xib}_n \right)$ for each $i$  costs 
+$O(npd)$ flops. In expression $\sum_{i=1}^n\Ghatb_n(t_i)^{\top} \left( \hat{\xb}_n(t_i) -\hat{\xib}_n \right)$ we have $(n-1)$ additions so the total cost
+is
+$$O(npd)+(n-1)d=O(npd)$$
+flops. The multiplication of $\hat{\Bb}_n^{-1}$ and $\frac{1}{n}\sum_{i=1}^n\Ghatb_n(t_i)^{\top} \left( \hat{\xb}_n(t_i) -\hat{\xib}_n \right)$ costs 
+$p^2$ flops so the total cost for $\hat{\thetab}_n$ is 
+$$O(p^2+npd)$$
+flops. 
+\par
+Hence, the total cost of the procedure is $O(pdn^2+dnp^2+p^3+d^3+nd^2p+p^2+npd)$ flops which is equal to 
+$$O(p^3+d^3+ndp(n+p+d))$$
+flops.
+
+\section{Summary}\label{sec:complexity}
+In this chapter we presented an extension of a parameter estimation method for systems of ODEs that are linear in their parameters when the data contain no replicates. 
+Our procedure does not require tuning. For example, in the generalized profiling procedure \citep{ramsay2007parameter}, the user needs to choose the number of basis functions, smoothing parameter for
+data smoothing and also the tunning parameter which balances the fidelity to the equation and fit to the data. On the other hand, our method is completely automatic; it
+requires no tuning whatsoever. It is computationally inexpensive and also does not require any initial value of the parameters. This is very appealing, since in both, 
+Bayesian and likelihood-based methods, a good starting value is essential. Thus, the method can be used as a fast way to  obtain an initial value for Markov chain in case of
+Bayesian methods or an initial guess for the optimization in case of likelihood-based methods.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

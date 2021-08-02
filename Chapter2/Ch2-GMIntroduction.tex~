@@ -1,0 +1,422 @@
+\chapter{Model selection in Gaussian graphical models}
+\chaptermark{Graphical models}
+\graphicspath{{Chapter2/Figs/}{Chapter2/Figs/PDF/}{Chapter2/Figs/}}%
+
+%Nomenclature
+\nomenclature[A]{$\sD f\smallskip,\sD \fb,\sD \Fb $}{the derivative of function \nomrefeqpage}%   ?
+\nomenclature[A]{$X\protect\mathpalette{\protect\independenT}{\perp}Y|Z $}{$X$ is conditionally independent of $Y$ given $Z$ \nomrefeqpage}%   ???
+\nomenclature[Z]{$\nei(i)$}{Set of neighbours of a node $i$}}%  ??
+\nomenclature[Z]{$\cl(i)$}{The closure a node $i$}}%   ??
+
+\nomenclature[A]{$l(\bm{theta}|{\cal D}_S)$}{the log-likelihood function based on a part of the data ${\cal D}_S\subset{\cal D}$; ${\cal D}_S$ is the full data set \nomrefeqpage }%
+\nomenclature[A]{$l_k(\thetab)$}{log-likelihood function based on the $k$th observation,i.e. $l(\thetab|\yb_k)$ \nomrefeqpage}%
+\nomenclature[A]{$l(\thetab)$}{log-likelihood function based on the whole data ${\cal D}$, i.e. $l(\thetab|{\cal D})$ \nomrefeqpage}%
+\nomenclature[A]{$\Yb_A$}{random vector $(Y_i)_{i\in A}$, where $A\subset \{1,2,...,p\}$ \nomrefeqpage}%
+\nomenclature[A]{$\mathcal{G}$}{graph $(V,E)$ \nomrefeqpage }%
+\nomenclature[A]{V}{the set of nodes of a graph $\mathcal{G}=(V,E)$ \nomrefeqpage}%
+\nomenclature[A]{$E$}{the set of edges of a graph $\mathcal{G}=(V,E)$ \nomrefeqpage}%
+\nomenclature[A]{$\Thetab$}{precision matrix \nomrefeqpage}%
+\nomenclature[A]{$\Sb_k$}{empirical covariance matrix of $k$th observation, $\Sb_k=\yb_k\yb_k^\top$}%
+\nomenclature[A]{$\Sb$}{empirical covariance matrix, $\Sb=1/n\sum_{k=1}^n \yb_k\yb_k^\top$}%
+\nomenclature[A]{$\Sb^{(-k)}$ }{in cross-validation, this is the sample covariance matrix based on the data with $k$-th partition excluded. }%
+\nomenclature[A]{$l_{\lambda}$}{penalized log-likelihood function}%
+\nomenclature[A]{$\Kb_p$}{commutation matrix $\Kb_p$ of dimension $p^2\times p^2$; it has the property $\Kb_p \vect(\Ab)=\vect(\Ab)^\top$ for any $p\times p$ matrix $\Ab$}%
+\nomenclature[A]{$\Mb_p$}{the matrix defined as $\Mb_p=1/2(\Ib_{p^2}+\Kb_p)$, where $\Kb_p$ is the commutation matrix and $\Ib_{p^2}$ is the identity matrix of order $p^2$}%
+\nomenclature[A]{$\Ncal_p(\mub,\Thetab^{-1})$}{$p$- dimensional Gaussian distribution with mean vector $\mub$ and precision matrix $\Thetab$}%
+\nomenclature[A]{$\Thetahatb_{\lambda}$}{maximum penalized likelihood estimator of the precision matrix with regularization parameter $\lambda$ }%
+\nomenclature[A]{$\df$}{degrees of freedom}%
+\nomenclature[A]{$\rR$}{the set of real numbers}%
+\nomenclature[A]{$\Ncal_d(\yb;\mub,\Thetab^{-1})$}{density function of variable $\yb$ of a gaussian distribution with mean $\mub$ and precision matrix $\Thetab$}%
+\nomenclature[A]{$\ob_{d}$}{column vector of zeros of dimension $d$}%
+\nomenclature[A]{$\df(\lambda)$}{degrees of freedom of the MPLE estimate $\Thetahatb_{\lambda}$ of the precision matrix. It is equal to the number of nonzero elements in the upper diagonal of $\Thetahatb_{\lambda}$.}%
+\nomenclature[A]{$\ob_{d}$}{column vector of zeros of dimension $d$}%
+\nomenclature[A]{$\cong$}{equal up to an additive constant}%
+
+\nomenclature[A]{$\vect$}{the vectorization operator which transforms a matrix into a column vector obtained by stacking the columns of the matrix on top of one another.}%
+\nomenclature[A]{$\tr(\Ab)$}{trace of (square) matrix $\Ab$}%
+\nomenclature[A]{$\Ab^{\top}$}{the transpose of a matrix $\Ab$}%
+\nomenclature[A]{$\lambda$}{regularization (penalization) parameter}%
+\nomenclature[A]{$\mathcal{D}$}{data set}%
+\nomenclature[Z]{MLE}{maximum likelihood estimator}%
+\nomenclature[Z]{MPLE}{maximum penalized likelihood estimator}%
+\nomenclature[Z]{KL}{Kullback-Leibler information}%
+\nomenclature[Z]{KLCV}{Kullback-Leibler cross-validation}%
+\nomenclature[Z]{AIC}{Akaike's information criterion}%
+\nomenclature[Z]{GIC}{generalized information criterion}%
+\nomenclature[Z]{CV}{cross-validation}%
+\nomenclature[Z]{LOOCV}{leave-one-out cross-validation}%
+\nomenclature[Z]{BIC}{Bayesian information criterion}%
+\nomenclature[Z]{EBIC}{extended Bayesian information criterion}%
+\nomenclature[Z]{GACV}{generalized approximate cross-validation}%
+\nomenclature[Z]{StARS}{stability approach to regularization selection }%
+\nomenclature[Z]{TP}{true positives}%
+\nomenclature[Z]{TN}{true negatives}%
+\nomenclature[Z]{FP}{false positives}%
+\nomenclature[Z]{FN}{false negatives}%
+\nomenclature[Z]{MCC}{Matthews correlation coefficient}%
+\nomenclature[Z]{F1}{F1 score}%
+\nomenclature[Z]{MRF}{Markov random field}%
+\nomenclature[Z]{GGM}{Gaussian graphical model}%
+
+
+
+
+
+A graphical model is a statistical model that uses a graph to represent conditional dependencies between random variables. Having a graphical representation of the dependencies enables one to have better 
+understanding of the relations between random variables. To undertake a formal definition of a graphical model we first introduce a notion of conditional independence. Our exposition is mainly based
+ on \cite{lauritzen1996graphical}. Other useful references are \cite{whittaker2009graphical}, \cite{rue2005gaussian}, \cite{edwards2000introduction} and \cite{fried2009robust}.
+%\cite{wainwright2008graphical},
+% \begin{definition}
+% If $X,Y,Z$ are random variables with a joint distribution $P$, we say that $X$ is conditionally independent of $Y$ given $Z$ under $P$, and write $X\independent Y|Z [P]$, if, for any measurable set $A$ in the
+% sample space of $X$, there exists a version of the conditional probability $P(A|Y,Z)$ which is a function of $Z$ alone. If $Z$ is trivial we say that  $X$ is independent of $Y$, and write $X\independent Y [P]$. 
+% \end{definition}
+Hereafter, we focus on continuous random vectors, although the theory is more general \citep{lauritzen1996graphical}.
+\begin{definition}
+Let $X,Y,Z$ be real random variables with a joint distribution $P$ that has a continuous density $f$ with respect to the product measure. We say that the random variable $X$ is conditionally independent of $Y$ given $Z$ under $P$,
+and write  $X\independent Y|Z [P]$, if
+$$f_{XY}(x,y|z)=f_{X|Z}(x|z)f_{Y|Z}(y|z),$$
+for all $z$ with $f_Z(z)>0$. If $Z$ is trivial we say that  $X$ is independent of $Y$, and  write $X\independent Y [P]$. 
+\end{definition}
+The simpler notation $X\independent Y|Z $ and $X\independent Y$ is usually used. 
+Consider a random vector $\Yb=(Y_1,\ldots,Y_p)^\top:\Omega\rightarrow \rR^p$, where $\Omega$ is a sample space.
+We are interested in the relations of the type 
+$$\Yb_A\independent \Yb_B | \Yb_C,$$
+where $\Yb_A$ stands for $(Y_i)_{i\in A}$ and $A,B,C$ are subsets of the set  $V=\{1,2,...,p\}$. The aim is to have a graph that describes the probability distribution of the vector $\Yb$.
+In this thesis, a graph is a pair $\mathcal{G}=(V,E)$, where $V=\{1,2,...,p\}$ is a finite set whose elements are called {\it nodes} or {\it vertices} and $E$ is a subset of unordered pairs of distinct values from $V$, 
+whose elements are called {\it edges} or {\it lines}. Thus, our graphs are {\it finite} -- have finite set of vertices, {\it undirected} -- the edges are undirected and {\it simple} -- there are no multiple edges and 
+no edges that connect a vertex to itself (loops). 
+
+In order to bring together random vector $\Yb$ and graph $\mathcal{G}$ we assign to every random variable $Y_i$ a node $i\in V$ and to any unordered pair $\{Y_i,Y_j\}$ of random variables an edge $\{i,j\}\in E$.
+In this context, instead $\Yb_A\independent \Yb_B | \Yb_C$  we will write
+$$A\independent B | C.$$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Undirected graphical models}
+From the definition of conditional independence it follows that the condition $A\independent B | C,$ can only be satisfied when the sets $A,B,C$ are disjoint. Depending on the nature of the sets $A,B,C$ we have the 
+following, so-called, {\it Markov properties}. A probability measure $P$ on $\rR^p$ is said to obey:
+\par
+(P) the {\it pairwise Markov property}, relative to $\mathcal{G}$, if for any pair of $(i,j)$ of non-adjacent vertices 
+$$i \independent j|V \setminus   \left\{i,j\right\}.$$ 
+\par
+(L)  the {\it local Markov property}, relative to $\mathcal{G}$, if for vertex $i\in V$
+$$i\independent V \setminus \cl(i)| \nei(i), $$ 
+where $\nei(i)=\{j \in V:\; \{i,j\}\in E\}$ is the {\it set of neighbours} and $\cl(i)= \nei(i)\cup\{i\}$ is the {\it closure} of the set $\{i\}$.
+\par
+(G) the {\it global Markov property}, relative to $\mathcal{G}$ if, for any triple ($A,B,C)$ of disjoint subsets of $V$ such that $C$ separates $A$ from $B$ in $\mathcal{G}$ 
+ $$ A\independent B|C.$$
+
+The subset $C$ is said to {\it separate} $A$ from $B$ if all paths in $G$ from any $a\in A$ to any $b\in B$ intersect $C$. A path in $\mathcal{G}$ is a sequence of distinct vertices such that two consecutive vertices form an 
+edge in $\mathcal{G}$.
+
+The properties implicitly define the distribution $P$, they do not describe the form of the density of $P$, in case it exists. The next property does exactly that.
+
+(F) A probability measure $P$ on $\rR^p$ is said to {\it factorize} according to $\mathcal{G}$, if for all cliques $c\subset V$ there exist non-negative functions $\psi_c$ that depend on $\yb=(y_{1},...,y_{p})$ through $\yb_c=(y_i)_{i\in c}$
+only, and there exists a product measure on $\rR^p$ with respect to which $P$ has the density $f$ of the form 
+$$
+\qquad   f(\yb)=\underset{c \in C}  \prod  \psi_{c}(\yb_{c}),
+$$
+where $C$ is a set of cliques. {\it Clique} is a maximal set (with respect to $\subseteq$) that has the property that each two vertices from the clique are joined by a line.
+
+For any undirected graph $\mathcal{G}$ and any probability distribution on $\rR^p$ it holds that $(F)\Rightarrow (G)\Rightarrow (L) \Rightarrow (P).$
+More can be said for the distributions that have continuous positive density and that is the content of the following theorem.
+
+\begin{theorem}[{\bf Hammersley and Clifford}]
+\label{t2}
+A probability distribution with positive and continuous pdf w.r.t. to a product measure satisfies the pairwise Markov property w.r.t. to an undirected graph $\mathcal{G}$ if and only if it factorizes according to
+ $\mathcal{G}$.
+\end{theorem}
+
+The theorem implies that in the case of the probability distribution with positive and continuous pdf w.r.t to a product measure it holds:
+$$(F)\Leftrightarrow  (G)\Leftrightarrow (L) \Leftrightarrow (P).$$
+Finally, we give the definition of an undirected graphical model \citep{wainwright2008graphical}.
+\begin{definition}
+ An undirected graphical model - also known as a Markov random field (MRF) -- associated with graph $\mathcal{G}$ is a family of probability distributions that factorizes according to $\mathcal{G}$.
+\end{definition}
+The definition assumes the strongest $F$ property, although some authors assume the weakest, pairwise Markov property \citep{whittaker2009graphical}.
+\begin{definition}
+ An undirected graphical model associated with graph $\mathcal{G}$ is a family of probability distributions that satisfy the pairwise conditional independence restrictions inherent in $\mathcal{G}$.
+\end{definition}
+
+In the case of probability distributions that have positive and continuous density, the case we consider in this thesis, theorem (\ref{t2}) implies that both definitions are equivalent.
+
+%\textcolor{red}{Note1: In the literature graphical model is defined as a family of distributions $\mathbb{P}$}
+%WHittaker definition of graphical model
+%Consider a $k$-dimensional random vector $X=(X_1,\ldots, X_k)$ and an independence graph $G=(V,E)$. A graphical model for $X$ is a single family of probability distributions for $X$, that satisfy the pairwise
+%conditional independence restrictions inherent in $G$, but are otherwise arbitrary. When the distributions are multivariate normal then we speak of the graphical Gaussian model.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gaussian graphical models}
+If in the definition of the graphical model we restrict the family of the distributions to be Gaussian we obtain a {\it Gaussian graphical model} (GGM).
+It turns out that in case of GGM the conditional dependencies can be read off from the inverse covariance matrix which is called the {\it precision matrix} or {\it concentration matrix}.
+
+The density of the normal distribution with mean $\mub$ and precision matrix $\Thetab=[\theta_{ij}]_{i,j}$ has the form
+$$f(\yb)=(2\pi)^{-p/2}|\Thetab|^{1/2}\exp\left\{-(\yb-\mub)^\top\Thetab(\yb-\mub)/2\right\}.$$
+The following result is of fundamental importance.
+
+\begin{proposition}
+ For a Gaussian graphical model it holds 
+$$i\independent j| V\setminus\{i,j\}\Longleftrightarrow \theta_{ij}=0.$$
+\end{proposition}
+
+The consequence of the proposition is that the precision matrix contains all the information about conditional independence relations between the variables. The edge between two nodes in the conditional independence graph is present if and only if the element in the precision matrix
+determined by the two nodes is not equal to zero. For example,  the following precision matrix and graph correspond to each other, where $*$ is a non-zero element  
+\[
+\Thetab= \begin{pmatrix}
+* & * &* & 0 \\
+* & * & 0  & * \\
+* &   0  & * & * \\
+0 & *& * &*
+\end{pmatrix}
+\qquad
+\raisebox{-15mm}{\includegraphics[keepaspectratio = true, scale = 0.6] {Graph.png}}
+\]
+Now we formulate some basic results in regard to GGM.
+
+Assume that the data $\yb_1,\ldots,\yb_n$ is a sample from $\Ncal_p(\ob,\Thetab^{-1})$; for simplicity we assume that the mean is zero. Using the notation  $\Sb_k=\yb_k\yb_k^\top$ for the empirical covariance matrix of a single 
+observation, we have that the empirical covariance matrix is given as $\Sb=1/n\sum_{k=1}^n \Sb_k$. Log-likelihood of one observation $\yb_k$  
+is up to an additive constant 
+\begin{equation}\label{eq:loglik_single}
+l_k(\Thetab)=\frac12 \left\{\log|\Thetab|-\tr(\Thetab \Sb_k)\right\}, 
+\end{equation}
+where $\Sb_k =\yb_k \yb_k^{\top}$ and the the log-likelihood of the data is  
+\begin{equation}\label{eq:loglik}
+l(\Thetab)=\sum_{k=1}^n l_k(\Thetab)=\frac{n}{2}\{\ln|\Thetab|-\tr(\Thetab \Sb)\}.
+\end{equation}
+For the result that follows we introduce some notation. The commutation matrix $\Kb_p$ is defined as a matrix that has the property $\Kb_p \vect(\Ab)=\vect(\Ab^\top)$ for any $p\times p$ matrix $\Ab$. Here, $\vect$ is the 
+vectorization operator which transforms a matrix into a column vector obtained by stacking the columns of the matrix on top of one another. Define $\Mb_p=1/2(\Ib_{p^2}+\Kb_p)$,  where $\Ib_{p^2}$ is identity matrix of order $p^2$.
+\begin{proposition}
+\label{prop:ggmmle}
+ If $n>p$ the maximum likelihood estimator (MLE) exists and it is given by $\Thetahatb=\Sb^{-1}$. Furthermore, $\Thetahatb$ is strongly consistent estimator of the true precision matrix $\Thetab_0$ and 
+ %\item $\sqrt{n}(\Sigmahat-\Sigma)\rightarrow N_{p^2}\Big(0,2M_p(\Sigma\otimes\Sigma)\Big),$
+ $$\sqrt{n}(\Thetahatb-\Thetab_0)\rightarrow \Ncal_{p^2}\Big(0,2\Mb_p(\Thetab_0\otimes\Thetab_0)\Big), \qquad  n\to \infty.$$
+\end{proposition}
+See \cite{fried2009robust}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section[Kullback Leibler information]{Kullback Leibler information} 
+\label{sec1:KL}
+In this section we review Kullback-Leibler information which is used as a criterion for evaluating statistical models. Assume that the data $\Dcal=\{\yb_1,\ldots, \yb_n\}$ is generated from some $p$-dimensional distribution $q$ that we
+refer to as the {\it true distribution}. Let $\Thetait\subset \rR^p$ and consider a parametric family of distributions $\{p(\yb|\thetab);\thetab\in \it \Theta\}$ that we use to approximate the true distribution.
+\par
+The goodness of the model $p(\yb)$ can be assessed in terms of its closeness to the true distribution $q(\yb)$. \cite{akaike1973information} proposed to measure this closeness by using  {\it Kullback-Leibler information}
+[or {\it Kullback-Leibler divergence}, \cite{kullback1951information}, hereinafter abbreviated as “KL”]:
+$$\KL(q;p)=\E_q\left\{\log\frac{q(\Yb)}{p(\Yb)}\right\}=\int_{\rR^p}\log\left\{\frac{q(\yb)}{p(\yb)}\right\}q(\yb)d\yb.$$
+Here, $\Yb$ stands for the random variable distributed according to $p(\yb)$. The basic properties of KL are given in the following preposition \citep{konishi2008information}. 
+\begin{proposition}[Properties of KL.] The KL has the following properties:
+\begin{enumerate}
+ \item $\KL(q; p) \geq 0$,
+ \item $\KL(q; p) = 0 \Leftrightarrow q(\yb) = p(\yb).$
+\end{enumerate}
+\end{proposition}
+KL is not a metric on the space of probability distributions since it is not symmetric and does not satisfy the triangle inequality. KL is, up to a constant, equal to the minus expected log-likelihood since
+$$\KL(q;p)=\E_q\left\{\log\frac{q(\Yb)}{p(\Yb)}\right\}=\E_q\{\log q(\Yb)\}-\E_q\{\log p(\Yb)\}=C -\E_q\{\log p(\Yb)\},$$
+and $C=\E_q\{\log q(\Yb)\}$ does not depend on $p$. Assume that $p$ is chosen from a parametric family of distributions, i.e. $p(\cdot)=p(\cdot|\thetahatb)$, where $\thetahatb$ is an estimator of $\thetab$. Denote by $l(\thetab|\Dcal_S)$ the log-likelihood function based on the data set
+$\Dcal_S\subset\Dcal$ and let $l_k(\thetab)=l(\thetab|\yb_k)$ and  $l(\thetab)=l(\thetab|\Dcal)$ denote log-likelihood based on the $k$th observation and the whole data set, respectively. Estimating $\E_q\{\log p(\yb|\thetahatb)\}$ by replacing
+ the density $q(\yb)$ by its empirical counterpart we obtain that
+\begin{equation}
+\label{eq:KLhat} 
+\hat{\KL}(q(\cdot);p(\cdot|\thetahatb))=-\frac{1}{n}\sum_{k=1}^n\log p(\yb_k|\hat{\thetab})=-\frac{1}{n}\sum_{k=1}^nl_k(\thetahatb)=-\frac{1}{n}l(\thetahatb).
+\end{equation}
+
+
+Thus, the scaled log-likelihood is an estimator of KL. However, it is a biased estimator since the data has been used twice -- once to obtain the estimator $\hat{\thetab}$ and once to obtain the empirical density of the true distribution.  
+We now list some of the estimators of KL that reduces this bias.
+\par
+{\bf Akaike's Information Criterion (AIC)}
+{\it Akaike's Information Criterion}, introduced by \cite{akaike1973information}, is an estimator of KL in case of the models estimated by maximum likelihood. It reduces the bias by adding the penalty to the 
+likelihood, where the penalty is given in terms of the number of the parameters of the model. AIC has the form:
+$$\AIC= -2l(\thetahatb)+2\df,$$
+where $\df=\dim(\Thetait)$. Similarly, in case of penalized maximum likelihood estimators we can define AIC selector \citep{zhang2010regularization}, which is a special case of Nishii's  {\it generalized information criterion} 
+(GIC) \citep{nishii1984asymptotic}. AIC selector has the form:
+\begin{equation}
+\label{eq:AICselector}
+ \AIC= -2l(\thetahatb_{\lambda})+2\df(\lambda),
+\end{equation}
+where $\thetahatb_{\lambda}$ is the penalized maximum likelihood estimator and $\df(\lambda)$ is the degrees of freedom of the corresponding model. We will refer to these criteria simply as AIC.
+\par
+{\bf Generalized Information Criterion (GIC)}
+%\textcolor{red}{ An estimated model $f(x|\Thetahatb)$ obtained by replacing an unknown parameter $\Theta$ with an estimator $\Thetahatb$ is referred to as a statistical model.}
+{\it Generalized Information Criterion}, introduced by  \citep{konishi1996generalised}, is an estimator of KL which is applicable to a  wide class of models and not only for models estimated by maximum likelihood.
+This is different from the GIC proposed by \citep{nishii1984asymptotic}. Here we present the GIC for $M$ estimators.
+An $M$-{\it estimator} is defined as a solution of the system of equations
+$$\sum_{k=1}^n \psib(\yb_k,\thetab)=\ob_d,$$
+where $\psib$ is a column vector of dimension $d$ and $\ob_d$ is the $d$ dimensional vector of zeros. The GIC for an \textit{M}-estimator \citep{konishi2008information} is given by:
+\begin{equation}
+\label{eq2:GICgeneral}
+\GIC=-2l(\hat{\thetab})+2\tr(\Rb^{-1}\Qb),
+\end{equation}
+where $\Rb$ and $\Qb$ are square matrices of order $p$ given by 
+\begin{equation}
+\label{eq:R}
+\Rb=-\frac1n\sum_{k=1}^n\{\sD\psib(\yb_k,\thetahatb)\}^\top,
+%\Rb=-\frac1n\sum_{k=1}^n\{D\psib(\yb_k,\thetab)\}^\top\big|_{\thetab=\thetahatb},
+\end{equation}
+ \begin{equation}
+\label{eq:Q}
+\Qb=\frac1n\sum_{k=1}^n\psib(\yb_k,\thetab){\sD}\psib(\yb_k,\thetahatb),
+%\Qb=\frac1n\sum_{k=1}^n\psib(\yb_k,\thetab)D l_k(\thetab)\big|_{\thetab=\thetahatb}.
+\end{equation}
+and $\sD\psib(\yb_k,\thetahatb)$ and $\sD\psib(\yb_k,\thetahatb)$ are Jacobian matrices of corresponding functions at $\thetahatb$. We use the definition of the derivative given in \cite{magnus2007matrix}
+(see appendix \ref{sec3:diff_calc} on matrix calculus).
+The maximum likelihood estimator is an $M$-estimator, corresponding to 
+$$\psib(\yb_k,\thetab)=\vect \sD l_{k}(\thetab),$$
+where $l_{k}$ is the log-likelihood of observation $\yb_k$ and $\sD l_{k}$ is the derivative of $l_k$ \citep{magnus2007matrix}.
+\par
+{\bf Cross validation (CV)} 
+{\it Cross validation} \citep{stone1974cross} is an estimator of KL that involves reusing the data. We split the data $\Dcal$ into $K$ roughly equal-sized parts that we denote by $\Dcal_1,\ldots,\Dcal_K$. For the $k$-th part of the data $\Dcal_k$, we
+ estimate the parameter $\thetab$ by using the data from the other $K-1$  parts. Denote this estimator by  $\thetahatb^{-(k)}$. Then we calculate the log-likelihood based on the $\Dcal_k$ at the estimate $\thetahatb^{-(k)}$. This procedure is
+ repeated for $k = 1, 2,\ldots,K$ and then the estimators are averaged. In other words, the cross validation estimator of KL is
+\begin{equation}
+\label{eq:CV} 
+\CV=-\frac{1}{K}\sum_{k=1}^Kl(\thetahatb^{-(k)}|\Dcal_k).
+\end{equation}
+Usual choices of $K$ are 5 or 10. When $K = N$ we obtain {\it leave-one-out cross-validation} (LOOCV)
+\begin{equation}
+\label{eq1:LOOCV} 
+\LOOCV=-\frac{1}{n}\sum_{k=1}^nl(\thetahatb^{-(k)}|\yb_k)=-\frac{1}{n}\sum_{k=1}^nl_k(\thetahatb^{-(k)}).
+\end{equation}
+\par
+We finish the section by presenting the KL between two normal distributions and writing the explicit form of the bias.
+\par
+{\bf KL  for normal models.} Let $q(\yb)=\Ncal_d(\yb;0,\Thetab_q^{-1})$ and $p(\yb)=\Ncal_d(\yb;0,\Thetab_p^{-1})$  be the multivariate normal densities. Then \citep{penny2001kullback}:
+
+\begin{equation}
+ \label{eq1:KL}
+\KL(q; p)=\frac{1}{2}\{-\log|\Thetab_q^{-1}\Thetab_p|+\tr(\Thetab_q^{-1}\Thetab_p)-d\}.
+\end{equation}
+Having in mind expression for the log-likelihood in Gaussian models (see \eqref{eq:loglik}) and that it is a biased estimator of KL we can write
+\begin{equation}
+ \label{eq:KLbias}
+\KL(q;p)= -\frac{1}{n}l(\Thetab_p)+\bias,
+\end{equation}
+where $\bias=\tr\{\Thetab_p(\Thetab_q^{-1}-\Sb)\}/2$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section[Penalized likelihood estimation in Gaussian graphical model]{Penalized likelihood estimation in Gaussian Graphical Models}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Estimation}
+Suppose we have $n$ multivariate observations $\yb_1,\ldots,\yb_n$ of dimension $p$ from distribution $\Ncal_p(0,\Thetab^{-1})$. When $n>p$ the precision matrix $\Thetab$ can estimated with probability one by maximizing the scaled log-likelihood function (see \eqref{eq:loglik})
+$$\frac{2}{n}l(\Thetab)=\log|\Thetab|-\tr(\Thetab \Sb),$$
+over positive definitive matrices $\Thetab$. The global maximizer is given by $\Thetahatb=\Sb^{-1}$ (Proposition~\ref{prop:ggmmle}). When $n\leq p$ maximum likelihood estimator does not exist. Moreover, in the case when $n>p$ \emph{and} the 
+true precision  matrix is known to be sparse, the MLE has a non-desirable property: with probability one all elements of the precision matrix are nonzero. An alternative approach which yields sparse estimator can be obtained by maximizing
+\begin{equation}
+\label{eq:penloglik}
+\Thetahatb_{\lambda}=\text{argmax}_{\Thetab}\log|\Thetab|-\tr(\Thetab \Sb)-\sum_{i=1}^p\sum_{j=1}^pp_{\lambda_{ij} }(|\theta_{ij}|),
+\end{equation}
+over positive definitive matrices $\Thetab$. Here, $p_{\lambda_{ij} }$ is a sparsity inducing penalty function, $\theta_{ij}$ is the $(i,j)$ element of matrix $\Thetab$ and $\lambda_{ij}>0$ is the corresponding regularization parameter. 
+We will refer to $\lambdab=(\lambda_{11},\ldots,\lambda_{pp})$ as a {\it regularization parameter} and typically $\lambda_{11}=\ldots=\lambda_{pp}=\lambda$.
+\par
+The LASSO penalty uses the $L_1$ penalty function $p_{\lambda}(|\theta|)=\lambda|\theta|$. \cite{friedman2008sparse} propose the {\it graphical lasso} algorithm for optimizing (\ref{eq:penloglik}) in the case of the Lasso
+penalty. The algorithm uses a coordinate descent procedure and is extremely fast. However, it is known that the LASSO penalty produces substantial biased estimates in a regression setting \citep{fan2001variable}. 
+To address this issue \cite{lam2009sparsistency} study the theoretical properties of sparse precision matrix estimation via a general penalty function satisfying the properties in \cite{fan2001variable}. This general penalty
+function includes LASSO and also SCAD and adaptive LASSO penalties, originally introduced in a linear regression setting \citep{fan2001variable,zou2006adaptive}. They also show that the LASSO penalty produces bias in the case
+of sparse precision matrix estimation. The SCAD penalty has a derivative of the  form
+$$p'_{\lambda}(|\theta|)=\lambda I(|\theta|\leq\lambda)+\frac{(a\lambda-|\theta|)_+}{a-1}I(|\theta|>\lambda),$$
+where $a$ is a constant usually set to 3.7 \citep{fan2001variable}.
+Another penalty, called the adaptive LASSO, which is proposed in \cite{zou2006adaptive}, uses the $L_1$ penalty function $p_{\lambda}(|\theta|)=\lambda|\theta|$ and
+$$\lambda_{ij}=\lambda/|\tilde{\theta}_{ij}|^{\gamma},$$
+where $\gamma>0$ is some constant and $\tilde{\theta}_{ij}$ is any consistent estimator of $\theta_{ij}$. The constant $\gamma$ is usually chosen to be $0.5$.
+Implementing the optimization with the SCAD and adaptive LASSO penalties can be done efficiently by using the graphical lasso algorithm \citep{fan2009network}.
+\par
+These penalties are important because under certain conditions the estimated precision matrix tends to the true one when sample size tends to infinity, with a certain rate of convergence.
+Also, the estimator has the {\it sparsistency} property, which means that when sample size tends to infinity all the parameters  that are zero are actually estimated as zero with probability tending to one \citep{lam2009sparsistency}.
+Also \citet{fan2009network} show that using the SCAD penalty in a GGM  setting produces estimators that are not just sparsistent but also $\sqrt{n}$-consistent, asymptotically normal, and have the oracle property. {\it Oracle property}
+of the estimator means that the estimator performs as if the correct submodel is known in advance. More specifically, when there are zeros in the true precision matrix, they are estimated as 0 with probability tending to 1, and the 
+nonzero components are estimated as as if the correct submodel is known.
+\par
+
+We will refer to a graphical model estimated by penalized maximum likelihood estimation as a {\it penalized Gaussian graphical model}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Model selection}
+Model selection in penalized graphical models is essentially a matter of choosing the regularization parameter.  It has been shown that certain asymptotic rates of $\lambda$ result in consistent or sparsistent estimators 
+\citep{ravikumar2011high, lam2009sparsistency}. However, for finite $n$ and $p$ the choices are less clear. In this section we review existing methods for selection of $\lambda$.
+
+In this section, we use the notion of {\it degrees of freedom} in Gaussian graphical models, defined as \citep{yuan2007model}: 
+\begin{equation}
+\label{eq2:df} 
+\df(\lambda)=\sum_{1\leq i<j\leq p}I(\thetahat_{ij,\lambda}\neq 0),
+\end{equation}
+where $\thetahat_{ij,\lambda}$ is $(i,j)$ element of estimated precision matrix $\Thetahatb_{\lambda}$.
+
+%Now we list the methods that have been used in the literature for choosing the regularization parameter.
+\begin{enumerate}
+\item {\bf Bayesian Information Criterion (BIC)} \citep{yuan2007model,schmidt2010graphical,menendez2010gene,lian2011shrinkage,gao2012tuning} has the form
+$$\BIC(\lambda)=-2l(\Thetahatb_{\lambda})+\log n\df(\lambda).$$
+Roughly speaking, the criterion provides an approximation  of the natural logarithm of the posterior probability of the model defined by $\Thetahatb_{\lambda}$ multiplied by -2. Approximation is based on the assumption that
+when $n$ tends to infinity $p$ is fixed. 
+The nature of this criterion is asymptotic in the sense the approximation of the posterior probability of the model defined by ith and the assumption is that when $n$ tends to infinity $p$ is fixed.
+\item {\bf Extended Bayesian Information Criterion (EBIC)} \citep{foygel2010ebic,gao2012tuning} is an extension of BIC and is introduced to deal with cases when also $p$ tends to infinity together with $n$.
+It has the form 
+$$\EBIC(\lambda)=-2l(\Thetahatb_{\lambda})+(\log n+4\gamma\log p)\df(\lambda),$$
+where $\gamma\in [0,1]$ is the parameter that penalizes the number of models, which increases when $p$ increases. In case of $\gamma=0$ the classical $\BIC$ is obtained. Typical values for $\gamma$ are  $1/2$ and $1$.
+\item {\bf Aikaike's Information Criterion (AIC)} \citep{menendez2010gene,liuroederwasserman10,lian2011shrinkage} has the form c.f. (\ref{eq:AICselector})
+\begin{equation}
+\label{eq2:AIC}
+\AIC(\lambda)=-2l(\Thetahatb_{\lambda})+2\df(\lambda).
+\end{equation}
+\item {\bf Cross-validation (CV)} \citep{rothman2008sparse,fan2009network,schmidt2010graphical,ravikumar2011high,fitch2012computationally} has the form c.f. (\ref{eq:CV})
+$$\CV(\lambda)=-\frac{1}{n}\sum_{k=1}^K n_k\left[\log|\Thetahatb^{(-k)}(\lambda)|-\tr\left\{\Sb^{(k)}\Thetahatb^{(-k)}(\lambda)\right\}\right],$$
+where $\Thetahatb^{(-k)}$ is the estimate of the precision matrix, with $\lambda$ as regularization parameter, based on the data with $k$th partition excluded and $\Sb^{(k)}$ is the empirical covariance matrix based on the $k$th partition of the
+data. The formula presented here differs from the one given in, for example, \citep{fan2009network,lian2011shrinkage} in that we have the term $-1/n$ in front of the sum.
+This term is usually omitted for the sake of simplicity.
+\item {\bf Generalized Approximate Cross Validation (GACV)} \citep{lian2011shrinkage} is introduced as an approximation of leave-one-out cross validation (LOOCV) and has the form
+$$\GACV(\lambda)= -2l(\Thetahatb_{\lambda})+2\sum_{k=1}^n\vect(\Thetahatb_{\lambda}^{-1}-\Sb_k)^\top\vect\{\Thetahatb_{\lambda}(\Sb^{(-k)}-\Sb)\Thetahatb_{\lambda}\},$$
+where $\Sb_k=\yb_k\yb_k^\top$ is the empirical covariance matrix of the $k$-th observation and $\Sb^{(-k)}$ is the empirical covariance matrix based on the data with $k$th partition excluded. The formula presented here differs from the one given in \cite{lian2011shrinkage} in that we have
+ scaled it with $-2$. We introduce this scaling to make the connection with KL.
+\par
+For any criterion mentioned above, denoted by CRITERION, the best regularization parameter is chosen as 
+$$\lambda^*=\argmin_{\lambda}\text{CRITERION}(\lambda).$$
+\item {\bf Stability Approach to Regularization Selection (StARS)} \citep{liuroederwasserman10} is, as cross-validation, based on the idea of subsampling.  First, define $\Lambda=1/\lambda$ so that small $\Lambda$ corresponds to a more sparse graph. Let $G_n=\{\Lambda_1,\ldots,\Lambda_K\}$ be a grid of regularization
+parameters.
+Let $b=b(n)$ be such that $1<b(n)<n$. We draw $N$ random subsamples $\mathcal{D}_1,\ldots,\mathcal{D}_N$ from $\yb_1,\ldots,\yb_n$ each of size $b$. The estimation of a graph for each $\Lambda\in G_n$ yields
+$N$ estimated edge matrices $\hat{E}_1(\Lambda),\ldots, \hat{E}_N(\Lambda)$. Let $\psi^{\Lambda}(\cdot)$ denote the graph estimation algorithm with the regularization parameter $\Lambda$ and 
+for any subsample $\mathcal{D}_j$ let $\psi_{st}^{\Lambda}(\cdot)$ be equal to one if the estimation algorithm puts an edge between $(s,t)$ and otherwise equal to zero.
+Define the parameters $\theta_{st}^b(\Lambda)=P(\psi_{st}^{\Lambda}(\Yb_1,\ldots,\Yb_n)=1)$ and $\xi^b_{st}(\Lambda)=2\theta_{st}^b(\Lambda)\{1-\theta_{st}^b(\Lambda)\}$ and its estimators 
+$\hat{\theta}_{st}^b(\Lambda)=\frac{1}{N}\sum_{j=1}^N\psi_{st}^{\Lambda}(\mathcal{D}_j)$ and $\hat{\xi}^b_{st}(\Lambda)=2\hat{\theta}_{st}^b(\Lambda)\{1-\hat{\theta}_{st}^b(\Lambda)\}$, respectively.
+Then $\xi^b_{st}(\Lambda)$ is the variance of the Bernoulli indicator of the edge $(s,t)$ and has the following interpretation: For each pair of graphs, we
+$\xi^b_{st}(\Lambda)$ is the fraction of times each pair of graphs disagree on the presence of the edge. For $\Lambda\in G_n$, the quantity $\xi^b_{st}(\Lambda)$ measures
+ instability of the edge across subsamples, with $0\leq \xi^b_{st}(\Lambda)\leq 1/2$. Total instability is defined by averaging over all edges $\hat{D}_b(\Lambda)=\Sigma_{s<t}\hat{\xi}^b_{st}/{p \choose 2}$.
+Let $\overline{D}_b(\Lambda)=\sup_{0\leq t\leq \Lambda}\hat{D}_b(t)$, then StARS approach chooses $\Lambda$ by defining
+$$\hat{\Lambda}_s=\sup\{\Lambda:\overline{D}_b(\Lambda)\leq \beta\}$$ 
+for specified cut point value $\beta$ usually taken to be equal to 0.05.
+\end{enumerate}
+
+\subsection{Measuring the goodness of a model}
+
+The goodness of the estimated precision matrix can be evaluated in terms of: (i) graph accuracy, i.e. how close is its corresponding graph to the
+true graph or (ii) prediction accuracy. BIC, EBIC and StARS are designed for the former and CV, GACV and AIC for the latter.
+\newline
+To measure graph accuracy we use Matthews Correlation Coefficient (MCC)
+$$\MCC=\frac{\TP\times\TN-\FP\times\FN}{\sqrt{(\TP+\FP)(\TP+\FN)(\TN+\FP)(\TN+\FN)}}$$
+and the $F1$ measure
+$$F_1=\frac{2\TP}{2\TP+\FN+\FP},$$
+where {\it True and False Positives} (TP/FP) refer to the estimated edges that are correct/incorrect, and similarly for {\it True and False Negatives} (TN/FN). 
+\citep{baldi2000assessing,powers2011evaluation}. Both, MCC and $F_1$ score, measure the quality of a binary classifier by taking into account both true positives and negatives.
+The $F_1$ score takes values in the interval $[0,1]$ and the MMC in the interval $[-1,1]$. The larger the values of these measures the better the classifier is. Prediction accuracy we measure by KL-information.
+\par
+Depending on whether we are interested in graph identification or prediction we should use different methods for choosing the regularization parameter (see Section \ref{sec3:KLexample}).
+\newline
+If the aim is graph estimation then the criteria BIC, EBIC and StARS are appropriate. Aim of these Most of them are graph selection consistency, which means that when the sample size goes to infinity they will identify the true graph.
+The BIC is shown to be consistent for penalized graphical models with adaptive LASSO and SCAD penalties for fixed $p$ \citep{lian2011shrinkage,gao2012tuning}. Numerical results suggest that
+BIC is not consistent with the LASSO penalty  \citep{foygel2010ebic,gao2012tuning}. When also $p$ tends to infinity EBIC is shown to be consistent for the graphical LASSO, 
+though only for decomposable graphical models  \citep{foygel2010ebic}. The disadvantage of EBIC is that it includes an additional parameter $\gamma$ that needs to be tuned. \citet{gao2012tuning} set $\gamma$ to one and show that in 
+this case EBIC is consistent with the SCAD penalty. StARS has the property of partial sparsistency which means that
+when the sample size goes to infinity all the true edges will be included in the selected model \citep{liuroederwasserman10}. 
+\newline
+On the other hand, Cross-validation (CV), Generalized Approximate Cross Validation (GACV) and AIC are methods for evaluating prediction accuracy. 
+Cross-validation and AIC are both estimators of Kullback-Leibler (KL) loss \citep{yanagihara2006bias}, which under some assumptions are asymptotically
+equivalent \citep{stone1977asymptotic}. Generalized Approximate Cross Validation is also an estimator of KL loss since it is  derived as an approximation to
+leave-one-out cross-validation \citep{lian2011shrinkage}. Advantage of AIC and GACV is that they are not as computationally expensive as CV. In the next chapter 
+we propose two new estimators of Kullback-Leibler loss. We also show how they can be used for graph estimation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+In this chapter, we reviewed undirected graphical models which are widely used to model conditional independence relationships. We focused on a special class, Gaussian graphical models(GGMs), for which
+the pattern of zeros in the precision matrix determines the conditional independence relationships. When the number of variables is large compared to the sample size, we introduced penalized likelihood 
+estimation of GGMs. The Kullback-Leibler (KL) information was introduced as a criterion to evaluate statistical models. Various estimators of KL, such as the Akaike's Information Criterion (AIC), Cross Validation (CV)
+and Generalized Approximate Cross Validation (GACV) for Gaussian graphical models were presented. These criteria yield an estimator of a precision matrix which has good predictive power. For graph estimation we presented the Bayesian
+Information Criterion (BIC), Extended Bayesian Information Criterion (EBIC) and Stability Approach to Regularization Selection (StARS). 

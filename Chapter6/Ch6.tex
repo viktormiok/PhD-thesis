@@ -1,0 +1,242 @@
+\chapter{Aberrant methylation-mediated silencing of microRNAs contributes to HPV-induced anchorage independence \\ {\footnotesize (\textit{Wilting, S. M., Miok, V., Jaspers, A., Boon, D., Sorgard, H., Lando, M., Snoek, B. C., van Wieringen, W. N., Meijer, C.J.L.M., Lyng, H., Snijders, P.J.F., Steenbergen, R.D.M., Oncotarget (2016), 7(28): 43805-43819})}}
+\chaptermark{HPV-induced anchorage independence}
+\label{chapter:Window estimator}
+
+\graphicspath{{Chapte6/Figs/}{Chapter6/Figs/PDF/}{Chapter6/Figs/}}%
+
+Cervical cancer and a subset of anogenital and head-and-neck carcinomas are caused by high-risk types of the human papillomavirus (hrHPV). During hrHPV-induced malignant transformation keratinocytes become able to grow anchorage independently, a tumorigenic trait at least partly associated with inactivation of tumor suppressor genes. We used hrHPV-containing keratinocytes to investigate the role of DNA methylation-mediated silencing of microRNAs (miRNAs) in the acquisition of anchorage independence.
+
+Anchorage dependent (n=11) and independent passages (n=19) of 4 hrHPV-immortalized keratinocyte cell lines were treated with 2'-deoxy-5-azacytidine (DAC). Genome-wide miRNA expression profiles before and after treatment were compared to identify miRNAs silenced by methylation. Bisulfite sequencing and methylation-specific PCR showed increased methylation of hsa-mir-129-2/-137/-935/-3663/-3665 and -4281 in anchorage independent HPV-transformed keratinocytes and cervical cancer cell lines. Mature miRNAs derived from hsa-mir-129-2/-137/-3663 and -3665 showed functional relevance as they decreased anchorage independence in cervical cancer cell lines. Cervical (pre)cancerous lesions demonstrated increased methylation of hsa-mir-129-2/-935/-3663/-3665 and -4281, underlining the clinical relevance of our findings.  
+
+In conclusion, methylation-mediated silencing of tumor suppressive miRNAs contributes to acquisition of an anchorage independent phenotype. This study further substantiates the importance of miRNAs during early stages of carcinogenesis and underlines their potential as both disease markers and therapeutic targets.
+\\
+\\
+This chapter corresponds to the article:\\
+ Wilting, S. M., Miok, V., Jaspers, A., Boon, D., Sorgad, H., Lando, M., Snoek, B. C., van Wieringen, W. N., Meijer, C. J. L. M., Lyng H., Snijders, P. J. F. and Steenbergen, R. D. M. (2016). Aberrant methylation-mediated silencing of microRNAs contributes to HPV-induced anchorage independence. \textit{Oncotarget}, 7(28): 43805-43819.
+
+\section{Introduction}
+
+Persistent infection with high-risk types of the human papillomavirus (hrHPV) is causally related to virtually all cervical cancers as well as a subset of other anogenital and head and neck carcinomas. 
+
+Normally, the viral life cycle of HPV is tightly linked to differentiation of the infected epithelium, resulting in very low expression of the viral oncogenes E6 and E7 in the basal dividing cells. In so-called transforming infections deregulated expression of E6 and E7 is found in the dividing cells. This aberrant expression results in uncontrolled cell proliferation and subsequent genetic instability. The latter is considered a driver of further cellular transformation \cite{Doorbar2006}. Previous studies in which primary keratinocytes were transfected with either full length hrHPV types or with the viral oncogenes E6/E7 showed that hrHPV-induced transformation involves 4 distinct phenotypic stages: extended life span, immortality, anchorage independence and tumorigenicity \cite{Chen1993, Schutze2014}.
+
+Anchorage independent growth is considered a crucial step in carcinogenesis and is often considered as surrogate marker for complete transformation in vitro \cite{Freedman1974, Mori2009}. Epithelial cells are dependent on proper cell-cell and cell-matrix interactions (“anchors”) for both differentiation and proliferation. Loss of these interactions results in aberrant integrin signaling and subsequent induction of anoikis (detachment-induced cell death). Cancerous epithelial cells were shown to use various strategies to circumvent anoikis, including adaptation to the new environment by epithelial-to-mesenchymal (EMT) like de-differentiation or integrin switching, constitutive activation of survival and proliferation pathways, and temporary dormancy through either autophagy or entosis (reviewed by \cite{Guadamillas2011}). Cell fusion studies have shown that anchorage independence of hrHPV-transformed cells relies on a recessive event, suggesting that inactivation of tumor suppressor genes is involved in bypassing anoikis \cite{Chen1993}. In support of this, functional loss of tumor suppressive host genes Caveolin-1, SOCS1, TAp63$\beta$, LKB1, CADM1, MAL, hsa-miR-34c-3p/5p and hsa-miR-203 was shown to affect anchorage independent growth of HPV-transformed cells \cite{Khalifa2011, Kamio2004, Mack2013, Overmeer2009, Razani2000, Steenbergen2004, Wilting2013,Lopez2011}. 
+
+Epigenetic changes, represent an important mechanism for the silencing of tumor suppressor genes. In cervical cancer, DNA methylation-mediated silencing of a rapidly growing number of coding and non-coding genes is being found and functional relevance has been demonstrated for part of these genes \cite{Steenbergen2014, Szalmas2009, Wentzensen2009}. In cervical cancer increased methylation has been shown for a number of miRNAs, including hsa-mir-34b, -95, -124, -125b1, -149, -203, -214, and -375 \cite{Wilting2013, Botezatu2011, Soto2012, Wang2013, Wilting2010, Yao2013, Zhu2013}. However, so far a systematic investigation of the involvement of aberrantly methylated miRNAs in hrHPV-induced transformation is lacking. 
+
+In this study we used a well characterized in vitro model system consisting of 4 hrHPV-containing keratinocyte cell lines to thoroughly investigate the contribution of DNA methylation-mediated silencing of miRNAs to hrHPV-mediated transformation \cite{Steenbergen1996}. To this end genome-wide miRNA expression profiles were generated during different stages of transformation with and without demethylating 2'-deoxy-5-azacytidine (DAC) treatment. To select miRNAs (potentially) silenced by methylation, DAC-induced fold changes in mature miRNA expression were combined with DNA methylation levels measured by Infinium HumanMethylation450 BeadChip. Bisulfite sequencing and methylation-specific PCR (MSP) analysis were performed to verify DNA methylation both in cell lines and cervical (pre)cancerous tissue specimens. In addition, for all miRNAs that showed increased DNA methylation during HPV-induced transformation we determined effects of their ectopic expression on viability and anchorage independence of cervical cancer cell lines SiHa and CaSki.
+\begin{table}[htbp]
+  \centering
+  \caption{Passage numbers included for all 4 hrHPV-transformation cell lines. FK16A and FK16B contain HPV16, wheres FK18A and Fk18B contain HPV18. Grey shaded passages represent anchorage dependent cells, whereas non-shading passages are able to grow anchorage independently.}
+    \begin{tabular}{ccccc}
+    \hline\hline
+    \textbf{Time point} & \textbf{FK16A } & \textbf{FK16B } & \textbf{FK18A } & \textbf{FK18B } \\
+    \hline
+    T1    & \cellcolor[rgb]{ .753,  .753,  .753}p18 & \cellcolor[rgb]{ .753,  .753,  .753}p21 & \cellcolor[rgb]{ .753,  .753,  .753}p19 & \cellcolor[rgb]{ .753,  .753,  .753}p17 \\
+    T2    & \cellcolor[rgb]{ .753,  .753,  .753}p22 & \cellcolor[rgb]{ .753,  .753,  .753}p22 & \cellcolor[rgb]{ .753,  .753,  .753}p21 & \cellcolor[rgb]{ .753,  .753,  .753}p18 \\
+    T3    & \cellcolor[rgb]{ .753,  .753,  .753}p39 & p45   & p47   & p40 \\
+    T4    & \cellcolor[rgb]{ .753,  .753,  .753}p52 & p51   & p60   & p52 \\
+    T5    & p109  & p89   & p92   & p90 \\
+    T6    & p115  & p102  & p99   & p98 \\
+    T7    & p206  & p140  & p148  & p146 \\
+    T8    & p222  & p169  & p160  & p164 \\
+    \hline\hline
+    \end{tabular}%
+  \label{table:table1}%
+\end{table}%
+
+\section{Results}
+
+\textbf{Anchorage independence coincides with marked changes in overall miRNA expression}
+\\
+To study methylation-mediated silencing of miRNAs during HPV-induced transformation, we investigated 4 independent HPV-transformed keratinocyte cell lines at different stages during transformation. miRNA expression was determined in all 4 cell lines at 6-8 different passages (hereafter referred to as timepoints) with and without demethylating DAC treatment (Table \ref{table:table1}). First we determined whether the selected timepoints represent distinct stages during HPV-induced transformation. hTERT expression, reflecting telomerase activation, was detectable at all timepoints for FK16A, FK16B and FK18A, suggesting that cells at all timepoints were already immortal (Figure \ref{fig:figure1} A). In the first 2 timepoints of FK18B virtually no hTERT expression was detectable indicating these cells are still in their extended lifespan stage (Figure \ref{fig:figure1}A). These findings are in concordance with previous telomerase activity assays done on these cell lines \cite{Steenbergen1996}. From all 4 cell lines both anchorage dependent and anchorage independent (i.e. fully transformed) timepoints were included (Table \ref{table:table1} and Figure \ref{fig:figure1}A). Therefore our experimental set up allows further investigation of the contribution of methylation-mediated miRNA silencing to acquisition of anchorage independence. 
+
+Interestingly, unsupervised clustering analysis of the baseline miRNA expression profiles (without DAC treatment) showed a clear distinction between anchorage dependent and anchorage independent timepoints in FK16A, FK16B and FK18B (Figure \ref{fig:figure1}B, \ref{fig:figure1}C and \ref{fig:figure1}E). The highest anchorage dependent timepoint (T3) of FK18A clustered together with subsequent anchorage independent timepoints, suggesting that these FK18A T3 cells were on the verge of anchorage independence (Figure \ref{fig:figure1}D). The stability of the clustering patterns was corroborated by consensus clustering \cite{Monti2003}. These results indicate that changes in miRNA expression are associated with the acquisition of anchorage independence.  
+\\
+\\
+\textbf{Identification of miRNAs silenced by methylation during HPV-induced transformation}
+\\
+Next we compared miRNA expression between DAC treated and untreated cells of all timepoints per cell line. Figure \ref{fig:figure2} summarises the selection procedure we used to identify the most promising methylation candidates. 
+
+  In total 104 CpG-island associated miRNA genes (as defined in Materials $\&$ Methods) encoding 126 mature miRNAs were included in the analysis. Per cell line we selected 1) the 25 miRNAs showing the highest upregulation upon DAC treatment over all timepoints and 2) the 25 miRNAs with the highest upregulation in anchorage independent timepoints. The resulting lists of candidate miRNAs were compared between the 4 cell lines and miRNAs were selected for further investigation if they were identified in 2 or more cell lines. This was the case for  57 mature miRNAs corresponding to 45 miRNA genes. An additional 16 mature miRNAs were only selected in 1 of the 4 cell lines and were therefore discarded from further analysis ( \cite{Supp2018} Table 6.1.).
+
+  DNA methylation was measured for 40 of the 45 selected miRNA gene loci in primary keratinocytes (HFK) of 2 donors, FK16A T8, FK16B T7, FK18A T6 and FK18B T7 (all anchorage independent) using an Infinium HumanMethylation450 BeadChip. Genes showing 1) low methylation levels in primary keratinocytes (<25$\%$), 2) at least 50$\%$ methylation in (part of) the HPV-transformed keratinocytes, and 3) a minimal increase in methylation of 30$\%$ from primary keratinocytes to HPV-transformed keratinocytes, were selected. In addition, we also selected the 5 miRNA genes for which no probes were available on the BeadChip. This resulted in selection of the following 10 miRNA genes for further investigation: hsa-mir-129-2, -137, -615, -675, -935, -2277, -3663, -3665, -4281, and -4323.
+\begin{figure}[h!]
+\centering
+\begin{tabular}{cc} 
+\includegraphics[scale=2.5]{Figure1.jpg}
+\end{tabular}
+\caption{Characterisation of our longitudinal in vitro model system of hrHPV-induced transformation. In A. anchorage dependent (grey) and independent (white) timepoints (T) of all 4 cell lines are shown in relation to the transformation process. Unsupervised hierarchical cluster results based on overall miRNA expression are shown for B. FK16A, C. FK16B, D. FK18A, and E. FK18B. Anchorage dependent timepoints are marked in grey, whereas anchorage independent timepoints are white. }
+\label{fig:figure1}
+\end{figure}
+\\
+\\
+\textbf{Bisulfite sequencing analysis of the regulatory sequences of selected miRNA genes}
+\\
+Bisulfite sequencing was performed on HFKs, anchorage independent HPV-transformed keratinocytes (FK16/18A/B), and cervical cancer cell lines (SiHa, HeLa or CaSki). For all 10 selected miRNA genes a region between 1000-500bp directly upstream of the transcription start site (TSS) was sequenced. Differential methylation in HPV-transformed keratinocytes and cancer cell lines compared to HFK was observed for hsa-mir-129-2, -137, -935 -3663, -3665, and -4281 (Figure \ref{fig:figure3}A, B, E, G, H, and I, respectively). For hsa-mir-615 methylation was only observed in cervical cancer cells and not in HPV-transformed keratinocytes (Figure \ref{fig:figure3}C), suggesting this to be a late event. No methylation was observed upstream of hsa-mir-2277 in any of the cells tested (Figure 3F). On the other hand, methylation upstream of hsa-mir-675 and -4323 was already observed in primary keratinocytes without HPV (Figure \ref{fig:figure3}D and J). Based on these results, hsa-mir-675, -2277, and -4323 were excluded from further analyses. 
+\begin{figure}[h!]
+\centering
+\begin{tabular}{cc} 
+\includegraphics[scale=3]{Figure2.jpg}
+\end{tabular}
+\caption{Schematic overview of the analysis pipeline used to select the most promising potential methylation targets.}
+\label{fig:figure2}
+\end{figure}
+\\
+\\
+\textbf{Aberrant hsa-mir-129-2, -137, -935, -3663, -3665, and -4281 methylation is common in HPV-transformed cells}
+\\
+To allow sensitive methylation analysis in larger numbers of samples, methylation-specific PCR (MSP) assays were designed for hsa-mir-129-2, -137, -615, -935, -3663, -3665, and -4281. Using the sequencing data described above we specifically designed primers to target the most differentially methylated region close to the TSS of the miRNA genes (indicated with grey arrows in Figure \ref{fig:figure3}). MSP was performed on HFKs of 3 independent donors, anchorage independent passages of all 4 HPV-transformed keratinocyte cell lines (FK16A, FK16B, FK18A and FK18B) and the cervical cancer cell lines SiHa, HeLa, and CaSki (Figure \ref{fig:figure4}). For hsa-mir-129-2 and -3663 no methylation was observed in any of the HFKs, whereas all HPV-transformed keratinocytes and cervical cancer cell lines showed clear methylation (Figure 4A and E). Concordant with sequencing results, methylation for hsa-mir-615 was only observed in the cervical cancer cell lines (Figure \ref{fig:figure4}C and \ref{fig:figure3}C). For hsa-mir-137, -935, -3665, and -4281 low levels of methylation were observed in part of the primary keratinocytes, but methylation clearly increased in most HPV-transformed keratinocytes and cervical cancer cell lines. The fact that with sequencing no methylation was observed for these miRNAs in HFK (Figure \ref{fig:figure3}B, E, H and I) is probably due to the higher analytical sensitivity of MSP compared to sequencing \cite{Eads2000, Kristensen2009}.  These results show that hsa-mir-129-2, -137, -935, -3663, -3665, and -4281 become hypermethylated during HPV-induced transformation. Methylation of hsa-mir-615, on the other hand, was only observed in cervical cancer cells and therefore does not seem to contribute to the process of transformation.
+\begin{figure}[h!]
+\centering
+\begin{tabular}{cc} 
+\includegraphics[scale=3.2, angle =270]{Figure3.jpg}
+\end{tabular}
+\caption{Bisulfite sequencing results of selected genomic regions in primary keratinocytes (HFK), HPV-transformed keratinocytes and cervical cancer cells. Results are shown for A. hsa-mir-129-2, B. hsa-mir-137, C. hsa-mir-615, D. hsa-mir-675, E. hsa-mir-935, F. hsa-mir-2277, G. hsa-mir-3663, H. hsa-mir-3665, I. hsa-mir-4281, and J. hsa-mir-4323. Methylation-independent sequencing primers are indicated by black arrows and methylation-specific MSP primers are indicated by grey arrows. TSS; transcription start site.}
+\label{fig:figure3}
+\end{figure}
+\\
+\\
+\textbf{miRNA silencing by DNA methylation contributes to anchorage independent growth}
+\\
+Next, we investigated whether silencing of the identified six hypermethylated miRNA genes contributes to the ability to grow anchorage independently. For this purpose the corresponding mature miRNAs from the DAC screen were ectopically expressed in SiHa and CaSki cells, both of which were methylated for all six miRNA genes (Figure \ref{fig:figure3}). Successful transfection of all mimics was verified by (quantitative) RT-PCR (data not shown). Subsequently effects on cell viability (Figure \ref{fig:figure5}A) and anchorage independence were determined (Figure \ref{fig:figure5}B). Based on the variation observed between replicate control experiments, only effects larger than 30$\%$ compared to the control transfected cells were considered true effects. miR-129-2-3p and -137 reduced both cell viability and anchorage independence in both cell lines tested. miR-4281 did not show any effect on viability and anchorage independence in either cell line. miR-129-5p reduced viability in both cell lines whereas anchorage independence was only reduced by this miRNA in SiHa. miR-3663-3p and -3665 modestly reduced viability and anchorage independence in CaSki but not in SiHa cells. However, a borderline reduction in anchorage independence was observed in SiHa cells as well. Finally, miR-935 modestly reduced viability in SiHa but not in CaSki cells. Together, these results support the functional relevance of methylation-mediated silencing of miRNAs for HPV-induced transformation.
+\begin{figure}[h!]
+\centering
+\begin{tabular}{cc} 
+\includegraphics[scale=2.5]{Figure4.jpg}
+\end{tabular}
+\caption{MSP results for selected miRNA genes in 3 cervical cancer cell lines (SiHa, HeLa, CaSki), primary keratinocytes (HFK) of 3 independent donors, and anchorage independent passages of 4 HPV-transformed keratinocytes cell lines (FK16A, FK16B, FK18A, and FK18B). Results are shown for A. mir-129-2, B. mir-137, C. mir-615, D. mir-935, E. mir-3663, F. mir-3665, G. mir-4281, and H. ACTB (reference gene). In vitro methylated DNA (IVD) and unmodified DNA were included as positive and negative controls, respectively.}
+\label{fig:figure4}
+\end{figure}
+\\
+\\
+\textbf{Increased methylation of hsa-mir-129-2, -935, -3663, -3665, and -4281 in cervical (pre)cancers}
+\\
+To verify the clinical relevance of our findings, methylation of mir-129-2, -137, -935, -3663, -3665 and -4281 was quantitatively determined in tissue specimens of normal cervical epithelium (n=22), CIN3 lesions (n=23), and SCCs (n=28). A significant increase in methylation levels with disease severity was observed for hsa-mir-129-2, -935, and -3663 (Figure \ref{fig:figure6}A, C and D). For mir-4281 the increase in methylation from normal to CIN3 lesions was only borderline significant (p =0.059) but a significant increase was seen in SCCs compared to both normal and CIN3 samples (Figure \ref{fig:figure6}F). Methylation of mir-3665 was absent in the large majority of samples but still showed a significant increase in SCCs (Figure \ref{fig:figure6}E). On the other hand, hsa-mir-137 showed relatively high methylation levels in all samples with a small, non-significant, increase in SCCs (p=0.089). 
+In summary, methylation of hsa-mir-129-2, -935, -3663, -3665 and -4281 increases with disease severity in cervical tissue specimens. 
+\begin{figure}[h!]
+\centering
+\begin{tabular}{cc} 
+\includegraphics[scale=2.5]{Figure5.jpg}
+\end{tabular}
+\caption{Functional effects of miRNAs silenced by methylation on HPV-induced transformation. Effects of ectopic expression of mimics of all mature miRNAs derived from the methylated gene loci that showed a DAC effect (miR-129-5p, -129-2-3p, -137, -935, -3663, -3665, and -4281) were determined on A. cell viability and B. anchorage independent growth. Dashed lines indicate the threshold of 30$\%$ we used to discriminate true effects from random variation. Results are representative of 2 independent experiments.}
+\label{fig:figure5}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{cc} 
+\includegraphics[scale=2.5]{Figure6.jpg}
+\end{tabular}
+\caption{Methylation levels of selected miRNA genes relative to the reference gene (ACTB) in normal cervical tissue specimens (n=22), CIN3 lesions (n=23) and SCCs (n=28).  Results are shown for A. hsa-mir-129-2, B. hsa-mir-137, C. hsa-mir-935, D. hsa-mir-3663, E. hsa-mir-3665, and F. hsa-mir-4281. ** indicates a two-sided p-value <0.001 (non-parametric Wilcoxon rank test).}
+\label{fig:figure6}
+\end{figure}
+
+\section{Discussion}
+
+This study systematically investigated the contribution of methylation-mediated silencing of miRNAs to hrHPV-induced transformation over time. Using an unbiased longitudinal approach, we identified 6 miRNA genes showing progressive silencing by methylation during HPV-induced transformation (hsa-mir-129-2, -137, -935, -3663, -3665, and -4281). Mature miRNAs derived from hsa-mir-129-2, -137, -3663, and -3665 reduced cell viability and/or anchorage independent growth to various extents in SiHa and CaSki cervical cancer cells. 
+
+Unsupervised hierarchical clustering showed for the first time that anchorage dependent and anchorage independent timepoints within the same cell line could be discriminated based on their basal miRNA expression profiles. These clustering results suggest that alterations in miRNA expression are strongly associated with anchorage independent growth.
+
+According to our definition only around 10$\%$ of the mature miRNAs measured were considered to come from CpG-island associated miRNA genes. This stringent definition limited the number of miRNAs included in the analysis. However, it was shown that in general DNA methylation in the region directly surrounding the TSS is most strongly associated with transcriptional silencing \cite{Brenet2011}. We were able to validate methylation for 2/3rd of genes showing strong DAC-induced re-expression. The majority of these genes were already methylated in primary keratinocytes, a phenomenon observed by Lujambio et al as well \cite{Lujambio2008}. 
+
+Methylation of hsa-mir-129-2 has been described before in gastric, colorectal, renal, kidney, hepatocellular, esophageal, and endometrial carcinomas as well as in osteosarcomas \cite{Anwar2013, Bandres2009, Chen2012, Chen2013, Huang2009, Long2015, Lu2013, Shen2010, Tsai2011}. Interferon-$\beta$ dependent induction of hsa-miR-129-5p in cervical cancer cells was shown to reduce E6 and E7 expression via targeting of SP1 \cite{Zhang2013}. Additional targets described for hsa-miR-129-5p include SOX4, GALNT1, and VCP \cite{Chen2013, Huang2009, Long2015, Shen2010}. Hsa-miR-129-2-3p, which strongly reduced anchorage independence as well, was previously shown to reduce the levels of phosphorylated FAK protein and MMP2 and 9 proteins in renal carcinoma cells \cite{Chen2014}. Interestingly, altered activation of the FAK signaling pathway has previously been described in HPV-immortalized keratinocytes and cervical cancer cell lines and was linked to invasion and anchorage independence \cite{McCormack1997, Schwock2009, Srivastava2015}. 
+
+Methylation of hsa-mir-137 has been described in oral and other head-and-neck, lung, bladder, breast, gastric, and colorectal cancers, glioblastomas, and neuroblastomas \cite{Bandres2009, Balaguer2010, Bier2013, Chen2011, Du2012, Kozaki2008, Langevin2010, Langevin2011, Shimizu2013, Steponaitiene2015, Takwi2014, Vrba2013, Wiklund2011}.  Remarkably, in our hands hsa-miR-137 strongly reduced viability and anchorage independent growth but did not show increased methylation in (pre)cancerous tissue biopsies. Tumor suppressive effects were described for hsa-miR-137 before \cite{Balaguer2010, Kozaki2008} and in other cancer types cancer-specific methylation of mir-137 was observed as well. However, also in these studies, differences between normal and cancer were small (on average $\sim$3x increase). Comparable to our results, also in these studies high background methylation was observed in normal samples \cite{Balaguer2010, Steponaitiene2015, Wiklund2011}. Described targets of hsa-miR-137 so far include CDK6, LSD1, RTVP1, CAR and CDC42 \cite{Balaguer2010, Bier2013, Kozaki2008, Takwi2014, Silber2008, Zhu2013}. Increased expression of CDC42 is found in cervical (pre)cancers and was shown to promote formation of filopodia/pseudopodia thereby facilitating migration, a phenotype associated with anchorage independence as well \cite{Ruiz2015, Ye2015}. 
+
+To the best of our knowledge, methylation of the other miRNA genes identified in this study has not been described before. Hsa-miR-935 was shown to be downregulated in medulloblastoma \cite{Genovesi2011}, whereas hsa-miR-3663-3p and -4281 conversely were found upregulated in malignant melanoma \cite{Sand2013}. Hsa-miR-4281 and -935 did not influence anchorage independence, but they were specifically hypermethylated in (pre)cancers. Our results suggest that methylation of these miRNA genes is a relatively late event. Potentially, ectopic expression of these miRNAs therefore would have an influence on later phenotypes, such as invasion and tumorigenicity.   
+
+Mature miRNAs derived from 4 out of 6 identified silenced miRNA genes reduced anchorage independent growth. This fact underlines the value of longitudinal in vitro model systems for the identification of (epi)genetic events that contribute to (HPV-induced) transformation. In addition, significantly increased methylation levels of hsa-mir-129-2, -935, -3663, -3665, and -4281 were observed in cervical high-grade precancerous lesions (CIN3) and SCCs compared to normal cervical epithelium as well. This underscores the clinical relevance of our in vitro findings. The methylation status of these genes in low-grade cervical lesions (CIN1) and the heterogeneous group of CIN2 lesions, believed to encompass both low-grade and high-grade cervical precancerous disease \cite{Wilting2016}, will be subject of future studies. In addition, these studies will address the potential marker value of the identified miRNA genes in cervical scrapes and self-collected cervico-vaginal specimens.   
+
+In summary, this study has shown that acquisition of anchorage independence during HPV-induced transformation in vitro is accompanied by clear changes in overall miRNA expression, which is partly attributable to aberrant DNA methylation. Mature miRNAs derived from genes silenced by methylation affected the ability of cervical cancer cells to grow anchorage independently, underlining the relevance of miRNA silencing for anchorage independent growth.  Methylation levels of hsa-mir-129-2, -935, and -3663 were significantly higher in high-grade precancerous cervical lesions, suggesting these genes might represent promising biomarkers for the detection of precancerous lesions with a high immediate risk of cancer.
+
+
+\section{Materials and methods}
+
+\textbf{Cell lines and clinical specimens}
+\\
+Establishment and culture of the HPV16 (FK16A and FK16B) and HPV18 (FK18A and FK18B) immortalized keratinocyte cell lines has been described previously \cite{Steenbergen1996}. Cervical carcinoma cell lines SiHa, HeLa and CaSki were obtained from the American Type Culture Collection (Manassas, VA, USA) and cultured as described previously \cite{Steenbergen2001}. Primary human foreskin keratinocytes (HFKs) were isolated and cultured as described previously \cite{Steenbergen1996}. From all 4 HPV-immortalized keratinocyte cell lines 6 to 8 different passage numbers (Table \ref{table:table1}), including both anchorage dependent (grey shading in Table \ref{table:table1}) and anchorage independent (no shading in Table \ref{table:table1}) cells, were selected. To analyze the effect of methylation inhibition on the expression of miRNAs over time, cells were treated daily for 5 days with 5000 nM 5-aza-2'-deoxycytidine (DAC; Sigma-Aldrich, Zwijndrecht, The Netherlands) dissolved in PBS. 
+
+Formalin-fixed paraffin-embedded (FFPE) biopsies of 22 normal cervical squamous epithelial samples, 23 CIN3 lesions, and 28 SCCs were used. hrHPV testing of all biopsies was performed using the general primer GP5+/6(+)-mediated PCR-enzyme immunoassay method using a probe cocktail of 14 hrHPV types \cite{Jacobs1997}. hrHPV was detected in 0$\%$ of normals, 96$\%$ of CIN3, and 100$\%$ of SCCs. The average age was 47.1 years (range 32-77) in the normal group, 34 years (range 26-45) in the CIN3 group and 48.2 years (range 30-85) in the SCC group. According to the International Federation of Gynecology and Obstetrics (FIGO) staging system all SCCs were stage I or II. All biopsies were collected during the course of routine clinical practice at the Department of Obstetrics and Gynaecology at the VU University Medical Center (Amsterdam). This study followed the ethical guidelines of the Institutional Review Board of the VU University Medical Center.
+\\
+\\
+\textbf{RNA/DNA isolation and DNA modification}
+\\
+Total RNA was isolated using TRIzol Reagent according to the manufacturer’s instructions (Life Technologies, Carlsbad, CA, USA). RNA integrity was determined by gel electrophoresis. Total DNA was isolated from cell lines using the PurelinkTM Genomic DNA Minikit (Life Technologies). DNA from FFPE biopsies was isolated by standard proteinase K digestion followed by phenol-chloroform purification \cite{VanZeeburg2005}.
+Genomic DNA was modified using the EZ DNA Methylation kit (D5002, Zymo Research), which induces chemical conversion of unmethylated cytosines into uracils, whereas methylated cytosines are protected from this conversion.
+\\
+\\
+\textbf{miRNA microarrays}
+\\
+Global miRNA expression profiles were determined in DAC treated and untreated cells using human miRNA microarrays (Sureprint G3 human v16 miRNA 8x60K; Agilent Technologies, Santa Clara, CA, USA) according to the manufacturer's instructions. These arrays contain 1205 human miRNAs based on the Sanger miRBase release 16. Microarray data are available from the NCBI Gene Expression Omnibus (GEO) through series accession number GSE78279\\ (http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE78279).\\
+\\
+\\
+\textit{Data pre-processing}
+\\ 
+Probes corresponding to human miRNAs were selected and weakly correlating replicates of the same probe were removed. Data was normalized per treatment group using the robust quantile method and transformed using a variance stabilizing transformation \cite{Boldstad2003, Huber2002}. The obtained values were averaged per probe for further analysis.
+\\
+\\
+\textit{Cluster analysis}
+\\
+Unsupervised hierarchical clustering was performed per cell line on complete miRNA expression profiles of untreated cells to explore the overall similarities in miRNA expression using maximum as distance measure and Ward’s linkage. 
+\\
+\\
+\textit{Identification of potentially methylated miRNAs}
+\\
+To reduce identification of miRNAs indirectly affected by DAC treatment, only miRNAs with a CpG island close to the TSS were included for downstream analysis. For this we investigated whether (part of) the region ranging from 50 basepairs (bp) upstream to 25 bp downstream of the miRNA gene TSS was embedded in a CpG island according to the UCSC Genome Browser (www.genome.ucsc.edu) (GRCh37/hg19 assembly). Regions with a significantly higher density of CpG dinucleotides than found on average in the whole genome are considered CpG islands if 1) the GC content is at least 50$\%$, 2) the region length is greater than 200 base pairs, and 3) the ratio of the observed number of CpG dinucleotides to the expected number based on the total number of Gs and Cs in the region is greater than 0.6 (ref \cite{Gardiner1987}).
+
+For all miRNAs having a CpG island in close genomic proximity, fold changes were calculated between DAC-treated and untreated cells per timepoint and cell line. Subsequently, miRNAs were ranked on this fold change in decreasing order and the top-25 miRNAs with the lowest median rank number over all passages were selected per cell line. In addition, we also selected the top-25 ranked miRNAs that showed the biggest difference between anchorage-dependent and anchorage-independent passages per cell line.
+\\
+\\
+\textbf{Infinium HumanMethylation450 BeadChip analysis}
+\\
+Genome-wide methylation profiles were yielded from primary keratinocytes of 2 independent donors and FK16A T8, FK16B T7, FK18A T6 and FK18B T7 (see Table \ref{table:table1}) by Infinium HumanMethylation450 BeadChip (Illumina, San Diego, CA, USA) according to the manufacturer's instructions. This platform interrogates 485 000 methylation sites, covering 99$\%$ of RefSeq genes and including miRNA promoter regions. 
+%Data are available from the NCBI Gene Expression Omnibus (GEO) through series accession number\\ GSE78279 (http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE78279).
+\\
+\\
+\textit{Data pre-processing}
+\\
+Data was processed and normalized using the pipeline described by Touleimat and Tost, which takes into account the different chemistry of class I and class II probes and returns Beta values representing the percentage of methylation for that particular CpG dinucleotide \cite{Touleimat2012}.
+\\
+\\
+\textit{Selection of methylated miRNAs}
+\\
+Probes assigned to miRNA genes were selected and Beta values were compared between primary keratinocytes and HPV-transformed keratinocytes. Probes showing 1) low methylation levels in primary keratinocytes (<25$\%$), 2) at least 50$\%$ methylation in (part of) the HPV-transformed keratinocytes, and 3) a minimal increase in methylation of 30$\%$ from primary keratinocytes to (part of) HPV-transformed keratinocytes were selected.
+\\
+\\
+\textbf{Bisulfite sequencing}
+\\
+Bisulfite sequencing was performed on a 500-1000bp region directly upstream of the TSS in primary keratinocytes, HPV-transformed keratinocytes and cervical cancer cell lines SiHa, HeLa and/or CaSki. Sequencing primers are listed in Table 2A and primer locations are depicted in Figure \ref{fig:figure3}. Sequencing was performed on an AB 3500 Genetic Analyzer (Life Technologies) using the Big dye terminator v3.1 sequencing kit (Life Technologies) according to the manufacturer’s instructions.
+
+\textbf{(Quantitative) methylation-specific PCR ((q)MSP) analysis}
+\\
+MSP analysis was performed as described previously for selected miRNAs \cite{Overmeer2009}. Primers were designed to amplify the methylated DNA sequence of the selected genomic region (Table 2B and Figure \ref{fig:figure3}). In addition, the modified sequence of the housekeeping gene $\beta$-actin (ACTB) was amplified to verify sufficient DNA quality and successful DNA modification \cite{Harden2003}. In vitro methylated DNA (IVD, Qiagen, Venlo, The Netherlands) and unmodified DNA were included as positive and negative control respectively.
+
+For hsa-mir-129-2, -137, -935, -3663, -3665, and -4281 a methylation specific probe was used for quantitative measurement of methylation levels as described previously (Table 2B) \cite{Wilting2010}. Assays were run in a multiplex format as described previously on the ABI 7500 Fast Real-Time PCR System (Life Technologies) \cite{Snellenberg2012}. Methylation values were normalised to ACTB using the comparative CT method ($2^{-\Delta CT}$) \cite{Schmittgen2008}.
+\\
+\\
+\textbf{Quantitative Reverse Transcription-PCR (qRT-PCR)}
+\\ 
+Expression of hsa-miR-129-2-3p (assay ID: 001184), hsa-miR-129-5p (assay ID: 00590), hsa-miR-137 (assay ID: 001129), hsa-miR-3663-3p (assay ID: 465775), hsa-miR-935 (assay ID: 002178), and  the small nucleolar RNA transcript RNU43 (assay ID: 001095) was measured using TaqMan microRNA assays following the manufacturer’s instructions (Life Technologies) on the ABI 7500 Fast Real-Time PCR System (Life Technologies). miRNA expression values were normalised to RNU43 using the comparative CT method ($2^{-\Delta CT}$)  \cite{Schmittgen2008}.
+
+For hsa-miR-3665 and hsa-miR-4281 we designed primers following the guidelines described previously (Table 2C) \cite{Chen2005}. Resulting PCR products were cloned using the TOPO TA cloning kit (Life Technologies) and sequenced to verify the specificity of the designed primers (data not shown). hTERT expression was determined using primers and probe described by \cite{Buttitta2003}. Expression levels were normalised to snRNP U1A levels as described before \cite{Henken2012}.
+\\
+\\
+\textbf{Transfection with miRNA mimics}
+\\
+SiHa and CaSki cells were transiently transfected with 30nM of miRIDIAN microRNA mimics for  hsa-miR-129-2-3p (C-301063-01), hsa-miR-129-5p (C-300539-03), hsa-miR-137 (C-300604-07), hsa-miR-3663-3p (C-301543-00), hsa-miR-3665 (C-301545-00), hsa-miR-4281 (C-3018242-00), hsa-miR-935 (C-301264-01) or negative control $\#$2 (CN-00200-01; GE Healthcare Dharmacon Inc., Lafayette, CO 80026, USA) according to the manufacturer's instructions. Cells were transfected for 18 hours using Dharmafect 2 (GE Healthcare Dharmacon Inc.). 
+\\
+\\
+\textbf{Cell viability assay}
+\\
+Cell viability was measured using a colorimetric (MTT-tetrazolium) assay (MP Biomedicals, Santa Ana, CA, USA) as described before \cite{Overmeer2009}. In this assay the amount of dye conversion, as measured by the optical density at a wavelength of 540 nm, is directly related to the number of viable cells in each well. Cells were seeded in triplicate 24 hours after transfection in 96 well plates (2500 cells/well) and viability was measured at day 0 and at day 5. The average measurement of day 0 was subsequently subtracted from the measurement at day 5. Two independent experiments were performed. Based on the variation observed between control transfected cells in separate experiments ($\sim$10$\%$), cell viability was considered to be altered if it deviated by 30$\%$ or more.
+\\
+\\
+\textbf{Anchorage independent growth}
+\\
+Colony formation in soft agar was analyzed as described before \cite{Steenbergen2004}. In short, 24 hours after transfection 5000 cells were suspended in medium containing 0.35$\%$ top agarose (Seaplague agarose; Lonza Group Ltd., Basel, Switzerland) and plated in duplicate on a surface of 0.6$\%$ bottom agarose in 6-cm dishes. Cells were incubated at 37 $^{\circ}$C for 3 weeks and were fed weekly by overlaying the agarose with fresh medium. After 3 weeks colonies were photographed and counted. Two independent experiments were performed. Based on the variation observed between control transfected cells in separate experiments ($\sim$10$\%$), anchorage independent growth was considered to be altered if it deviated by 30$\%$ or more.
+\\
+\\
+\textbf{Statistical analysis}
+\\
+Differences in methylation levels between clinical sample groups were determined using the non-parametric Wilcoxon rank test. A two-sided p value below 0.05 was considered statistically significant.

@@ -1,0 +1,63 @@
+% ******************************* Thesis Conclusion ********************************
+
+\begin{conclusion}
+
+In Chapter \ref{chapter:introduction}, we have displayed Table \ref{ch1:tab1} and Table \ref{ch1:tab2}. The former lists existing methods for choosing the regularization parameter in Gaussian graphical models; the latter contains those for estimating parameters in ordinary differential equations. The results presented in this thesis complement both tables.
+\par
+We have complemented Table \ref{ch1:tab1} with two new methods, the generalized information criterion and the Kullback-Leibler cross-validation. These methods improve the Akaike's information criterion and generalized approximate cross-validation. The purpose of Table \ref{ch1:tab1} is not only to give a summary of the methods and show our contribution, but more importantly, to make a clear distinction between different methods. This distinction with respect to prediction and model selection does not seem to be stressed enough in the literature. For example, usage of cross-validation (CV) for model selection is not uncommon \citep{wang2013class,gao2012tuning} even though it was pointed out that this method is not appropriate for that purpose \citep{liuroederwasserman10,lian2011shrinkage}. However, to our best knowledge, so far it has not been actually proved that cross-validation is not model selection consistent. Therefore, as a step in that direction, we have proved that this claim is true for the Akaike's information criterion (AIC). Since AIC and CV share similar asymptotic properties \citep{shao1997asymptotic,yang2005can} in the regression setting, it is plausible that the same holds for Gaussian graphical models. Moreover, we expect the same result to hold for other methods whose aim is prediction. Thus we conclude and conjecture the following:
+\begin{itemize}
+\item AIC, $K$-CV, GACV, GIC and KLCV are appropriate for prediction but not for model selection.
+\item BIC, EBIC, StARS are appropriate for model selection.
+\end{itemize}
+Another important issue is the generality of the methods. Although the methods we propose have advantages, they rely on the assumption of
+Gaussianity. In regard to this, computational methods $K$-CV and StARS
+are expected to be the most robust with respect to the departure from Gaussianity.
+\newpage
+As for Table \ref{ch1:tab2}, we have both proposed a new method and extended an existing one. The one that we propose, the RKHS approach, can deal with systems of differential equations of a general form. The method is relatively simple to use and produces estimates of the parameters in one step. It has been tested on real and simulated data and it exhibits reasonable performance. However, the drawback is that it relies on the assumption of Gaussianity and its asymptotic properties are unclear. It seems likely that the method is not asymptotically consistent, due to the various approximations we employ.
+\par
+On the other hand, although the second method, the window-based estimator, can be applied only to autonomous systems of differential equations linear in the parameters, it does provide an asymptotically consistent estimator. Although we restrict the class of systems we consider, many applied problems are defined by the systems that belong to this class. The window-based estimator has an explicit form, it is computationally fast and it does not require strong assumptions on the distribution of the data. 
+\par 
+Finally, both methods discussed can be applied only if all states of the system are observed. Estimation of the parameters in the partially observed systems has not been covered in this thesis. In the literature two ways are used to deal with partially observed systems. One way is to use a Bayesian approach  which relies on Gaussian processes \citep{chkrebtii2013bayesian}. The other involves writing the unobserved states as a linear combination of certain basis functions and optimizing with respect to both the parameters of the system and the coefficients of the basis expansion \citep{ramsay2007parameter}. In the case of the window estimator both approaches can be used; this will be the topic of our further research.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{conclusion}
+%Even though in the literature $K$-CV was not suggested for model selection in GGM 
+%\citep{liuroederwasserman10,lian2011shrinkage}, it appears that it is a common practice. 
+%a general method that is commonly used for selecting regularization parameter in Gaussian graphical models. We believe that, using it is a bad practice
+%\cite{liuroederwasserman10,lian2011shrinkage}. In Gaussian graphical models, it is important to differentiate between methods whose aim is prediction and those that are appropriate for model selection. Based on the
+%results from Chapter 3 we conjecture that the following methods are not model selection consistent: AIC, GIC, GACV, KLCV and $K$-CV where $K$ is fixed when $n$ tends to infinity. In this thesis, we provided the proof for AIC when $p$ is fixed. 
+%
+%The weaknesses of the methods we explored in Chapter 3 are that they rely on the assumption of Gaussianity. Still, our analysis shows that even in Gaussian case there are still issues that need to be resolved.
+
+
+%\par
+%One paragraph stating what you researched and what your original contribution to the field is…then break into sections
+%
+%\begin{itemize}
+%\item  One section on what you researched and how you did it
+%\item  One section on what are the main findings were… showinglinks across chapters (this explains why you chose thestructure you did)
+%\item One section on possible areas for future research
+%\end{itemize}
+%
+%\begin{itemize}
+%\item Main finding 1 (subsections on how you arrived at thisfinding and how it challenges previous research)•
+%\item Main finding 2 (subsections on how you arrived at thisfinding and how it challenges previous research)•
+%\item Main finding 3 (subsections on how you arrived at thisfinding and how it challenges previous research)•
+%\item One section on potential leads to openings for further research resulting from your research•
+%\end{itemize}
+%
+%
+%
+%Final section reminding readers of the original contributionand significance of your research to your field
