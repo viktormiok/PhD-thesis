@@ -1,0 +1,459 @@
+% ******************************* PhD Thesis Template **************************
+% Please have a look at the README.md file for info on how to use the template
+
+%\documentclass[a4paper,12pt,custombib,print,index]{Classes/PhDThesisPSnPDF} % Stara varianta
+\documentclass[notitlepage,twoside,10pt,openright,leqno]{Classes/PhDThesisPSnPDF} % combined with Gwen
+%\documentclass[notitlepage,twoside,10pt,openright,leqno]{book}
+
+\usepackage{etex}
+\usepackage[table]{xcolor}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Code block}
+
+
+\setlength{\textheight}{9in} \setlength{\topmargin}{0.2in}
+\setlength{\textwidth}{6.0in} \setlength{\oddsidemargin}{+.3in}
+\setlength{\evensidemargin}{-.1in}
+
+
+\definecolor{lightgrey}{rgb}{0.9,0.9,0.9}
+\definecolor{darkgreen}{rgb}{0,0.6,0}
+\lstset{language=R, basicstyle=\small\ttfamily, numbers=none, breaklines=true, keywordstyle=\color{red}, commentstyle=\color{darkgreen},
+stringstyle=\color{blue}, otherkeywords={$, \{, \}, \[, \]}, frame=none, tabsize=2, backgroundcolor=\color{lightgrey}, caption=R code}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           pacakges for ragt2ridges paper
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{times}
+%\usepackage{w-thm}
+%\usepackage[authoryear]{natbib}
+%\setlength{\bibsep}{2pt}
+%\setlength{\bibhang}{2em}
+
+    
+\newcommand{\J}{J\"{o}reskog}
+\newcommand{\So}{S\"{o}rbom}
+\newcommand{\bcx}{{\bf X}}
+\newcommand{\bcy}{{\bf Y}}
+\newcommand{\bcz}{{\bf Z}}
+\newcommand{\bcu}{{\bf U}}
+\newcommand{\bcv}{{\bf V}}
+\newcommand{\bcw}{{\bf W}}
+\newcommand{\bci}{{\bf I}}
+\newcommand{\bch}{{\bf H}}
+\newcommand{\bcb}{{\bf B}}
+\newcommand{\bcr}{{\bf R}}
+\newcommand{\bcm}{{\bf M}}
+\newcommand{\bcf}{{\bf F}}
+\newcommand{\bcg}{{\bf G}}
+\newcommand{\bcs}{{\bf S}}
+\newcommand{\bca}{{\bf A}}
+\newcommand{\bcd}{{\bf D}}
+\newcommand{\bcc}{{\bf C}}
+\newcommand{\bce}{{\bf E}}
+\newcommand{\ba}{{\bf a}}
+\newcommand{\bb}{{\bf b}}
+\newcommand{\bc}{{\bf c}}
+\newcommand{\bd}{{\bf d}}
+\newcommand{\bx}{{\bf x}}
+\newcommand{\by}{{\bf y}}
+\newcommand{\bz}{{\bf z}}
+\newcommand{\bu}{{\bf u}}
+\newcommand{\bv}{{\bf v}}
+\newcommand{\bh}{{\bf h}}
+\newcommand{\bl}{{\bf l}}
+\newcommand{\be}{{\bf e}}
+\newcommand{\br}{{\bf r}}
+\newcommand{\bw}{{\bf w}}
+\newcommand{\de}{\stackrel{D}{=}}
+\newcommand{\bt}{\bigtriangleup}
+\newcommand{\bfequiv}{\mbox{\boldmath $\equiv$}}
+\newcommand{\bmu}{\mbox{\boldmath $\mu$}}
+\newcommand{\bnu}{\mbox{\boldmath $\nu$}}
+\newcommand{\bxi}{\mbox{\boldmath $\xi$}}
+\newcommand{\btau}{\mbox{\boldmath $\tau$}}
+\newcommand{\bgamma}{\mbox{\boldmath $\Gamma$}}
+\newcommand{\bphi}{\mbox{\boldmath $\Phi$}}
+\newcommand{\bfphi}{\mbox{\boldmath $\varphi$}}
+\newcommand{\bfeta}{\mbox{\boldmath $\eta$}}
+\newcommand{\bpi}{\mbox{\boldmath $\Pi$}}
+\newcommand{\bequiv}{\mbox{\boldmath $\equiv$}}
+\newcommand{\bvarepsilon}{\mbox{\boldmath $\varepsilon$}}
+\newcommand{\btriangle}{\mbox{\boldmath $\triangle$}}
+\newcommand{\bdelta}{\mbox{\boldmath $\Delta$}}
+\newcommand{\beps}{\mbox{\boldmath $\epsilon$}}
+\newcommand{\btheta}{\mbox{\boldmath $\theta$}}
+\newcommand{\balpha}{\mbox{\boldmath $\alpha$}}
+\newcommand{\bsphi}{\mbox{\boldmath $\varphi$}}
+\newcommand{\bsig}{\mbox{\boldmath $\sigma$}}
+\newcommand{\bfpsi}{\mbox{\boldmath $\psi$}}
+\newcommand{\bfdelta}{\mbox{\boldmath $\delta$}}
+\newcommand{\bsigma}{{\bf \Sigma}}
+\newcommand{\bzero}{{\bf 0}}
+\newcommand{\bpsi}{\mbox{\boldmath $\Psi$}}
+\newcommand{\bep}{\mbox{\boldmath $\epsilon$}}
+\newcommand{\bomega}{\mbox{\boldmath $\Omega$}}
+\newcommand{\bfomega}{\mbox{\boldmath $\omega$}}
+\newcommand{\blambda}{\mbox{\boldmath $\Lambda$}}
+\newcommand{\bflambda}{\mbox{\boldmath $\lambda$}}
+\newcommand{\bfsigma}{\mbox{\boldmath $\sigma$}}
+\newcommand{\bfpi}{{\mbox{\boldmath $\pi$}}}
+\newcommand{\bupsilon}{\mbox{\boldmath $\upsilon$}}
+\newcommand{\obs}{{\rm obs}}
+\newcommand{\mis}{{\rm mis}}
+%\theoremstyle{plain}
+%\newtheorem{criterion}{Criterion}
+%\theoremstyle{definition}
+%\newtheorem{condition}[theorem]{Condition}
+%\usepackage[]{graphicx}
+%\chardef\bslash=`\\ % p. 424, TeXbook
+\newcommand{\ntt}{\normalfont\ttfamily}
+\newcommand{\cn}[1]{{\protect\ntt\bslash#1}}
+\newcommand{\pkg}[1]{{\protect\ntt#1}}
+\let\fn\pkg
+\let\env\pkg
+\let\opt\pkg
+\hfuzz1pc % Don't bother to report overfull boxes if overage is < 1pc
+\newcommand{\envert}[1]{\left\lvert#1\right\rvert}
+\let\abs=\envert
+
+\usepackage{bm, helvet, graphicx, graphics, amssymb, amsthm, amsfonts, url, paralist, afterpage}
+% natbib,
+\DeclareMathAlphabet{\mathsfit}{\encodingdefault}{\sfdefault}{m}{sl}
+\SetMathAlphabet{\mathsfit}{bold}{\encodingdefault}{\sfdefault}{bx}{sl}
+
+\newcommand*\rfrac[2]{{}^{#1}\!/_{#2}}
+
+
+%\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+
+\def\fat#1{\mbox{\boldmath$#1$}}
+\def\reminder#1{\marginpar{\rule[0pt]{1mm}{11pt}}\textbf{#1}}
+
+\bmdefine\ttheta{\theta}
+\bmdefine\aalpha{\alpha}
+\bmdefine\bbeta{\beta}
+\bmdefine\ddelta{\delta}
+\bmdefine\kkappa{\kappa}
+\bmdefine\llambda{\lambda}
+\bmdefine\ggamma{\gamma}
+\bmdefine\nnu{\nu}
+\bmdefine\vvarepsilon{\varepsilon}
+\bmdefine\mmu{\mu}
+\bmdefine\nnu{\nu}
+\bmdefine\ttau{\tau}
+\bmdefine\SSigma{\Sigma}
+\bmdefine\TTheta{\Theta}
+\bmdefine\XXi{\Xi}
+\bmdefine\PPi{\Pi}
+\bmdefine\GGamma{\Gamma}
+\bmdefine\DDelta{\Delta}
+\bmdefine\ssigma{\sigma}
+\bmdefine\UUpsilon{\Upsilon}
+\bmdefine\PPsi{\Psi}
+\bmdefine\PPhi{\Phi}
+\bmdefine\LLambda{\Lambda}
+\bmdefine\OOmega{\Omega}
+
+%\usepackage{ulem}
+%\usepackage{xcolor}
+%\definecolor{light-gray}{gray}{0.72}
+%\newcommand{\lgray}[1]{{\textcolor {light-gray} {#1}}}
+%\newcommand{\red}[1]{{\textcolor {red} {#1}}}
+%\newcommand{\green}[1]{{\textcolor {green} {#1}}}
+%\newcommand{\mg}[1]{{\textcolor {magenta} {#1}}}
+%\newcommand{\og}[1]{{\textcolor {PineGreen} {#1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ******************************************************************************
+% ******************************* Class Options ********************************
+% *********************** See README for more details **************************
+% ******************************************************************************
+
+% `a4paper'(The University of Cambridge PhD thesis guidelines recommends a page
+% size a4 - default option) or `a5paper': A5 Paper size is also allowed as per
+% the Cambridge University Engineering Deparment guidelines for PhD thesis
+%
+% `11pt' or `12pt'(default): Font Size 10pt is NOT recommended by the University
+% guidelines
+%
+% `oneside' or `twoside'(default): Printing double side (twoside) or single
+% side.
+%
+% `print': Use `print' for print version with appropriate margins and page
+% layout. Leaving the options field blank will activate Online version.
+%
+% `index': For index at the end of the thesis
+%
+% `draft': For draft mode without loading any images (same as draft in book)
+%
+% `abstract': To generate only the title page and abstract page with
+% dissertation title and name, to submit to the Student Registry
+%
+% `chapter`: This option enables only the specified chapter and it's references
+%  Useful for review and corrections.
+%
+% ************************* Custom Page Margins ********************************
+%
+% `custommargin`: Use `custommargin' in options to activate custom page margins,
+% which can be defined in the preamble.tex. Custom margin will override
+% print/online margin setup.
+%
+% *********************** Choosing the Fonts in Class Options ******************
+%
+% `times' : Times font with math support. (The Cambridge University guidelines
+% recommend using times)
+%
+% `fourier': Utopia Font with Fourier Math font (Font has to be installed) 
+%            It's a free font.
+%
+% `customfont': Use `customfont' option in the document class and load the
+% package in the preamble.tex
+%
+% default or leave empty: `Latin Modern' font will be loaded.
+%
+% ********************** Choosing the Bibliography style ***********************
+%
+% `authoryear': For author-year citation eg., Krishna (2013)
+%
+% `numbered': (Default Option) For numbered and sorted citation e.g., [1,5,2]
+%
+% `custombib': Define your own bibliography style in the `preamble.tex' file.
+%              `\RequirePackage[square, sort, numbers, authoryear]{natbib}'. 
+%              This can be also used to load biblatex instead of natbib 
+%              (See Preamble) 
+%
+% **************************** Choosing the Page Style *************************
+%
+% `default (leave empty)': For Page Numbers in Header (Left Even, Right Odd) and
+% Chapter Name in Header (Right Even) and Section Name (Left Odd). Blank Footer.
+%
+% `PageStyleI': Chapter Name next & Page Number on Even Side (Left Even).
+% Section Name & Page Number in Header on Odd Side (Right Odd). Footer is empty.
+%
+% `PageStyleII': Chapter Name on Even Side (Left Even) in Header. Section Number
+% and Section Name in Header on Odd Side (Right Odd). Page numbering in footer
+
+
+% ********************************** Preamble **********************************
+% Preamble: Contains packages and user-defined commands and settings
+\input{Preamble/preamble}
+
+% ************************ Thesis Information & Meta-data **********************
+% Thesis title and author information, refernce file for biblatex
+\input{thesis-info}
+
+% ***************************** Abstract Separate ****************************** 
+% To printout only the titlepage and the abstract with the PhD title and the 
+% author name for submission to the Student Registry, use the `abstract' option in
+% the document class. 
+
+%\ifdefineAbstract
+% \pagestyle{empty}
+% \includeonly{Declaration/declaration, Abstract/abstract} 
+%\fi
+
+% ***************************** Chapter Mode ***********************************
+% The chapter mode allows user to only print particular chapters with references
+% Title, Contents, Frontmatter are disabled by default
+% Useful option to review a particular chapter or to send it to supervisior.
+% To use choose `chapter' option in the document class
+
+%\ifdefineChapter
+% \includeonly{Chapter3/chapter3} 
+%\fi
+
+
+
+% ******************************** Front Matter ********************************
+\begin{document}
+
+\frontmatter
+
+
+%\begin{titlepage}
+
+%\maketitle
+
+%\end{titlepage}
+
+\thispagestyle{empty}
+\begin{center}
+\vspace{2.5cm}
+ % {\bf\fontsize{16pt}{1em}\selectfont Comprehensive molecular characterisation of HPV-induced transformation by longitudinal statistical modelling\\}
+  \vspace{2.5cm}
+\end{center}
+
+\newpage
+\thispagestyle{empty}
+%\vfill
+%copyright, editing...
+%\vfill
+\noindent The work in this thesis was funded by a grant from the VU University Medical Center-Cancer Center Amsterdam (VUMC-CCA, project CCA2011-5-02) and carried out under the auspices of the VU University Amsterdam.\\
+
+\noindent The printing of this thesis was kindly supported by the Amsterdam University \\ Medical Centers.\\
+\begin{center}
+	\null\hspace{\fill}
+  	\includegraphics[width=0.28\textwidth]{VU.png}%trim=0 60 0 0, clip=true, 
+  	\null\hspace{2cm}
+  	\includegraphics[width=0.57\textwidth]{AUMC.png}
+  	\hspace{\fill}\null
+\end{center}
+\null
+
+\vfill
+
+\noindent
+Copyright {\fontfamily{times}\selectfont \copyright}~Viktorian Miok, Belgrade, 2018\\
+\\
+%\noindent
+%ISBN: 978-90-9028117-9\\
+\vspace{0.2cm}\\
+\noindent
+All rights reserved. No part of this publication may be reproduced in any form or by
+any electronic or mechanical means (including photocopying, recording or information
+storage and retrieval systems) without permission in writing from the author.
+\\
+\\
+Document prepared with {\fontfamily{times}\selectfont \LaTeX} \\
+Cover design by Livija Balnozan\\
+Printed by: Fine Graf, Belgrade, Serbia (www.finegraf.rs)
+
+\newpage
+\begin{titlepage}
+	\centering
+	VRIJE UNIVERSITEIT\\
+\vspace{2cm}
+  {\bf\fontsize{16pt}{1em}\selectfont Comprehensive molecular characterisation of HPV-induced transformation by longitudinal statistical modelling\\}
+  \vspace{2cm}
+ACADEMISCH PROEFSCHRIFT\\
+\vspace{1.5cm}
+ter verkrijging van de graad Doctor \\
+aan de Vrije Universiteit Amsterdam,\\
+op gezag van de rector magnificus\\
+prof.dr. V. Subramaniam,\\
+in het openbaar te verdedigen\\
+ten overstaan van de promotiecommissie\\
+van de Faculteit der Geneeskunde\\
+op maandag 10 september 2018 om 13.45 uur\\
+in de aula van de universiteit,\\
+De Boelelaan 1105\\
+\vspace{1.5cm}
+door\\
+\vspace{1.5cm}
+\textbf{Viktorian Miok}\\
+\vspace{0.5cm}
+geboren te Zrenjanin, Servi\"e\\
+\end{titlepage}
+
+% Page 4 (left)
+\newpage
+\thispagestyle{empty}
+
+% Page 5: Reading committee (right)
+\newpage
+\thispagestyle{empty}
+\begin{tabular}{ll}
+promotoren: & prof.dr.ir. M.A. van de Wiel\\
+ & dr. R.D.M. Steenbergen \\
+copromotoren: & dr. W.N. van Wieringen\\
+ & dr. S.M. Wilting \\
+\\ 
+\end{tabular}
+
+
+%\include{Dedication/dedication}
+%\include{Declaration/declaration}
+\include{Acknowledgement/acknowledgement}
+%\include{Dedication/quote}
+%\include{Abstract/abstract}
+
+% *********************** Adding TOC and List of Figures ***********************
+
+%\include{Acknowledgement/acknowledgement}
+
+\tableofcontents
+
+%\listoffigures
+
+%\listoftables 
+
+% \printnomenclature[space] space can be set as 2.5cm between symbol and
+% description
+%%%%IVAN: I added
+%\include{Notation/notation}
+%\printnomencl[1.2in]
+%\printnomenclature[1.2in]
+
+% ******************************** Main Matter *********************************
+\mainmatter
+
+
+\include{Chapter1/Ch1}
+\include{Chapter2/Ch2}
+\include{Chapter3/Ch3}
+\include{Chapter4/Ch4}
+\include{Chapter5/Ch5}
+\include{Chapter6/Ch6}
+\include{Chapter7/Ch7}
+
+
+% ********************************** Back Matter *******************************
+% Backmatter should be commented out, if you are using appendices after References
+%\backmatter 
+
+% ********************************** Bibliography ******************************
+\begin{spacing}{0.9}
+
+% To use the conventional natbib style referencing
+% Bibliography style previews: http://nodonn.tipido.net/bibstyle.php
+
+\bibliographystyle{apalike}
+%\bibliographystyle{plainnat} % use this to have URLs listed in References
+%\cleardoublepage
+\bibliography{References/references} % Path to your References.bib file
+
+
+
+
+
+%\include{Acknowledgement/acknowledgement}
+\include{Summary/summary}
+\include{Biography/biography}
+
+
+
+
+
+
+% If you would like to use BibLaTeX for your references, pass `custombib' as 
+% an option in the document class. The location of 'reference.bib' should be 
+% specified in the preamble.tex file in the custombib section. 
+% Comment out the lines related to natbib above and uncomment the following line.
+
+% \printbibliography[heading=bibintoc, title={References}]
+
+
+
+
+%%\include{Colophon/colophon}
+
+\end{spacing}
+
+% ********************************** Appendices ********************************
+
+%\begin{appendices} % Using appendices environment for more functunality
+
+%\include{Appendix1/appendix1}
+%\include{Appendix2/appendix2}
+
+%\end{appendices}
+
+% *************************************** Index ********************************
+%\printthesisindex % If index is present
+
+\end{document}

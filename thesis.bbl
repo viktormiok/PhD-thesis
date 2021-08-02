@@ -1,0 +1,1445 @@
+\begin{thebibliography}{}
+
+\bibitem[Abegaz and Wit, 2013]{Abegaz2013}
+Abegaz, F. and Wit, E. (2013).
+\newblock Sparse time series chain graphical models for reconstructing genetic
+  networks.
+\newblock {\em Biostatistics}, 1:1--14.
+
+\bibitem[Abramovich and Angelini, 2006]{Abramovich2006}
+Abramovich, F. and Angelini, C. (2006).
+\newblock Bayesian {M}aximum a posteriori {M}ultiple {T}esting {P}rocedure.
+\newblock {\em The Indian Journal of Statistics}, 68:436--460.
+
+\bibitem[Agarwal et~al., 2015]{Agarwal2015}
+Agarwal, V., Bell, G.~W., Nam, J.~W., and Bartel, D.~P. (2015).
+\newblock Predicting effective micro{RNA} target sites in mammalian m{RNA}s.
+\newblock {\em eLife}, 4:e05005.
+
+\bibitem[Alix-Panabi{\`e}res and Pantel, 2013]{Alix2013}
+Alix-Panabi{\`e}res, C. and Pantel, K. (2013).
+\newblock Circulating tumor cells: liquid biopsy of cancer.
+\newblock {\em Clinical Chemistry}, 59(1):110--118.
+
+\bibitem[Allen and Liu, 2013]{Allen2013}
+Allen, G.~I. and Liu, Z. (2013).
+\newblock A local {P}oisson graphical model for inferring networks from
+  sequencing data.
+\newblock {\em IEEE Transactions on NanoBioscience}, 12(3):189--198.
+
+\bibitem[Alon, 2003]{Alon2003}
+Alon, U. (2003).
+\newblock Biological networks: the tinkerer as an engineer.
+\newblock {\em Science}, 301:1866--1867.
+
+\bibitem[Alon, 2007]{Alon2007}
+Alon, U. (2007).
+\newblock Network motifs: theory and experimental approaches.
+\newblock {\em Nature Reviews Genetics}, 8(6):450--461.
+
+\bibitem[Angelini et~al., 2007]{Angelini2007}
+Angelini, C., De~Canditiis, D., Mutarelli, M., and Pensky, M. (2007).
+\newblock A {B}ayesian approach to estimation and testing in time-course
+  microarray experiments.
+\newblock {\em Statistical Applications in Genetics and Molecular Biology},
+  6:1--30.
+
+\bibitem[Anwar et~al., 2013]{Anwar2013}
+Anwar, S.~L., Albat, C., Krech, T., Hasemeier, B., Schipper, E., Schweitzer,
+  N., Vogel, A., Kreipe, H., and Lehmann, U. (2013).
+\newblock Concordant hypermethylation of intergenic micro{RNA} genes in human
+  hepatocellular carcinoma as new diagnostic and prognostic marker.
+\newblock {\em International Journal of Cancer}, 133(3):660--670.
+
+\bibitem[Balaguer et~al., 2010]{Balaguer2010}
+Balaguer, F., Link, A., Lozano, J.~J., Cuatrecasas, M., Nagasaka, T., Boland,
+  C.~R., and Goel, A. (2010).
+\newblock Epigenetic silencing of mi{R}-137 is an early event in colorectal
+  carcinogenesis.
+\newblock {\em Cancer Research}, 70(16):6609--6618.
+
+\bibitem[Band et~al., 1990]{Band1990}
+Band, V., Zajchowski, D., Kulesa, V., and Sager, R. (1990).
+\newblock Human papilloma virus {DNA}s immortalize normal human mammary
+  epithelial cells and reduce their growth factor requirements.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  87(1):463--467.
+
+\bibitem[Bandres et~al., 2009]{Bandres2009}
+Bandres, E., Agirre, X., Bitarte, N., Ramirez, N., Zarate, R., Roman-Gomez, J.,
+  Prosper, F., and Garcia-Foncillas, J. (2009).
+\newblock Epigenetic regulation of micro{RNA} expression in colorectal cancer.
+\newblock {\em International Journal of Cancer}, 125(11):2737--2743.
+
+\bibitem[Bar-Joseph et~al., 2003]{BarJoseph2003}
+Bar-Joseph, Z., Gerber, G.~K., Lee, T.~I., Rinaldi, N.~J., Yoo, J.~Y., Robert,
+  F., Gordon, D.~B., Fraenkel, E., Jaakkola, T.~S., Young, R.~A., and Gifford,
+  D.~K. (2003).
+\newblock Computational discovery of gene modules and regulatory networks.
+\newblock {\em Nature Biotechnology}, 21:1337--1324.
+
+\bibitem[Baxter, 2003]{Baxter2000}
+Baxter, R.~C. (2003).
+\newblock Insulin-like growth factor {(IGF)}-binding proteins: interactions
+  with {IGF}s and intrinsic bioactivities.
+\newblock {\em American Journal of Physiology-Endocrinology and Metabolism},
+  278:967--976.
+
+\bibitem[Benjamini and Hochberg, 1995]{Benjamini1995}
+Benjamini, Y. and Hochberg, Y. (1995).
+\newblock Controlling the false discovery rate: a practical and powerful
+  approach to multiple testing.
+\newblock {\em Journal of the Royal Statistical Society. Series B
+  (Methodological)}, 57:289--300.
+
+\bibitem[Bickel and Doksum, 2001]{Bickel2001}
+Bickel, P.~J. and Doksum, K.~A. (2001).
+\newblock {\em Mathematical Statistics}.
+\newblock Prentice Hall, New Jersey.
+
+\bibitem[Bier et~al., 2013]{Bier2013}
+Bier, A., Giladi, N., Kronfeld, N., Lee, H.~K., Cazacu, S., Finniss, S., Xiang,
+  C., Poisson, L., et~al. (2013).
+\newblock Micro{RNA}-137 is downregulated in glioblastoma and inhibits the
+  stemness of glioma stem cells by targeting {RTVP}-1.
+\newblock {\em Oncotarget}, 4(5):665.
+
+\bibitem[Bierkens et~al., 2013]{Bierkens2013}
+Bierkens, M., Krijgsman, O., Wilting, S.~M., Bosch, L., Jaspers, A., Meijer,
+  G.~A., Meijer, C. J. L.~M., Snijders, P. J.~F., Ylstra, B., and Steenbergen,
+  R. D.~M. (2013).
+\newblock Focal aberrations indicate {EYA2} and hsa-mi{R}-375 as oncogene and
+  tumor suppressor in cervical carcinogenesis.
+\newblock {\em Genes, Chromosomes and Cancer}, 52:56--68.
+
+\bibitem[Bilgrau et~al., 2015]{Bilgrau2015}
+Bilgrau, A.~E., Peeters, C. F.~W., Eriksen, P.~S., B{\o}gsted, M., and
+  Van~Wieringen, W.~N. (2015).
+\newblock Targeted fused ridge estimation of inverse covariance matrices from
+  multiple high-dimensional data classes.
+\newblock {\em http://arxiv.org/pdf/1509.07982.pdf}, 1:1.
+
+\bibitem[Boldstad et~al., 2003]{Boldstad2003}
+Boldstad, B.~M., Irizarry, R.~A., Astrand, M., and Speed, T.~P. (2003).
+\newblock A comparison of normalization methods for high density
+  oligonucleotide array data based on bias and variance.
+\newblock {\em Bioinformatics}, 19(2):185--193.
+
+\bibitem[Botezatu et~al., 2011]{Botezatu2011}
+Botezatu, A., Goia-Rusanu, C.~D., Iancu, I.~V., Huica, I., Plesa, A., Socolov,
+  D., Ungureanu, C., and Anton, G. (2011).
+\newblock Quantitative analysis of the relationship between
+  micro{RNA}-124a,-34b and-203 gene methylation and cervical oncogenesis.
+\newblock {\em Molecular Medicine Reports}, 4:121--8.
+
+\bibitem[Brenet et~al., 2011]{Brenet2011}
+Brenet, F., Moh, M., Funk, P., Feierstein, E., Viale, A.~J., Socci, N.~D., and
+  Scandura, J.~M. (2011).
+\newblock D{NA} methylation of the first exon is tightly linked to
+  transcriptional silencing.
+\newblock {\em PloS One}, 6(1):e14524.
+
+\bibitem[Buffart et~al., 2008]{Buffart2008}
+Buffart, T.~E., Overmeer, R.~M., Steenbergen, R. D.~M., Tijssen, M., van
+  Grieken, N. C.~T., Snijders, P. J.~F., Grabsch, H.~I., van~de Velde, C.
+  J.~H., Carvalho, B., and Meijer, G.~A. (2008).
+\newblock {MAL} promoter hypermethylation as a novel prognostic marker in
+  gastric cancer.
+\newblock {\em British Journal of Cancer}, 99(11):1802.
+
+\bibitem[Buttitta et~al., 2003]{Buttitta2003}
+Buttitta, F., Pellegrini, C., Marchetti, A., Gadducci, A., Cosio, S.,
+  Felicioni, L., Barassi, F., Salvatore, S., Martella, C., Coggi, G., et~al.
+  (2003).
+\newblock Human telomerase reverse transcriptase m{RNA} expression assessed by
+  real-time reverse transcription polymerase chain reaction predicts
+  chemosensitivity in patients with ovarian carcinoma.
+\newblock {\em Journal of Clinical Oncology}, 21(7):1320--1325.
+
+\bibitem[Charbonnier et~al., 2010]{Charbonnier2010}
+Charbonnier, C., Chiquet, J., and Ambroise, C. (2010).
+\newblock Weighted-{LASSO} for structured network inference from time course
+  data.
+\newblock {\em Statistical Applications in Genetics and Molecular Biology},
+  9:1--27.
+
+\bibitem[Chen et~al., 2005]{Chen2005}
+Chen, C., Ridzon, D.~A., Broomer, A.~J., Zhou, Z., Lee, D.~H., Nguyen, J.~T.,
+  Barbisin, M., Xu, N.~L., Mahuvakar, V.~R., Andersen, M.~R., et~al. (2005).
+\newblock Real-time quantification of micro{RNA}s by stem--loop {RT}--{PCR}.
+\newblock {\em Nucleic Acids Research}, 33(20):e179--e179.
+
+\bibitem[Chen et~al., 2011]{Chen2011}
+Chen, Q., Chen, X., Zhang, M., Fan, Q., Luo, S., and Cao, X. (2011).
+\newblock mi{R}-137 is frequently down-regulated in gastric cancer and is a
+  negative regulator of {C}dc42.
+\newblock {\em Digestive Diseases and Sciences}, 56(7):2009--2016.
+
+\bibitem[Chen et~al., 1993]{Chen1993}
+Chen, T.~M., Pecoraro, G., and Defendi, V. (1993).
+\newblock Genetic analysis of in vitro progression of human
+  papillomavirus-transfected human cervical cells.
+\newblock {\em Cancer Research}, 53:1167--1171.
+
+\bibitem[Chen et~al., 2012]{Chen2012}
+Chen, X., Hu, H., Guan, X., Xiong, G., Wang, Y., Wang, K., Li, J., Xu, X.,
+  Yang, K., and Bai, Y. (2012).
+\newblock Cp{G} island methylation status of mi{RNA}s in esophageal squamous
+  cell carcinoma.
+\newblock {\em International Journal of Cancer}, 130(7):1607--1613.
+
+\bibitem[Chen et~al., 2014]{Chen2014}
+Chen, X., Ruan, A., Wang, X., Han, W., Wang, R., Lou, N., Ruan, H., Qiu, B.,
+  Yang, H., and Zhang, X. (2014).
+\newblock mi{R}-129-3p, as a diagnostic and prognostic biomarker for renal cell
+  carcinoma, attenuates cell migration and invasion via downregulating multiple
+  metastasis-related genes.
+\newblock {\em Journal of Cancer Research and Clinical Oncology},
+  140(8):1295--1304.
+
+\bibitem[Chen et~al., 2013]{Chen2013}
+Chen, X., Zhang, L., Zhang, T., Hao, M., Zhang, X., Zhang, J., Xie, Q., Wang,
+  Y., Guo, M., Zhuang, H., et~al. (2013).
+\newblock Methylation-mediated repression of micro{RNA} 129-2 enhances
+  oncogenic {SOX}4 expression in {HCC}.
+\newblock {\em Liver International}, 33(3):476--486.
+
+\bibitem[Chow et~al., 2010]{Chow2010}
+Chow, L.~T., Broker, T.~R., and Steinberg, B.~M. (2010).
+\newblock The natural history of human papillomavirus infections of the mucosal
+  epithelia.
+\newblock {\em Apmis}, 118(6-7):422--449.
+
+\bibitem[Colak and ten Dijke, 2017]{Colak2017}
+Colak, S. and ten Dijke, P. (2017).
+\newblock Targeting {TGF}-$\beta$ signaling in cancer.
+\newblock {\em Trends in Cancer}.
+
+\bibitem[Cover and Thomas, 2006]{Cover2006}
+Cover, T.~M. and Thomas, J.~A. (2006).
+\newblock {\em Elements of Information Theory}.
+\newblock John Wiley, New York.
+
+\bibitem[Crainiceanu et~al., 2005]{Crainiceanu2005}
+Crainiceanu, C.~M., Ruppet, D., and Wand, M.~P. (2005).
+\newblock Bayesian {A}nalysis for {P}enalized {S}pline {R}egression using
+  {WinBUGS}.
+\newblock {\em Journal of Statistical Software}, 14:1--47.
+
+\bibitem[Dahl et~al., 2005]{Dahl2005}
+Dahl, J., Roychowdhury, V., and Vandenberghe, L. (2005).
+\newblock Maximum likelihood estimation of {G}aussian graphical models:
+  numerical implementation and topology selection.
+\newblock {\em Technical Report}, 1:1.
+
+\bibitem[Dahlhaus, 2000]{Dahlhaus2000}
+Dahlhaus, R. (2000).
+\newblock Graphical interaction models for multivariate time series.
+\newblock {\em Metrika}, 51(2):157--172.
+
+\bibitem[Dahlhaus and Eichler, 2003]{Dahlhaus2003}
+Dahlhaus, R. and Eichler, M. (2003).
+\newblock Causality and graphical models in time series analysis.
+\newblock {\em Oxford Statistical Science Series}, 1:115--137.
+
+\bibitem[Den~Boon et~al., 2015]{Boon2015}
+Den~Boon, J.~A., Pyeon, D., Wang, S.~S., Horswill, M., Schiffman, M., Sherman,
+  M., Zuna, R.~E., Wang, Z., Hewitt, S.~M., Pearson, R., et~al. (2015).
+\newblock Molecular transitions from papillomavirus infection to cervical
+  precancer and cancer: Role of stromal estrogen receptor signaling.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  112(25):3255--3264.
+
+\bibitem[D'Ercole and Calikoglu, 2001]{D'Ercole2001}
+D'Ercole, A.~J. and Calikoglu, A.~S. (2001).
+\newblock The case of local versus endocrine {IGF-I} actions: the jury is still
+  out.
+\newblock {\em Growth Hormone \& {IGF} Research}, 11:261--265.
+
+\bibitem[Dobra et~al., 2011]{Dobra2011}
+Dobra, A., Lenkoski, A., et~al. (2011).
+\newblock Copula {G}aussian graphical models and their application to modeling
+  functional disability data.
+\newblock {\em The Annals of Applied Statistics}, 5(2A):969--993.
+
+\bibitem[Doorbar, 2006]{Doorbar2006}
+Doorbar, J. (2006).
+\newblock Molecular biology of human papillomavirus infection and cervical
+  cancer.
+\newblock {\em Clinical Science}, 110:525--541.
+
+\bibitem[Du et~al., 2012]{Du2012}
+Du, Y., Liu, Z., Gu, L., Zhou, J., Zhu, B.-d., Ji, J., and Deng, D. (2012).
+\newblock Characterization of human gastric carcinoma-related methylation of 9
+  mi{R} {C}p{G} islands and repression of their expressions in vitro and in
+  vivo.
+\newblock {\em BMC Cancer}, 12(1):1.
+
+\bibitem[Duensing and M{\"u}nger, 2002]{Duensing2002}
+Duensing, S. and M{\"u}nger, K. (2002).
+\newblock Human papillomaviruses and centrosome duplication errors: modeling
+  the origins of genomic instability.
+\newblock {\em Oncogene}, 21(40):6241.
+
+\bibitem[Duensing and M{\"u}nger, 2004]{Duensing2004}
+Duensing, S. and M{\"u}nger, K. (2004).
+\newblock Mechanisms of genomic instability in human cancer: insights from
+  studies with human papillomavirus oncoproteins.
+\newblock {\em International Journal of Cancer}, 109:157--162.
+
+\bibitem[D{\"u}rst et~al., 1987]{Durst1987}
+D{\"u}rst, M., Dzarlieva-Petrusevska, R., Boukamp, P., Fusenig, N., and
+  Gissmann, L. (1987).
+\newblock Molecular and cytogenetic analysis of immortalized human primary
+  keratinocytes obtained after transfection with human papillomavirus type 16
+  {DNA}.
+\newblock {\em Oncogene}, 1(3):251--256.
+
+\bibitem[Eads et~al., 2000]{Eads2000}
+Eads, C.~A., Danenberg, K.~D., Kawakami, K., Saltz, L.~B., Blake, C., Shibata,
+  D., Danenberg, P.~V., and Laird, P.~W. (2000).
+\newblock Methy{L}ight: a high-throughput assay to measure {DNA} methylation.
+\newblock {\em Nucleic Acids Research}, 28(8):e32--00.
+
+\bibitem[Eckel et~al., 2004]{Eckel2004}
+Eckel, J.~E., Gennings, C., Chinchilli, V.~M., Burgoon, L.~D., and Zacharewski,
+  T.~R. (2004).
+\newblock Empirical {B}ayes gene screening tool for time-course or
+  dose-response microarray data.
+\newblock {\em Journal of Biopharmaceutical Statistics}, 14:647--670.
+
+\bibitem[Efron, 2004]{Efron2004}
+Efron, B. (2004).
+\newblock Large-scale simultaneous hypothesis testing: the choice of a null
+  hypothesis.
+\newblock {\em Journal of the American Statistical Association},
+  99(465):96--104.
+
+\bibitem[Efron et~al., 2001]{Efron2001}
+Efron, B., Tibshirani, R., Storey, J.~D., and Tusher, V. (2001).
+\newblock Empirical {B}ayes analysis of a microarray experiment.
+\newblock {\em Journal of the American Statistical Association}, 96:1151--1160.
+
+\bibitem[Ernst et~al., 2005]{Ernst2005}
+Ernst, J., Nau, G.~J., and Bar-Joseph, Z. (2005).
+\newblock Clustering short time series gene expression data.
+\newblock {\em Bioinformatics}, 21:i159--i168.
+
+\bibitem[Evans et~al., 2007]{Evans2007}
+Evans, A.~J., Russell, R.~C., Roche, O., Burry, T.~N., Fish, J.~E., Chow, V.
+  W.~K., Kim, W.~Y., Saravanan, A., Maynard, M.~A., Gervais, M.~L., et~al.
+  (2007).
+\newblock V{HL} promotes {E}2 box-dependent {E}-cadherin transcription by
+  {HIF}-mediated regulation of {SIP}1 and snail.
+\newblock {\em Molecular and Cellular Biology}, 27(1):157--169.
+
+\bibitem[Faith et~al., 2007]{Faith2007}
+Faith, J.~J., Hayete, B., Thaden, J.~T., Mogno, I., Wierzbowski, J., Cottarel,
+  G., Kasif, S., Collins, J.~J., and Gardner, T.~S. (2007).
+\newblock Large-scale mapping and validation of escherichia coli
+  transcriptional regulation from a compendium of expression profiles.
+\newblock {\em PLoS Biology}, 5(1):e8.
+
+\bibitem[Fan et~al., 2014]{Fan2014}
+Fan, D.~M., Tian, X.~Y., Wang, R.~F., and Yu, J.~J. (2014).
+\newblock The prognosis significance of {TGF}-$\beta$1 and {ER} protein in
+  cervical adenocarcinoma patients with stage {I}b\~{}{II}a.
+\newblock {\em Tumor Biology}, 35(11):11237--11242.
+
+\bibitem[Fan and Li, 2001]{Fan2001}
+Fan, J. and Li, R. (2001).
+\newblock Variable selection via nonconcave penalized likelihood and its oracle
+  properties.
+\newblock {\em Journal of the American Statistical Association}, 96:1348--1360.
+
+\bibitem[Ferlay et~al., 2015]{Ferlay2015}
+Ferlay, J., Soerjomataram, I., Dikshit, R., Eser, S., Mathers, C., Rebelo, M.,
+  Parkin, D., Forman, D., and Bray, F. (2015).
+\newblock Cancer incidence and mortality worldwide: sources, methods and major
+  patterns in {GLOBOCAN} 2012.
+\newblock {\em International Journal of Cancer}, 136:359--386.
+
+\bibitem[Freedman and Shin, 1974]{Freedman1974}
+Freedman, V.~H. and Shin, S. (1974).
+\newblock Cellular tumorigenicity in nude mice: correlation with cell growth in
+  semi-solid medium.
+\newblock {\em Cell}, 3:355--359.
+
+\bibitem[Friedman et~al., 2008]{Friedman2008}
+Friedman, J., Hastie, T., and Tibshirani, R. (2008).
+\newblock Sparse inverse covariance estimation with the graphical lasso.
+\newblock {\em Biostatistics}, 9:432--441.
+
+\bibitem[Frisch et~al., 2013]{Frisch2013}
+Frisch, S.~M., Schaller, M., and Cieply, B. (2013).
+\newblock Mechanisms that link the oncogenic epithelial--mesenchymal transition
+  to suppression of anoikis.
+\newblock {\em Journal of Cell Science}, 126(1):21--29.
+
+\bibitem[Gardiner-Garden and Frommer, 1987]{Gardiner1987}
+Gardiner-Garden, M. and Frommer, M. (1987).
+\newblock Cp{G} islands in vertebrate genomes.
+\newblock {\em Journal of Molecular Biology}, 196(2):261--282.
+
+\bibitem[Garofalo et~al., 2012]{Garofalo2012}
+Garofalo, M., Quintavalle, C., Romano, G., M~Croce, C., and Condorelli, G.
+  (2012).
+\newblock mi{R}221/222 in cancer: their role in tumor progression and response
+  to therapy.
+\newblock {\em Current Molecular Medicine}, 12(1):27--33.
+
+\bibitem[Geiger and Levitzki, 2007]{Geiger2007}
+Geiger, T. and Levitzki, A. (2007).
+\newblock Loss of robustness and addiction to {IGF1} during early keratinocyte
+  transformation by human papilloma virus 16.
+\newblock {\em PloS One}, 2:605.
+
+\bibitem[Genovesi et~al., 2011]{Genovesi2011}
+Genovesi, L.~A., Carter, K.~W., Gottardo, N.~G., Giles, K.~M., and Dallas,
+  P.~B. (2011).
+\newblock Integrated analysis of mi{RNA} and m{RNA} expression in childhood
+  medulloblastoma compared with neural stem cells.
+\newblock {\em PloS One}, 6(9):e23935.
+
+\bibitem[Guadamillas et~al., 2011]{Guadamillas2011}
+Guadamillas, M.~C., Cerezo, A., and del Pozo, M.~A. (2011).
+\newblock Overcoming anoikis pathways to anchorage-independent growth in
+  cancer.
+\newblock {\em Journal of Cell Science}, 124:3189--3197.
+
+\bibitem[Hamilton, 1994]{Hamilton1994}
+Hamilton, J.~D. (1994).
+\newblock {\em Time series analysis}.
+\newblock Princeton University Press.
+
+\bibitem[Hanash, 2004]{Hanash2004}
+Hanash, S. (2004).
+\newblock Integrated global profile of cancer.
+\newblock {\em Nature Reviews Cancer}, 4:638--644.
+
+\bibitem[Harden et~al., 2003]{Harden2003}
+Harden, S.~V., Guo, Z., Epstein, J.~I., and Sidransky, D. (2003).
+\newblock Quantitative {GSTP}1 methylation clearly distinguishes benign
+  prostatic tissue and limited prostate adenocarcinoma.
+\newblock {\em The Journal of Urology}, 169(3):1138--1142.
+
+\bibitem[Harville, 2008]{Harville2008}
+Harville, D.~A. (2008).
+\newblock {\em Matrix Algebra From a Statistician's Perspective}.
+\newblock Springer, New York.
+
+\bibitem[Heinen et~al., 2003]{Heinen2003}
+Heinen, A., Rengifo, E., et~al. (2003).
+\newblock {\em Multivariate modelling of time series count data: an
+  autoregressive conditional {P}oisson model}.
+\newblock Universite Catholique de Louvain.
+
+\bibitem[Henken et~al., 2012]{Henken2012}
+Henken, F.~E., Arce, J.~D., R{\"o}sl, F., Bosch, L., Meijer, C. J. L.~M.,
+  Snijders, P. J.~F., and Steenbergen, R. D.~M. (2012).
+\newblock The functional role of notch signaling in {HPV}-mediated
+  transformation is dose-dependent and linked to {AP}-1 alterations.
+\newblock {\em Cellular Oncology}, 35(2):77--84.
+
+\bibitem[Henken et~al., 2007]{Henken2007}
+Henken, F.~E., Wilting, S.~M., Overmeer, R.~M., Van~Rietschoten, J.~G., Nygren,
+  A. O.~H., Errami, A., Schouten, J.~P., Meijer, C. J. L.~M., Snijders, P.
+  J.~F., and Steenbergen, R. D.~M. (2007).
+\newblock Sequential gene promoter methylation during {HPV}-induced cervical
+  carcinogenesis.
+\newblock {\em British Journal of Cancer}, 97:1457--1464.
+
+\bibitem[Hong and Li, 2006]{Hong2006}
+Hong, F. and Li, H. (2006).
+\newblock Functional {H}ierarchical {M}odels for {I}dentifying {G}enes with
+  {D}ifferent {T}ime-{C}ourse {E}xpression {P}rofiles.
+\newblock {\em Biometrics}, 62:534--544.
+
+\bibitem[Hosseini et~al., 2017]{Hosseini2017}
+Hosseini, E.~S., Kashani, H.~H., Sabzalipoor, H., Nikzad, H., Meryet-Figuiere,
+  M., and Asemi, Z. (2017).
+\newblock Dysregulated expression of long noncoding {RNA}s in gynecologic
+  cancers.
+\newblock {\em Molecular Cancer}, 16(1):107.
+
+\bibitem[Hou et~al., 2012]{Hou2012}
+Hou, F., Li, Z., Ma, D., Zhang, W., Zhang, Y., Zhang, T., Kong, B., and Cui, B.
+  (2012).
+\newblock Distribution of {T}h17 cells and {F}oxp3-expressing {T} cells in
+  tumor-infiltrating lymphocytes in patients with uterine cervical cancer.
+\newblock {\em Clinica Chimica Acta}, 413(23):1848--1854.
+
+\bibitem[Huang et~al., 2009]{Huang2009}
+Huang, Y.~W., Liu, J.~C., Deatherage, D.~E., Luo, J., Mutch, D.~G., Goodfellow,
+  P.~J., Miller, D.~S., and Huang, T. H.~M. (2009).
+\newblock Epigenetic repression of micro{RNA}-129-2 leads to overexpression of
+  {SOX}4 oncogene in endometrial cancer.
+\newblock {\em Cancer Research}, 69(23):9038--9046.
+
+\bibitem[Huber et~al., 2002]{Huber2002}
+Huber, W., Von~Heydebreck, A., S{\"u}ltmann, H., Poustka, A., and Vingron, M.
+  (2002).
+\newblock Variance stabilization applied to microarray data calibration and to
+  the quantification of differential expression.
+\newblock {\em Bioinformatics}, 18(suppl 1):S96--S104.
+
+\bibitem[Irizarry et~al., 2003]{Irizarry2003}
+Irizarry, R.~A., Hobbs, B., Collin, F., Beazer-Barclay, Y.~D., Antonellis,
+  K.~J., Scherf, U., Speed, T.~P., et~al. (2003).
+\newblock Exploration, normalization, and summaries of high density
+  oligonucleotide array probe level data.
+\newblock {\em Biostatistics}, 4(2):249--264.
+
+\bibitem[Jacobs et~al., 1997]{Jacobs1997}
+Jacobs, M.~V., Snijders, P.~J., Van Den~Brule, A.~J., Helmerhorst, T.~J.,
+  Meijer, C.~J., and Walboomers, J.~M. (1997).
+\newblock A general primer {GP5}+/{GP6} (+)-mediated {PCR}-enzyme immunoassay
+  method for rapid detection of 14 high-risk and 6 low-risk human
+  papillomavirus genotypes in cervical scrapings.
+\newblock {\em Journal of Clinical Microbiology}, 35(3):791--795.
+
+\bibitem[Jones and West, 2005]{Jones2005}
+Jones, B. and West, M. (2005).
+\newblock Covariance decomposition in undirected {G}aussian graphical models.
+\newblock {\em Biometrika}, 92(4):779--786.
+
+\bibitem[Kamio et~al., 2004]{Kamio2004}
+Kamio, M., Yoshida, T., Ogata, H., Douchi, T., Nagata, Y., Inoue, M., Hasegawa,
+  M., Yonemitsu, Y., and Yoshimura, A. (2004).
+\newblock {SOC1} inhibits {HPV}-{E}7-mediated transformation by inducing
+  degradation of {E}7 protein.
+\newblock {\em Oncogene}, 23:3107--3115.
+
+\bibitem[Kanehisa and Goto, 2000]{Kanehisa2000}
+Kanehisa, M. and Goto, S. (2000).
+\newblock {KEGG}: kyoto encyclopedia of genes and genomes.
+\newblock {\em Nucleic Acids Research}, 28(1):27--30.
+
+\bibitem[Kantz and Schreiber, 2004]{Kantz2004}
+Kantz, H. and Schreiber, T. (2004).
+\newblock {\em Nonlinear time series analysis}, volume~7.
+\newblock Cambridge University Press.
+
+\bibitem[Khalifa et~al., 2011]{Khalifa2011}
+Khalifa, Y.~B., Teissier, S., Tan, M. K.~M., Phan, Q.~T., Daynac, M., Wong,
+  W.~Q., and Thierry, F. (2011).
+\newblock The human papillomavirus {E}6 oncogene represses a cell adhesion
+  pathway and disrupts focal adhesion through degradation of {TA}p63$\beta$
+  upon transformation.
+\newblock {\em PLoS Pathology}, 7:e1002256.
+
+\bibitem[Klingelhutz and Roman, 2012]{Klingelhutz2012}
+Klingelhutz, A.~J. and Roman, A. (2012).
+\newblock Cellular transformation by human papillomaviruses: lessons learned by
+  comparing high-and low-risk viruses.
+\newblock {\em Virology}, 424(2):77--98.
+
+\bibitem[Kodama et~al., 2001]{Kodama2001}
+Kodama, J., Hashimoto, I., Seki, N., Hongo, A., Yoshinouchi, M., Okuda, H., and
+  Kudo, T. (2001).
+\newblock Thrombospondin-1 and-2 messenger {RNA} expression in invasive
+  cervical cancer correlation with angiogenesis and prognosis.
+\newblock {\em Clinical Cancer Research}, 7:2826--2831.
+
+\bibitem[Korzeniewski et~al., 2011]{Korzeniewski2011}
+Korzeniewski, N., Spardy, N., Duensing, A., and Duensing, S. (2011).
+\newblock Genomic instability and cancer: lessons learned from human
+  papillomaviruses.
+\newblock {\em Cancer Letters}, 305(2):113--122.
+
+\bibitem[Kozaki et~al., 2008]{Kozaki2008}
+Kozaki, K., Imoto, I., Mogi, S., Omura, K., and Inazawa, J. (2008).
+\newblock Exploration of tumor-suppressive micro{RNA}s silenced by {DNA}
+  hypermethylation in oral cancer.
+\newblock {\em Cancer Research}, 68(7):2094--2105.
+
+\bibitem[Kristensen and Hansen, 2009]{Kristensen2009}
+Kristensen, L.~S. and Hansen, L.~L. (2009).
+\newblock P{CR}-based methods for detecting single-locus {DNA} methylation
+  biomarkers in cancer diagnostics, prognostics, and response to treatment.
+\newblock {\em Clinical Chemistry}, 55(8):1471--1483.
+
+\bibitem[Langevin et~al., 2010]{Langevin2010}
+Langevin, S.~M., Stone, R.~A., Bunker, C.~H., Grandis, J.~R., Sobol, R.~W., and
+  Taioli, E. (2010).
+\newblock Micro{RNA}-137 promoter methylation in oral rinses from patients with
+  squamous cell carcinoma of the head and neck is associated with gender and
+  body mass index.
+\newblock {\em Carcinogenesis}, 31(5):864--870.
+
+\bibitem[Langevin et~al., 2011]{Langevin2011}
+Langevin, S.~M., Stone, R.~A., Bunker, C.~H., Lyons-Weiler, M.~A., LaFramboise,
+  W.~A., Kelly, L., Seethala, R.~R., Grandis, J.~R., Sobol, R.~W., and Taioli,
+  E. (2011).
+\newblock Micro{RNA}-137 promoter methylation is associated with poorer overall
+  survival in patients with squamous cell carcinoma of the head and neck.
+\newblock {\em Cancer}, 117(7):1454--1462.
+
+\bibitem[Lauritzen, 1996]{Lauritzen1996}
+Lauritzen, S.~L. (1996).
+\newblock {\em Graphical models}.
+\newblock Oxford University Press, Oxford.
+
+\bibitem[Lebre et~al., 2010]{Lebre2009}
+Lebre, S., Becq, J., Devaux, F., Stumpf, M. P.~H., and Lelandais, G. (2010).
+\newblock Statistical inference of the time-varying structure of
+  gene-regulation networks.
+\newblock {\em BMC Systems Biology}, 4(1):130.
+
+\bibitem[Lindenbergh-Van~der Plas et~al., 2013]{Lindenbergh2013}
+Lindenbergh-Van~der Plas, M., Martens-de Kemp, S.~R., de~Maaker, M.,
+  Van~Wieringen, W.~N., Ylstra, B., Agami, R., Cerisoli, F., Leemans, C.~R.,
+  Braakhuis, B. J.~M., and Brakenhoff, R.~H. (2013).
+\newblock Identification of lethal micro{RNA}s specific for head and neck
+  cancer.
+\newblock {\em Clinical Cancer Research}, 19:5647--5657.
+
+\bibitem[Liu et~al., 2012]{Liu2012}
+Liu, H., Han, F., Yuan, M., Lafferty, J., Wasserman, L., et~al. (2012).
+\newblock High-dimensional semiparametric {G}aussian copula graphical models.
+\newblock {\em The Annals of Statistics}, 40(4):2293--2326.
+
+\bibitem[Liu et~al., 2009]{Liu2009}
+Liu, H., Lafferty, J., and Wasserman, L. (2009).
+\newblock The nonparanormal: {S}emiparametric estimation of high dimensional
+  undirected graphs.
+\newblock {\em Journal of Machine Learning Research}, 10(Oct):2295--2328.
+
+\bibitem[Livak and Schmittgen, 2001]{Livak2001}
+Livak, K.~J. and Schmittgen, T.~D. (2001).
+\newblock Analysis of relative gene expression data using real-time
+  quantitative {PCR} and the 2- $\delta$$\delta${CT} method.
+\newblock {\em Methods}, 25(4):402--408.
+
+\bibitem[Long et~al., 2015]{Long2015}
+Long, X.~H., Zhou, Y.~F., Peng, A.~F., Zhang, Z.~H., Chen, X.~Y., Chen, W.~Z.,
+  Liu, J.~M., Huang, S.~H., and Liu, Z.~L. (2015).
+\newblock Demethylation-mediated mi{R}-129-5p up-regulation inhibits malignant
+  phenotype of osteogenic osteosarcoma by targeting homo sapiens
+  valosin-containing protein ({VCP}).
+\newblock {\em Tumor Biology}, 36(5):3799--3806.
+
+\bibitem[L{\"o}nnstedt and Speed, 2002]{Lonnstedt2002}
+L{\"o}nnstedt, I. and Speed, T.~P. (2002).
+\newblock Replicated microarray data.
+\newblock {\em Statistica Sinica}, 12:31--46.
+
+\bibitem[L{\'o}pez and Alvarez-Salas, 2011]{Lopez2011}
+L{\'o}pez, J.~A. and Alvarez-Salas, L.~M. (2011).
+\newblock Differential effects of mi{R}-34c-3p and mi{R}-34c-5p on {S}i{H}a
+  cells proliferation apoptosis, migration and invasion.
+\newblock {\em Biochemical and Biophysical Research Communications},
+  409:513--519.
+
+\bibitem[Lu et~al., 2013]{Lu2013}
+Lu, C.~Y., Lin, K.~Y., Tien, M.~T., Wu, C.~T., Uen, Y.~H., and Tseng, T.~L.
+  (2013).
+\newblock Frequent {DNA} methylation of mi{R}-129-2 and its potential clinical
+  implication in hepatocellular carcinoma.
+\newblock {\em Genes, Chromosomes and Cancer}, 52(7):636--643.
+
+\bibitem[Lujambio et~al., 2008]{Lujambio2008}
+Lujambio, A., Calin, G.~A., Villanueva, A., Ropero, S.,
+  S{\'a}nchez-C{\'e}spedes, M., Blanco, D., Montuenga, L.~M., Rossi, S.,
+  Nicoloso, M.~S., Faller, W.~J., et~al. (2008).
+\newblock A micro{RNA} {DNA} methylation signature for human cancer metastasis.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  105(36):13556--13561.
+
+\bibitem[Luo et~al., 2011]{Luo2011}
+Luo, D., Wang, J., Li, J., and Post, M. (2011).
+\newblock Mouse snail is a target gene for {HIF}.
+\newblock {\em Molecular Cancer Research}, 9(2):234--245.
+
+\bibitem[L{\"u}tkepohl, 2005]{Lutkepohl2005}
+L{\"u}tkepohl, H. (2005).
+\newblock {\em New introduction to multiple time series analysis}.
+\newblock Springer.
+
+\bibitem[Mack and Munger, 2013]{Mack2013}
+Mack, H. I.~D. and Munger, K. (2013).
+\newblock The {LKB1} tumor suppressor differentially affects anchorage
+  independent growth of {HPV} positive cervical cancer cell lines.
+\newblock {\em Virology}, 446:9--16.
+
+\bibitem[Massagu{\'e}, 2008]{Massague2008}
+Massagu{\'e}, J. (2008).
+\newblock T{GF}-$\beta$ in cancer.
+\newblock {\em Cell}, 134(2):215--230.
+
+\bibitem[McCormack et~al., 1997]{McCormack1997}
+McCormack, S.~J., Brazinski, S.~E., Moore~Jr, J.~L., Werness, B.~A., and
+  Goldstein, D.~J. (1997).
+\newblock Activation of the focal adhesion kinase signal transduction pathway
+  in cervical carcinoma cell lines and human genital epithelial cells
+  immortalized with human papillomavirus type 18.
+\newblock {\em Oncogene}, 15(3).
+
+\bibitem[Medina-Martinez et~al., 2014]{Medina2014}
+Medina-Martinez, I., Barr{\'o}n, V., Roman-Bassaure, E., Ju{\'a}rez-Torres, E.,
+  Guardado-Estrada, M., Espinosa, A., Bermudez, M., Fern{\'a}ndez, F.,
+  Venegas-Vega, C., Orozco, L., et~al. (2014).
+\newblock Impact of gene dosage on gene expression, biological processes and
+  survival in cervical cancer: a genome-wide follow-up study.
+\newblock {\em PloS One}, 9(5):e97842.
+
+\bibitem[Mersmann, 2014]{Mersmann2014}
+Mersmann, O. (2014).
+\newblock microbenchmark: Accurate timing functions.
+\newblock {\em CRAN}, 1.4-2:12.
+
+\bibitem[Meyer et~al., 2007]{Meyer2007}
+Meyer, P.~E., Kontos, K., Lafitte, F., and Bontempi, G. (2007).
+\newblock Information-theoretic inference of large transcriptional regulatory
+  networks.
+\newblock {\em EURASIP Journal on Bioinformatics and Systems Biology},
+  2007(1):79879.
+
+\bibitem[Miok, 2018]{Supp2018}
+Miok, V. (2018).
+\newblock Supplementary materials: Comprehensive molecular characterization of
+  {HPV}-induced transformation by longitudinal statistical modelling.
+\newblock {\em https://github.com/viktormiok/PhdThesisSupplementaryMaterials},
+  1:1--96.
+
+\bibitem[Miok et~al., 2014]{Miok2014}
+Miok, V., Wilting, S.~M., van~de Wiel, M.~A., Jaspers, A., van Noort, P.~I.,
+  Brakenhoff, R.~H., Snijders, P. J.~F., Steenbergen, R., and van Wieringen,
+  W.~N. (2014).
+\newblock tiga{R}: integrative significance analysis of temporal differential
+  gene expression induced by genomic abnormalities.
+\newblock {\em BMC Bioinformatics}, 15(1):327.
+
+\bibitem[Miok et~al., 2017]{Miok2017}
+Miok, V., Wilting, S.~M., and van Wieringen, W.~N. (2017).
+\newblock Ridge estimation of the {VAR}(1) model and its time series chain
+  graph from multivariate time-course omics data.
+\newblock {\em Biometrical Journal}, 59(1):172--191.
+
+\bibitem[Miranda et~al., 2006]{Miranda2006}
+Miranda, K.~C., Huynh, T., Tay, Y., Ang, Y.~S., Tam, W.~L., Thomson, A.~M.,
+  Lim, B., and Rigoutsos, I. (2006).
+\newblock A pattern-based method for the identification of micro{RNA} binding
+  sites and their corresponding heteroduplexes.
+\newblock {\em Cell}, 126(6):1203--1217.
+
+\bibitem[Monti et~al., 2003]{Monti2003}
+Monti, S., Tamayo, P., Mesirov, J., and Golub, T. (2003).
+\newblock Consensus clustering: a resampling-based method for class discovery
+  and visualization of gene expression microarray data.
+\newblock {\em Machine Learning}, 52(1-2):91--118.
+
+\bibitem[Moody and Laimins, 2010]{Moody2010}
+Moody, C.~A. and Laimins, L.~A. (2010).
+\newblock Human papillomavirus oncoproteins: pathways to transformation.
+\newblock {\em Nature Reviews Cancer}, 10:550--560.
+
+\bibitem[Mori et~al., 2009]{Mori2009}
+Mori, S., Chang, J.~T., Andrechek, E.~R., Matsumura, N., Baba, T., Yao, G.,
+  Kim, J.~W., Gatza, M., Murphy, S., and Nevins, J.~R. (2009).
+\newblock Anchorage-independent cell growth signature identifies tumors with
+  metastatic potential.
+\newblock {\em Oncogene}, 28:2796--2805.
+
+\bibitem[Mutarelli et~al., 2008]{Mutarelli2008}
+Mutarelli, M., Cicatiello, L., Ferraro, L., Grober, O. M.~V., Ravo, M.,
+  Facchiano, A.~M., Angelini, C., and Weisz, A. (2008).
+\newblock Time-course analysis of genome-wide gene expression data from
+  hormone-responisve human breast cancer cells.
+\newblock {\em BMC Bioinformatics}, 9:S12.
+
+\bibitem[Nau et~al., 2002]{Nau2002}
+Nau, G.~J., Richmond, J. F.~L., Schlesinger, A., Jennings, E.~G., Lander,
+  E.~S., and Young, R.~A. (2002).
+\newblock Human macrophage activation programs induced by bacterial pathogens.
+\newblock {\em Proceedings of the National Academy of Sciences}, 99:1503--1508.
+
+\bibitem[Neuzillet et~al., 2015]{Neuzillet2015}
+Neuzillet, C., Tijeras-Raballand, A., Cohen, R., Cros, J., Faivre, S., Raymond,
+  E., and de~Gramont, A. (2015).
+\newblock Targeting the {TGF}$\beta$ pathway for cancer therapy.
+\newblock {\em Pharmacology \& Therapeutics}, 147:22--31.
+
+\bibitem[Newman, 2010]{Newman2010}
+Newman, M. (2010).
+\newblock {\em Networks: an introduction}.
+\newblock Oxford University Press.
+
+\bibitem[Nicholls and Pope, 1988]{Nicholls1988}
+Nicholls, D.~F. and Pope, A.~L. (1988).
+\newblock Bias in the estimation of multivariate autoregressions.
+\newblock {\em Australian Journal of Statistics}, 30A:296--309.
+
+\bibitem[Novianti et~al., 2017]{Novianti2017}
+Novianti, P.~W., Snoek, B.~C., Wilting, S.~M., and van~de Wiel, M.~A. (2017).
+\newblock Better diagnostic signatures from {RNA}seq data through use of
+  auxiliary co-data.
+\newblock {\em Bioinformatics}, 33(10):1572--1574.
+
+\bibitem[Oberhofer and Kmenta, 1974]{Oberhofer1974}
+Oberhofer, W. and Kmenta, J. (1974).
+\newblock A general procedure for obtaining maximum likelihood estimates in
+  generalized regression models.
+\newblock {\em Econometrica}, 42:579--590.
+
+\bibitem[Olshen et~al., 2004]{Olshen2004}
+Olshen, A.~B., Venkatraman, E.~S., Lucito, R., and Wigler, M. (2004).
+\newblock Circular binary segmentation for the analysis of array-based {DNA}
+  copy number data.
+\newblock {\em Biostatistics}, 5(4):557--572.
+
+\bibitem[Oshlack et~al., 2010]{Oshlack2010}
+Oshlack, A., Robinson, M.~D., and Young, M.~D. (2010).
+\newblock From {RNA}-seq reads to differential expression results.
+\newblock {\em Genome Biology}, 11:220.
+
+\bibitem[Overmeer et~al., 2009]{Overmeer2009}
+Overmeer, R.~M., Henken, F.~E., Bierkens, M., Wilting, S.~M., Timmerman, I.,
+  Meijer, C. J. L.~M., Snijders, P. J.~F., and Steenbergen, R. D.~M. (2009).
+\newblock Repression of mal tumour suppressor activity by promoter methylation
+  during cervical carcinogenesis.
+\newblock {\em The Journal of Pathology}, 219(3):327--336.
+
+\bibitem[Overmeer et~al., 2008]{Overmeer2008}
+Overmeer, R.~M., Henken, F.~E., Snijders, P. J.~F., Claassen-Kramer, D.,
+  Berkhof, J., Helmerhorst, T. J.~M., Heideman, D. A.~M., Wilting, S.~M.,
+  Murakami, Y., Ito, A., Meijer, C. J. L.~M., and Steenbergen, R. D.~M. (2008).
+\newblock Association between dense {CADM1} promoter methylation and reduced
+  protein expression in high-grade {CIN} and cervical {SCC}.
+\newblock {\em The Journal of Pathology}, 215:388--397.
+
+\bibitem[Paoli et~al., 2013]{Paoli2013}
+Paoli, P., Giannoni, E., and Chiarugi, P. (2013).
+\newblock Anoikis molecular pathways and its role in cancer progression.
+\newblock {\em Biochimica et Biophysica Acta (BBA)-Molecular Cell Research},
+  1833(12):3481--3498.
+
+\bibitem[Park et~al., 1991]{Park1991}
+Park, N.~H., Min, B.~M., Li, S.~L., Huang, M.~Z., and Doniger, J. (1991).
+\newblock Immortalization of normal human oral keratinocytes with type 16 human
+  papillomavirus.
+\newblock {\em Carcinogenesis}, 12(9):1627--1631.
+
+\bibitem[Pecoraro et~al., 1989]{Pecoraro1989}
+Pecoraro, G., Morgan, D., and Defendi, V. (1989).
+\newblock Differential effects of human papillomavirus type 6, 16, and 18
+  {DNA}s on immortalization and transformation of human cervical epithelial
+  cells.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  86(2):563--567.
+
+\bibitem[Peel and McLachlan, 2000]{Peel2000}
+Peel, D. and McLachlan, G.~J. (2000).
+\newblock Robust mixture modeling using the t distribution.
+\newblock {\em Statistics and Computing}, 10:339--348.
+
+\bibitem[Pett et~al., 2004]{Pett2004}
+Pett, M.~R., Alazawi, W. O.~F., Roberts, I., Dowen, S., Smith, D.~I., Stanley,
+  M.~A., and Coleman, N. (2004).
+\newblock Acquisition of high-level chromosomal instability is associated with
+  integration of human papillomavirus type 16 in cervical keratinocytes.
+\newblock {\em Cancer research}, 64(4):1359--1368.
+
+\bibitem[Pinz{\'o}n et~al., 2017]{Pinzon2017}
+Pinz{\'o}n, N., Li, B., Martinez, L., Sergeeva, A., Presumey, J., Apparailly,
+  F., and Seitz, H. (2017).
+\newblock micro{RNA} target prediction programs predict many false positives.
+\newblock {\em Genome Research}, 27(2):234--245.
+
+\bibitem[Pirisi et~al., 1987]{Pirisi1987}
+Pirisi, L., Yasumoto, S., Feller, M., Doniger, J., and DiPaolo, J.~A. (1987).
+\newblock Transformation of human fibroblasts and keratinocytes with human
+  papillomavirus type 16 {DNA}.
+\newblock {\em Journal of Virology}, 61(4):1061--1066.
+
+\bibitem[Rau et~al., 2010]{Rau2010}
+Rau, A., Jaffr{\'e}zic, F., Foulley, J.~L., and Doerge, R.~W. (2010).
+\newblock An empirical {B}ayesian method for estimating biological networks
+  from temporal microarray data.
+\newblock {\em Statistical Applications in Genetics and Molecular Biology},
+  9(1).
+
+\bibitem[Razani et~al., 2000]{Razani2000}
+Razani, B., Altschuler, Y., Zhu, L., Pestell, R.~G., Mostov, K.~E., and
+  Lisanti, M.~P. (2000).
+\newblock Caveolin-1 expression is down-regulated in cells transformed by the
+  human papilloma virus in a p53-dependent manner. {R}eplacement of caveolin-1
+  expression suppresses {HPV}-mediated cell transformation.
+\newblock {\em Biochemistry}, 39:13916--13924.
+
+\bibitem[Ritchie et~al., 2007]{Ritchie2007}
+Ritchie, M.~E., Silver, J., Oshlack, A., Holmes, M., Diyagama, D., Holloway,
+  A., and Smyth, G.~K. (2007).
+\newblock A comparison of background correction methods for two-colour
+  microarrays.
+\newblock {\em Bioinformatics}, 23:2700--2707.
+
+\bibitem[Robinson et~al., 2010]{Robinson2010}
+Robinson, M.~D., McCarthy, D.~J., and Smyth, G.~K. (2010).
+\newblock edge{R}: a {B}ioconductor package for differential expression
+  analysis of digital gene expression data.
+\newblock {\em Bioinformatics}, 26:139--140.
+
+\bibitem[Robinson and Smyth, 2007]{RobinsonSmyth2007}
+Robinson, M.~D. and Smyth, G.~K. (2007).
+\newblock Moderated statistical tests for assessing differences in tag
+  abundance.
+\newblock {\em Bioinformatics}, 23:2881--2887.
+
+\bibitem[Rue et~al., 2009]{Rue2009}
+Rue, H., Matrino, S., and Chopin, N. (2009).
+\newblock Approximate {B}ayesian inference for latent {G}aussian models by
+  using integrated nested {L}aplace approximation.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 71:319--392.
+
+\bibitem[Ruiz-Lafuente et~al., 2015]{Ruiz2015}
+Ruiz-Lafuente, N., Alcaraz-Garc{\'\i}a, M.~J., Garc{\'\i}a-Serna, A.~M.,
+  Sebasti{\'a}n-Ruiz, S., Moya-Quiles, M.~R., Garc{\'\i}a-Alonso, A.~M., and
+  Parrado, A. (2015).
+\newblock Dock10, a {C}dc42 and {R}ac1 {GEF}, induces loss of elongation,
+  filopodia, and ruffles in cervical cancer epithelial {H}e{L}a cells.
+\newblock {\em Biology Open}, 4(5):627--635.
+
+\bibitem[Ruppert et~al., 2009]{Ruppert2009}
+Ruppert, D., Wand, M.~P., and Carroll, R.~J. (2009).
+\newblock Semiparametric regression during 2003-2007.
+\newblock {\em Electronic Journal of Statistics}, 3:1193.
+
+\bibitem[Sand et~al., 2013]{Sand2013}
+Sand, M., Skrygan, M., Sand, D., Georgas, D., Gambichler, T., Hahn, S.~A.,
+  Altmeyer, P., and Bechara, F.~G. (2013).
+\newblock Comparative microarray analysis of micro{RNA} expression profiles in
+  primary cutaneous malignant melanoma, cutaneous malignant melanoma
+  metastases, and benign melanocytic nevi.
+\newblock {\em Cell and Tissue Research}, 351(1):85--98.
+
+\bibitem[Schena et~al., 1995]{Schena1995}
+Schena, M., Shalon, D., Davis, R.~W., and Brown, P.~O. (1995).
+\newblock Quantitative monitoring of gene expression patterns with a
+  complementary {DNA} microarray.
+\newblock {\em Science}, 270:467.
+
+\bibitem[Schmittgen and Livak, 2008]{Schmittgen2008}
+Schmittgen, T.~D. and Livak, K.~J. (2008).
+\newblock Analyzing real-time {PCR} data by the comparative {CT} method.
+\newblock {\em Nature Protocols}, 3(6):1101--1108.
+
+\bibitem[Sch{\"u}tze et~al., 2016]{Schutze2016}
+Sch{\"u}tze, D.~M., Krijgsman, O., Snijders, P. J.~F., Ylstra, B.,
+  Weischenfeldt, J., Mardin, B., St{\"u}tz, A.~M., Korbel, J.~O., de~Winter,
+  J.~P., Meijer, C. J. L.~M., et~al. (2016).
+\newblock Immortalization capacity of {HPV} types is inversely related to
+  chromosomal instability.
+\newblock {\em Oncotarget}, 7(25):37608.
+
+\bibitem[Sch{\"u}tze et~al., 2014]{Schutze2014}
+Sch{\"u}tze, D.~M., Snijders, P. J.~F., Bosch, L., Kramer, D., Meijer, C. J.
+  L.~M., and Steenbergen, R. D.~M. (2014).
+\newblock Differential in vitro immortalization capacity of eleven, probable
+  high-risk human papillomavirus types.
+\newblock {\em Journal of Virology}, 88(3):1714--1724.
+
+\bibitem[Schwock et~al., 2009]{Schwock2009}
+Schwock, J., Dhani, N., Cao, M. P.~J., Zheng, J., Clarkson, R., Radulovich, N.,
+  Navab, R., Horn, L.-C., and Hedley, D.~W. (2009).
+\newblock Targeting focal adhesion kinase with dominant-negative {FRNK} or
+  {H}sp90 inhibitor 17-{DMAG} suppresses tumor growth and metastasis of
+  {S}i{H}a cervical xenografts.
+\newblock {\em Cancer Research}, 69(11):4750--4759.
+
+\bibitem[Shapira et~al., 2009]{Shapira2009}
+Shapira, S.~D., Gat-Viks, I., Shum, B. O.~V., Dricot, A., de~Grace, M.~M., Wu,
+  L., Gupta, P.~B., Hao, T., Silver, S.~J., Root, D.~E., et~al. (2009).
+\newblock A physical and regulatory map of host-influenza interactions reveals
+  pathways in {H}1{N}1 infection.
+\newblock {\em Cell}, 139(7):1255--1267.
+
+\bibitem[Shen et~al., 2010]{Shen2010}
+Shen, R., Pan, S., Qi, S., Lin, X., and Cheng, S. (2010).
+\newblock Epigenetic repression of micro{RNA}-129-2 leads to overexpression of
+  {SOX}4 in gastric cancer.
+\newblock {\em Biochemical and Biophysical Research Communications},
+  394(4):1047--1052.
+
+\bibitem[Shen et~al., 2017]{Shen2017}
+Shen, W., Tao, G.~G., Zhang, Y., Cai, B., Sun, J., and Tian, Z.~G. (2017).
+\newblock T{GF}-$\beta$ in pancreatic cancer initiation and progression: two
+  sides of the same coin.
+\newblock {\em Cell \& Bioscience}, 7(1):39.
+
+\bibitem[Shimizu et~al., 2013]{Shimizu2013}
+Shimizu, T., Suzuki, H., Nojima, M., Kitamura, H., Yamamoto, E., Maruyama, R.,
+  Ashida, M., Hatahira, T., Kai, M., Masumori, N., et~al. (2013).
+\newblock Methylation of a panel of micro{RNA} genes is a novel biomarker for
+  detection of bladder cancer.
+\newblock {\em European Urology}, 63(6):1091--1100.
+
+\bibitem[Silber et~al., 2008]{Silber2008}
+Silber, J., Lim, D.~A., Petritsch, C., Persson, A.~I., Maunakea, A.~K., Yu, M.,
+  Vandenberg, S.~R., Ginzinger, D.~G., James, C.~D., Costello, J.~F., et~al.
+  (2008).
+\newblock mi{R}-124 and mi{R}-137 inhibit proliferation of glioblastoma
+  multiforme cells and induce differentiation of brain tumor stem cells.
+\newblock {\em BMC Medicine}, 6(1):1.
+
+\bibitem[Silver et~al., 2008]{Silver2008}
+Silver, J.~D., Ritchie, M.~E., and Smyth, G.~K. (2008).
+\newblock Microarray background correction: maximum likelihood estimation for
+  the normal exponential convolution.
+\newblock {\em Biostatistics}, 10(2):352--363.
+
+\bibitem[Smeets et~al., 2011]{Smeets2011}
+Smeets, S.~J., van~der Plas, M., Schaaij-Visser, T., van Veen, E. A.~M., van
+  Meerloo, J., Braakhuis, B. J.~M., Steenbergen, R. D.~M., and Brakenhoff,
+  R.~H. (2011).
+\newblock Immortalization of oral keratinocytes by functional inactivation of
+  the p53 and p{R}b pathways.
+\newblock {\em International Journal of Cancer}, 128(7):1596--1605.
+
+\bibitem[Smyth, 2004]{Smyth2004}
+Smyth, G.~K. (2004).
+\newblock Linear models and empirical {B}ayes methods for assessing
+  differential expression in microarray experiments.
+\newblock {\em Statistical Applications in Genetics and Molecular Biology},
+  3(1):1--25.
+
+\bibitem[Snellenberg et~al., 2014]{Snellenberg2014}
+Snellenberg, S., Cillessen, S. A. G.~M., Van~Criekinge, W., Bosch, L., Meijer,
+  C. J. L.~M., Snijders, P. J.~F., and Steenbergen, R. D.~M. (2014).
+\newblock Methylation-mediated repression of {PRDM}14 contributes to apoptosis
+  evasion in {HPV}-positive cancers.
+\newblock {\em Carcinogenesis}, 35(11):2611--2618.
+
+\bibitem[Snellenberg et~al., 2012]{Snellenberg2012}
+Snellenberg, S., De~Strooper, L. M.~A., Hesselink, A.~T., Meijer, C. J. L.~M.,
+  Snijders, P. J.~F., Heideman, D. A.~M., and Steenbergen, R. D.~M. (2012).
+\newblock Development of a multiplex methylation-specific {PCR} as candidate
+  triage test for women with an {HPV}-positive cervical scrape.
+\newblock {\em BMC Cancer}, 12(1):1.
+
+\bibitem[Song et~al., 2009]{Song2009}
+Song, L., Kolar, M., and Xing, E.~P. (2009).
+\newblock Time-varying dynamic {B}ayesian networks.
+\newblock pages 1732--1740. Elsevier.
+
+\bibitem[Sopov et~al., 2004]{Sopov2004}
+Sopov, I., S{\"o}rensen, T., Magbagbeolu, M., Jansen, L., Beer, K.,
+  K{\"u}hne-Heid, R., Kirchmayr, R., Schneider, A., and D{\"u}rst, M. (2004).
+\newblock Detection of cancer-related gene expression profiles in severe
+  cervical neoplasia.
+\newblock {\em International Journal of Cancer}, 112(1):33--43.
+
+\bibitem[Soto-Reyes et~al., 2012]{Soto2012}
+Soto-Reyes, E., Gonz{\'a}lez-Barrios, R., Cisneros-Soberanis, F.,
+  Herrera-Goepfert, R., P{\'e}rez, V., Cant{\'u}, D., Prada, D., Castro, C.,
+  Recillas-Targa, F., and Herrera, L.~A. (2012).
+\newblock Disruption of {CTCF} at the mi{R}-125b1 locus in gynecological
+  cancers.
+\newblock {\em BMC Cancer}, 12(1):1.
+
+\bibitem[Spiegelhalter et~al., 2002]{Spiegelhalter2002}
+Spiegelhalter, D.~J., Best, N.~G., Carlin, B.~P., and van~der Liner, A. (2002).
+\newblock Bayesian measures of model complexity and fit.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 64:583--639.
+
+\bibitem[Srivastava et~al., 2015]{Srivastava2015}
+Srivastava, K., Pickard, A., McDade, S., and McCance, D.~J. (2015).
+\newblock p63 drives invasion in keratinocytes expressing {HPV}16 {E}6/{E}7
+  genes through regulation of {S}rc-{FAK} signalling.
+\newblock {\em Oncotarget}.
+
+\bibitem[Srivastava et~al., 2017]{Srivastava2017}
+Srivastava, S.~K., Ahmad, A., Zubair, H., Miree, O., Singh, S., Rocconi, R.~P.,
+  Scalici, J., and Singh, A.~P. (2017).
+\newblock Micro{RNA}s in gynecological cancers: Small molecules with big
+  implications.
+\newblock {\em Cancer Letters}.
+
+\bibitem[Steenbergen et~al., 2005]{Steenbergen2005}
+Steenbergen, R. D.~M., de~Wilde, J., Wilting, S.~M., Brink, A. A. T.~P.,
+  Snijders, P. J.~F., and Meijer, C. J. L.~M. (2005).
+\newblock {HPV}-mediated transformation of the anogenital tract.
+\newblock {\em Journal of Clinical Virology}, 32:25--33.
+
+\bibitem[Steenbergen et~al., 2004]{Steenbergen2004}
+Steenbergen, R. D.~M., Kramer, D., Braakhuis, B. J.~M., Stern, P.~L.,
+  Verheijen, R. H.~M., Meijer, C. J. L.~M., and Snijders, P. J.~F. (2004).
+\newblock {TSLC1} gene silencing in cervical cancer cell lines and cervical
+  neoplasia.
+\newblock {\em Journal of the National Cancer Institute}, 96:294--305.
+
+\bibitem[Steenbergen et~al., 2001]{Steenbergen2001}
+Steenbergen, R. D.~M., Kramer, D., Meijer, C. J. L.~M., Walboomers, J. M.~M.,
+  Trott, D.~A., Cuthbert, A.~P., Newbold, R.~F., Overkamp, W. J.~I.,
+  Zdzienicka, M.~Z., and Snijders, P. J.~F. (2001).
+\newblock Telomerase suppression by chromosome 6 in a human papillomavirus type
+  16-immortalized keratinocyte cell line and in a cervical cancer cell line.
+\newblock {\em Journal of the National Cancer Institute}, 93(11):865--872.
+
+\bibitem[Steenbergen et~al., 2014]{Steenbergen2014}
+Steenbergen, R. D.~M., Snijders, P. J.~F., Heideman, D. A.~M., and Meijer, C.
+  J. L.~M. (2014).
+\newblock Clinical implications of (epi) genetic changes in {HPV}-induced
+  cervical precancerous lesions.
+\newblock {\em Nature Reviews Cancer}, 14:395--405.
+
+\bibitem[Steenbergen et~al., 1996]{Steenbergen1996}
+Steenbergen, R. D.~M., Walboomers, J. M.~M., Meijer, C. J. L.~M., Van~der
+  Raaij-Helmer, E. M.~H., Parker, J.~N., Chow, L.~T., Broker, T.~R., and
+  Snijders, P. J.~F. (1996).
+\newblock Transition of human papillomavirus type 16 and 18 transfected human
+  foreskin keratinocytes towards immortality: activation of telomerase and
+  allele loss at 3p, 10p, 11q and/or 18q.
+\newblock {\em Oncogene}, 13:1249--1257.
+
+\bibitem[Steponaitiene et~al., 2015]{Steponaitiene2015}
+Steponaitiene, R., Kupcinskas, J., Langner, C., Balaguer, F., Venclauskas, L.,
+  Pauzas, H., Tamelis, A., Skieceviciene, J., Kupcinskas, L., Malfertheiner,
+  P., et~al. (2015).
+\newblock Epigenetic silencing of mi{R}-137 is a frequent event in gastric
+  carcinogenesis.
+\newblock {\em Molecular Carcinogenesis}.
+
+\bibitem[Storey et~al., 2005]{Storey2005}
+Storey, J.~D., Xiao, W., Leek, J.~T., Tompkins, R.~G., and Davis, R.~W. (2005).
+\newblock Significance analysis of time course microarray experiments.
+\newblock {\em Proceedings of the National Academy of Sciences of the United
+  States of America}, 102:12837--12842.
+
+\bibitem[Strimmer, 2008]{Strimmer2008}
+Strimmer, K. (2008).
+\newblock A unified approach to false discovery rate estimation.
+\newblock {\em BMC Bioinformatics}, 9(1):303.
+
+\bibitem[Sun et~al., 2014]{Sun2014}
+Sun, L., Li, T., Wei, Q., Zhang, Y., Jia, X., Wan, Z., and Han, L. (2014).
+\newblock Upregulation of {BNIP}3 mediated by {ERK}/{HIF}-1$\alpha$ pathway
+  induces autophagy and contributes to anoikis resistance of hepatocellular
+  carcinoma cells.
+\newblock {\em Future Oncology}, 10(8):1387--1398.
+
+\bibitem[Szalm{\'a}s and K{\'o}nya, 2009]{Szalmas2009}
+Szalm{\'a}s, A. and K{\'o}nya, J. (2009).
+\newblock Epigenetic alterations in cervical carcinogenesis.
+\newblock 19:144--152.
+
+\bibitem[Tabas-Madrid et~al., 2014]{Tabas2014}
+Tabas-Madrid, D., Muniategui, A., S{\'a}nchez-Caballero, I.,
+  Mart{\'\i}nez-Herrera, D.~J., Sorzano, C. O.~S., Rubio, A., and
+  Pascual-Montano, A. (2014).
+\newblock Improving mi{RNA}-m{RNA} interaction predictions.
+\newblock {\em BMC Genomics}, 15(10):S2.
+
+\bibitem[Tai and Speed, 2006]{Tai2006}
+Tai, Y.~C. and Speed, T.~P. (2006).
+\newblock A multivariate empirical {B}ayes statistics for replicated microarray
+  time course data.
+\newblock {\em The Annals of Statistics}, 34:2387--2412.
+
+\bibitem[Takwi et~al., 2014]{Takwi2014}
+Takwi, A.~A., Wang, Y.~M., Wu, J., Michaelis, M., Cinatl, J., and Chen, T.
+  (2014).
+\newblock mi{R}-137 regulates the constitutive androstane receptor and
+  modulates doxorubicin sensitivity in parental and doxorubicin-resistant
+  neuroblastoma cells.
+\newblock {\em Oncogene}, 33(28):3717--3729.
+
+\bibitem[Tang et~al., 2015]{Tang2015}
+Tang, W., Feng, X., Zhang, S., Ren, Z., Liu, Y., Yang, B., Cai, Y., Xia, J.,
+  Ge, N., et~al. (2015).
+\newblock Caveolin-1 confers resistance of hepatoma cells to anoikis by
+  activating {IGF}-1 pathway.
+\newblock {\em Cellular Physiology and Biochemistry}, 36(3):1223--1236.
+
+\bibitem[Thomas et~al., 2014]{Thomas2014}
+Thomas, L.~K., Bermejo, J.~L., Vinokurova, S., Jensen, K., Bierkens, M.,
+  Steenbergen, R., Bergmann, M., von Knebel~Doeberitz, M., and Reuschenbach, M.
+  (2014).
+\newblock Chromosomal gains and losses in human papillomavirus-associated
+  neoplasia of the lower genital tract--a systematic review and meta-analysis.
+\newblock {\em European Journal of Cancer}, 50(1):85--98.
+
+\bibitem[Touleimat and Tost, 2012]{Touleimat2012}
+Touleimat, N. and Tost, J. (2012).
+\newblock Complete pipeline for {I}nfinium{\textregistered} {H}uman
+  {M}ethylation 450{K} {B}ead{C}hip data processing using subset quantile
+  normalization for accurate {DNA} methylation estimation.
+\newblock {\em Epigenomics}, 4(3):325--341.
+
+\bibitem[Toussaint-Smith and Roman, 2004]{ToussaintSmith2004}
+Toussaint-Smith, E, D. D.~B. and Roman, A. (2004).
+\newblock Expression of human papillomavirus type 16 {E6} and {E7} oncoproteins
+  in primary foreskin keratinocytes is sufficient to alter the expression of
+  angiogenic factors.
+\newblock {\em Oncogene}, 23:2988--2995.
+
+\bibitem[Tsai et~al., 2011]{Tsai2011}
+Tsai, K.~W., Wu, C.~W., Hu, L.~Y., Li, S.~C., Liao, Y.~L., Lai, C.~H., Kao,
+  H.~W., Fang, W.~L., Huang, K.~H., Chan, W.~C., et~al. (2011).
+\newblock Epigenetic regulation of mi{R}-34b and mi{R}-129 expression in
+  gastric cancer.
+\newblock {\em International Journal of Cancer}, 129(11):2600--2610.
+
+\bibitem[Tusher et~al., 2001]{Tusher2001}
+Tusher, V.~G., Tibshirani, R., and Chu, G. (2001).
+\newblock Significance analysis of microarrays applied to the ionizing
+  radiation response.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  98(9):5116--5121.
+
+\bibitem[Van~de Wiel et~al., 2007]{Wiel2007}
+Van~de Wiel, M.~A., Kim, K.~I., Vosse, S.~J., Van~Wieringen, W.~N., Wilting,
+  S.~M., and Ylstra, B. (2007).
+\newblock {CGH}call: calling aberrations for array {CGH} tumor profiles.
+\newblock {\em Bioinformatics}, 23:892--894.
+
+\bibitem[Van~de Wiel et~al., 2013]{Mark2013}
+Van~de Wiel, M.~A., Leday, G. G.~R., Pardo, L., Rue, H., Van~der Vaart, A.~W.,
+  and Van~Wieringen, W.~N. (2013).
+\newblock Bayesian analysis of {RNA} sequencing data by estimating multiple
+  shrinkage priors.
+\newblock {\em Biostatistics}, 14:113--128.
+
+\bibitem[Van~de Wiel et~al., 2010]{Wiel2011}
+Van~de Wiel, M.~A., Picard, F., Van~Wieringen, W.~N., and Ylstra, B. (2010).
+\newblock Preprocessing and downstream analysis of microarray {DNA} copy number
+  profiles.
+\newblock {\em Briefings in Bioinformatics}, 12(1):10--21.
+
+\bibitem[Van~Loan, 2000]{Loan2000}
+Van~Loan, C.~F. (2000).
+\newblock The ubiquitous kronecker product.
+\newblock {\em Journal of Computational and Applied Mathematics}, 123:85--100.
+
+\bibitem[Van~Wieringen et~al., 2010]{Wessel2010}
+Van~Wieringen, W.~N., Berkhof, J., and Van~de Wiel, M.~A. (2010).
+\newblock A random coefficients model for regional co-expression associated
+  with {DNA} copy number.
+\newblock {\em Statistical Applications in Genetics and Molecular Biology},
+  9:1--30.
+
+\bibitem[Van~Wieringen and Peeters, 2016]{Wieringen2016}
+Van~Wieringen, W.~N. and Peeters, C. F.~W. (2016).
+\newblock Ridge estimation of inverse covariance matrices from high-dimensional
+  data.
+\newblock {\em Computational Statistics \& Data Analysis}, 103:284--303.
+
+\bibitem[Van~Wieringen et~al., 2012]{Wieringen2012}
+Van~Wieringen, W.~N., Unger, K., Leday, G. G.~R., Krijgsman, O., de~Menezes,
+  R., Ylstra, B., and Van~de Wiel, M.~A. (2012).
+\newblock Matching of array {CGH} and gene expression microarray features for
+  the purpose of integrative genomic analysis.
+\newblock {\em BMC Bioinformatics}, 13:80.
+
+\bibitem[Van~Wieringen et~al., 2007]{Wieringen2007}
+Van~Wieringen, W.~N., Van~de Wiel, M.~A., and Ylstra, B. (2007).
+\newblock Weighted clustering of called array {CGH} data.
+\newblock {\em Biostatistics}, 9(3):484--500.
+
+\bibitem[Van~Wieringen and van~der Vaart, 2015]{Wieringen2015}
+Van~Wieringen, W.~N. and van~der Vaart, A.~W. (2015).
+\newblock Transcriptomic heterogeneity in cancer as a consequence of
+  dysregulation of the gene-gene interaction network.
+\newblock {\em Bulletin of Mathematical Biology}, 77(9):1768--1786.
+
+\bibitem[Van~Zeeburg et~al., 2005]{VanZeeburg2005}
+Van~Zeeburg, H. J.~T., Snijders, P. J.~F., Pals, G., Hermsen, M.~A., Rooimans,
+  M.~A., Bagby, G., Soulier, J., Gluckman, E., Wennerberg, J., Leemans, C.~R.,
+  et~al. (2005).
+\newblock Generation and molecular characterization of head and neck squamous
+  cell lines of fanconi anemia patients.
+\newblock {\em Cancer Research}, 65(4):1271--1276.
+
+\bibitem[Veigaard and Kjeldsen, 2014]{Veigaard2014}
+Veigaard, C. and Kjeldsen, E. (2014).
+\newblock Exploring the genome-wide relation between copy number status and
+  micro{RNA} expression.
+\newblock {\em Genomics}, 104(4):271--278.
+
+\bibitem[Vogelstein and Kinzler, 2004]{Vogelstein2004}
+Vogelstein, B. and Kinzler, K.~W. (2004).
+\newblock Cancer genes and the pathways they control.
+\newblock {\em Nature Medicine}, 10:789--799.
+
+\bibitem[Vrba et~al., 2013]{Vrba2013}
+Vrba, L., Mu{\~n}oz-Rodr{\'\i}guez, J.~L., Stampfer, M.~R., and Futscher, B.~W.
+  (2013).
+\newblock mi{RNA} gene promoters are frequent targets of aberrant {DNA}
+  methylation in human breast cancer.
+\newblock {\em PloS One}, 8(1):e54398.
+
+\bibitem[Walboomers et~al., 1999]{Walboomers1999}
+Walboomers, J. M.~M., Jacobs, M.~V., Manos, M.~M., Bosch, F.~X., Kummer, J.~A.,
+  Shah, K.~V., Snijders, P. J.~F., Peto, J., Meijer, C. J. L.~M., and
+  Mu{\~n}oz, N. (1999).
+\newblock Human papillomavirus is a necessary cause of invasive cervical cancer
+  worldwide.
+\newblock {\em The Journal of Pathology}, 189(1):12--19.
+
+\bibitem[Wang et~al., 2013]{Wang2013}
+Wang, F., Liu, M., Li, X., and Tang, H. (2013).
+\newblock Mi{R}-214 reduces cell survival and enhances cisplatin-induced
+  cytotoxicity via down-regulation of {B}cl2l2 in cervical cancer cells.
+\newblock {\em FEBS Letters}, 587(5):488--495.
+
+\bibitem[Wang et~al., 2009]{Wang2009}
+Wang, Z., Gerstein, M., and Snyder, M. (2009).
+\newblock {RNA}-{S}eq: a revolutionary tool for transcriptomics.
+\newblock {\em Nature Reviews Genetics}, 10:57--63.
+
+\bibitem[Weinberg, 2006]{Weinberg2006}
+Weinberg, R.~A. (2006).
+\newblock {\em The Biology of Cancer}.
+\newblock Garland Science, New York.
+
+\bibitem[Wentzensen et~al., 2009]{Wentzensen2009}
+Wentzensen, N., Sherman, M.~E., Schiffman, M., and Wang, S.~S. (2009).
+\newblock Utility of methylation markers in cervical cancer early detection:
+  appraisal of the state-of-the-science.
+\newblock {\em Gynecologic Oncology}, 112:293--299.
+
+\bibitem[Whittaker, 1990]{Whittaker1990}
+Whittaker, J. (1990).
+\newblock {\em Graphical Models in Applied Multivariate Statistics}.
+\newblock John Wiley \& Sons, Chichester, England.
+
+\bibitem[Wiklund et~al., 2011]{Wiklund2011}
+Wiklund, E.~D., Gao, S., Hulf, T., Sibbritt, T., Nair, S., Costea, D.~E.,
+  Villadsen, S.~B., Bakholdt, V., Bramsen, J.~B., S{\o}rensen, J.~A., et~al.
+  (2011).
+\newblock Micro{RNA} alterations and associated aberrant {DNA} methylation
+  patterns across multiple sample types in oral squamous cell carcinoma.
+\newblock {\em PLoS One}, 6(11):e27840.
+
+\bibitem[Willey et~al., 1991]{Willey1991}
+Willey, J.~C., Broussoud, A., Sleemi, A., Bennett, W.~P., Cerutti, P., and
+  Harris, C.~C. (1991).
+\newblock Immortalization of normal human bronchial epithelial cells by human
+  papillomaviruses 16 or 18.
+\newblock {\em Cancer Research}, 51(19):5370--5377.
+
+\bibitem[Wilting et~al., 2008]{Wilting2008}
+Wilting, S.~M., de~Wilde, J., Meijer, C. J.~L., Berkhof, J., Yi, Y.,
+  Van~Wieringen, W.~N., Braakhuis, B. J.~M., Meijer, G.~A., Ylstra, B.,
+  Snijders, P. J.~F., and Steenbergen, R. D.~M. (2008).
+\newblock Integrated genomic and transcriptional profiling identifies
+  chromosomal loci with altered gene expression in cervical cancer.
+\newblock {\em Genes, Chromosomes and Cancer}, 47:890--905.
+
+\bibitem[Wilting et~al., 2006]{Wilting2006}
+Wilting, S.~M., Snijders, P. J.~F., Meijer, G.~A., Ylstra, B., Van~den Ijssel,
+  P.~R., Snijders, A.~M., Albertson, D.~G., Coffa, J., Schouten, J.~P., Van~de
+  Wiel, M.~A., Meijer, C. J. L.~M., and Steenbergen, R. D.~M. (2006).
+\newblock Increased gene copy number at chromosome 20q are frequent in both
+  squamous cell carcinomas and adenocarcinomas of the cervix.
+\newblock {\em The Journal of Pathology}, 209:220--230.
+
+\bibitem[Wilting and Steenbergen, 2016]{Wilting2016}
+Wilting, S.~M. and Steenbergen, R. D.~M. (2016).
+\newblock Molecular events leading to {HPV}-induced high grade neoplasia.
+\newblock {\em Papillomavirus Research}, 2:85--88.
+
+\bibitem[Wilting et~al., 2010]{Wilting2010}
+Wilting, S.~M., van Boerdonk, R. A.~A., Henken, F.~E., Meijer, C. J. L.~M.,
+  Diosdado, B., Meijer, G.~A., le~Sage, C., Agami, R., Snijders, P. J.~F., and
+  Steenbergen, R. D.~M. (2010).
+\newblock Methylation-mediated silencing and tumour suppressive function of
+  hsa-mi{R}-124 in cervical cancer.
+\newblock {\em Molecular Cancer}, 9(1):1.
+
+\bibitem[Wilting et~al., 2013]{Wilting2013}
+Wilting, S.~M., Verlaat, W., Jaspers, A., Makazaji, N.~A., Agami, R., Meijer,
+  C. J. L.~M., Snijders, P. J.~F., and Steenbergen, R. D.~M. (2013).
+\newblock Methylation-mediated transcriptional repression of micro{RNA}s during
+  cervical carcinogenesis.
+\newblock {\em Epigenetics}, 8:220--228.
+
+\bibitem[Wong and Wang, 2014]{Wong2015}
+Wong, N. and Wang, X. (2014).
+\newblock mi{RDB}: an online resource for micro{RNA} target prediction and
+  functional annotations.
+\newblock {\em Nucleic Acids Research}, 43(D1):D146--D152.
+
+\bibitem[Wong et~al., 2006]{Wong2006}
+Wong, Y.~F., Cheung, T.~H., Tsao, G. S.~W., Lo, K. W.~K., Yim, S.~F., Wang,
+  V.~W., Heung, M., Chan, S., Chan, L. K.~Y., Ho, T. W.~F., et~al. (2006).
+\newblock Genome-wide gene expression profiling of cervical cancer in {H}ong
+  {K}ong women by oligonucleotide microarray.
+\newblock {\em International Journal of Cancer}, 118(10):2461--2469.
+
+\bibitem[Wu et~al., 2002]{Wu2002}
+Wu, H.~S., Li, Y.~F., Chou, C.~I., Yuan, C.~C., Hung, M.~W., and Tsai, L.~C.
+  (2002).
+\newblock The concentration of serum {T}ransforming {G}rowth {F}actor beta-1
+  ({TGF}-$\beta$1) is decreased in cervical carcinoma patients.
+\newblock {\em Cancer Investigation}, 20(1):55--59.
+
+\bibitem[Yang et~al., 2008]{Yang2008}
+Yang, M.~H., Wu, M.~Z., Chiou, S.~H., Chen, P.~M., Chang, S.~Y., Liu, C.~J.,
+  Teng, S.~C., and Wu, K.~J. (2008).
+\newblock Direct regulation of {TWIST} by {HIF}-1$\alpha$ promotes metastasis.
+\newblock {\em Nature Cell Biology}, 10(3):295--305.
+
+\bibitem[Yao et~al., 2013]{Yao2013}
+Yao, T., Rao, Q., Liu, L., Zheng, C., Xie, Q., Liang, J., and Lin, Z. (2013).
+\newblock Exploration of tumor-suppressive micro{RNA}s silenced by {DNA}
+  hypermethylation in cervical cancer.
+\newblock {\em Virology Journal}, 10(1):1.
+
+\bibitem[Ye et~al., 2015]{Ye2015}
+Ye, H., Zhang, Y., Geng, L., and Li, Z. (2015).
+\newblock Cdc42 expression in cervical cancer and its effects on cervical tumor
+  invasion and migration.
+\newblock {\em International Journal of Oncology}, 46(2):757--763.
+
+\bibitem[Zellner, 1962]{Zellner1962}
+Zellner, A. (1962).
+\newblock An efficient method of estimating seemingly unrelated regressions and
+  tests for aggregation bias.
+\newblock {\em Journal of the American Statistical Association}, 57:977--992.
+
+\bibitem[Zhang et~al., 2013]{Zhang2013}
+Zhang, J., Li, S., Yan, Q., Chen, X., Yang, Y., Liu, X., and Wan, X. (2013).
+\newblock Interferon-$\beta$ induced micro{RNA}-129-5p down-regulates {HPV}-18
+  {E}6 and {E}7 viral gene expression by targeting {SP}1 in cervical cancer
+  cells.
+\newblock {\em PLoS One}, 8(12):e81366.
+
+\bibitem[Zhang et~al., 2006]{Zhang2006}
+Zhang, L., Huang, J., Yang, N., Greshock, J., Megraw, M., Giannakakis, A.,
+  Liang, S., Naylor, T., Barchetti, A., Ward, M., et~al. (2006).
+\newblock micro{RNA}s exhibit high frequency genomic alterations in human
+  cancer.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  103(24):9136--9141.
+
+\bibitem[Zhang et~al., 2008]{Zhang2008}
+Zhang, L., Volinia, S., Bonome, T., Calin, G.~A., Greshock, J., Yang, N., Liu,
+  C.~G., Giannakakis, A., Alexiou, P., Hasegawa, K., et~al. (2008).
+\newblock Genomic and epigenetic alterations deregulate micro{RNA} expression
+  in human epithelial ovarian cancer.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  105(19):7004--7009.
+
+\bibitem[Zhu et~al., 2016]{Zhu2016}
+Zhu, H., Luo, H., Shen, Z., Hu, X., Sun, L., and Zhu, X. (2016).
+\newblock Transforming growth factor-$\beta$1 in carcinogenesis, progression,
+  and therapy in cervical cancer.
+\newblock {\em Tumor Biology}, 37(6):7075--7083.
+
+\bibitem[Zhu et~al., 2013]{Zhu2013}
+Zhu, X., Er, K., Mao, C., Yan, Q., Xu, H., Zhang, Y., Zhu, J., Cui, F., Zhao,
+  W., and Shi, H. (2013).
+\newblock mi{R}-203 suppresses tumor growth and angiogenesis by targeting
+  {VEGFA} in cervical cancer.
+\newblock {\em Cellular Physiology and Biochemistry}, 32(1):64--73.
+
+\bibitem[Zoppoli et~al., 2010]{Zoppoli2010}
+Zoppoli, P., Morganella, S., and Ceccarelli, M. (2010).
+\newblock Timedelay-{ARACNE}: {R}everse engineering of gene networks from
+  time-course data by an information theoretic approach.
+\newblock {\em BMC Bioinformatics}, 11(1):154.
+
+\end{thebibliography}
