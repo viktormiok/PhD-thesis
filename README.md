@@ -35,9 +35,6 @@ The pdf version of this thesis can be accessed here: [https://research.vu.nl/en/
 The work presented in this thesis has been done by me in collaboration with the persons listed in each section. 
 When using to information of this thesis, please cite the associated papers:
 
-cover.jpeg![Cover](https://github.com/viktormiok/PhD-thesis/blob/main/cover.pdf)
-
-
 https://github.com/viktormiok/PhD-thesis/blob/main/cover.pdf
 **Chapter 1:** [Introduction](https://research.vu.nl/ws/portalfiles/portal/61554199/chapter+1.pdf)
 
