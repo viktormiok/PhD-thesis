@@ -28,7 +28,7 @@ latexmk -pdf thesis.tex
 
 ## Where to access this thesis
 
-The pdf version of this thesis can be accessed here: [https://research.vu.nl/en/publications/comprehensive-molecular-characterisation-of-hpv-induced-transform](https://research.vu.nl/en/publications/comprehensive-molecular-characterisation-of-hpv-induced-transform)
+The pdf version of this thesis can be accessed [here:](https://research.vu.nl/en/publications/comprehensive-molecular-characterisation-of-hpv-induced-transform)
 
 ## How to cite this thesis
 
