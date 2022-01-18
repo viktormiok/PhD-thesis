@@ -11,6 +11,8 @@ Viktorian Miok
 
 Comprehensive molecular characterisation of HPV-induced transformation by longitudinal statistical modelling
 
+![image](https://github.com/viktormiok/PhD-thesis/blob/main/cover.pdf)
+
 ## How to compile this thesis
 
 Clone this thesis into a local folder using:
