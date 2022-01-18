@@ -28,7 +28,7 @@ latexmk -pdf thesis.tex
 
 ## Where to access this thesis
 
-The pdf version of this thesis can be accessed [here:](https://research.vu.nl/en/publications/comprehensive-molecular-characterisation-of-hpv-induced-transform)
+The pdf version of this thesis can be accessed [here.](https://research.vu.nl/en/publications/comprehensive-molecular-characterisation-of-hpv-induced-transform)
 
 ## How to cite this thesis
 
@@ -63,5 +63,5 @@ Wilting, S.M., Miok, V., Jaspers, A., Boon, D., Sorgard, H., Lando, M., Snoek, B
 The figures in the introduction are my own work. 
 When using or adapting them, please cite this thesis as follows:
 
-Viktorian, M. (2019). _Comprehensive molecular characterisation of HPV-induced transformation by longitudinal statistical modelling_
+Viktorian, M. (2019). [_Comprehensive molecular characterisation of HPV-induced transformation by longitudinal statistical modelling_](https://research.vu.nl/en/publications/comprehensive-molecular-characterisation-of-hpv-induced-transform)
 
