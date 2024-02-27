@@ -77,11 +77,11 @@ Wilting, S.M., Miok, V., Jaspers, A., Boon, D., Sorgard, H., Lando, M., Snoek, B
 
 Discussion and concluding remarks.
 
-The figures in the introduction are my own work. 
+The figures in the introduction are my work. 
 When using or adapting them, please cite this thesis as follows:
 
 Viktorian, M. (2019). [_Comprehensive molecular characterisation of HPV-induced transformation by longitudinal statistical modelling_](https://research.vu.nl/en/publications/comprehensive-molecular-characterisation-of-hpv-induced-transform)
 
 ## License
 
-__`PhD-thesis`__ is distributed under the GPL-3.0 License. Please read the license before using __`PhD-thesis`__, which it is distributed in the `LICENSE` file.
+__`PhD-thesis`__ is distributed under the GPL-3.0 License. Please read the license before using __`PhD-thesis`__, which is distributed in the `LICENSE` file.
