@@ -45,13 +45,13 @@ The pdf version of this thesis can be accessed [here.](https://research.vu.nl/en
 
 ## Doctoral thesis
 
-The work presented in this thesis has been done by me in collaboration with the persons listed in each section. 
+I have done the work presented in this thesis in collaboration with the persons listed in each section. 
 When using to information of this thesis, please cite the associated papers:
 
 
 [**Chapter 1:**](https://research.vu.nl/ws/portalfiles/portal/61554199/chapter+1.pdf) `Introduction`
 
-Background, data generation and statistical analysis.
+Background, data generation, and statistical analysis.
 
 [**Chapter 2:**](https://research.vu.nl/ws/portalfiles/portal/61554201/chapter+2.pdf) `tigaR: integrative significance analysis of temporal differential gene expression induced by genomic abnormalities`
 
@@ -84,4 +84,4 @@ Viktorian, M. (2019). [_Comprehensive molecular characterisation of HPV-induced 
 
 ## License
 
-__`PhD-thesis`__ is distributed under the GPL-3.0 License. Please read the license before using __`PhD-thesis`__, which is distributed in the `LICENSE` file.
+__`PhD-thesis`__ is distributed under the GPL-3.0 License. Please read the license before using __`PhD-thesis`__, distributed in the `LICENSE` file.
