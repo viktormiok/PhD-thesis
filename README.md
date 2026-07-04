@@ -41,12 +41,12 @@ latexmk -pdf thesis.tex
 
 ## Where to access this thesis
 
-The PDF version of this thesis can be accessed [here.](https://research.vu.nl/en/publications/comprehensive-molecular-characterisation-of-hpv-induced-transform)
+The PDF version of this thesis can be accessed [here](https://research.vu.nl/en/publications/comprehensive-molecular-characterisation-of-hpv-induced-transform).
 
 ## Doctoral thesis
 
 I have done the work presented in this thesis in collaboration with the persons listed in each section. 
-When using to information in this thesis, please cite the associated papers:
+When using the information in this thesis, please cite the associated papers:
 
 
 [**Chapter 1:**](https://research.vu.nl/ws/portalfiles/portal/61554199/chapter+1.pdf) `Introduction`
